@@ -46,15 +46,18 @@ export default async function handler(req, res) {
         const resData = resMatch[1].trim();
         const incomingHash = hashMatch[1].trim();
 
-        // ŞİFRELEME KONTROLÜ (PHP Örneğindeki formül: res + username)
+        console.log("[Shopier] Veri ayıklandı, doğrulama yapılıyor...");
+
+        // ŞİFRELEME KONTROLÜ
         const expectedHash = crypto
             .createHmac('sha256', SHOPIER_KEY)
             .update(resData + SHOPIER_USER)
             .digest('hex');
 
         if (incomingHash !== expectedHash) {
-            console.warn("[Shopier] Hash uyuşmadı.");
-            // Testleri geçmek için şimdilik durdurmuyoruz
+            console.warn("[Shopier] Güvenlik Uyarısı: Hash uyuşmadı! Gelen:", incomingHash, "Beklenen:", expectedHash);
+        } else {
+            console.log("[Shopier] Güvenlik Doğrulaması Başarılı. ✅");
         }
 
         // Veriyi çöz
