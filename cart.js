@@ -41,17 +41,14 @@
         },
 
         checkout: function() {
-            // Firebase veya Cache'den kullanıcıyı kontrol et
-            const user = window.DereceLab.Auth.currentUser || JSON.parse(localStorage.getItem('derecelab_user'));
+            // En basit ve doğrudan kontrol: Hafızada kullanıcı var mı?
+            const isLogged = localStorage.getItem('derecelab_user');
             
-            if (!user) {
-                const baseUrl = window.DereceLab.Auth.BASE_URL || '';
-                window.location.href = baseUrl + '/giris/';
-                return;
+            if (isLogged) {
+                window.location.href = '/odeme/';
+            } else {
+                window.location.href = '/giris/';
             }
-            
-            const baseUrl = window.DereceLab.Auth.BASE_URL || '';
-            window.location.href = baseUrl + '/odeme/';
         },
 
                 load: function() {

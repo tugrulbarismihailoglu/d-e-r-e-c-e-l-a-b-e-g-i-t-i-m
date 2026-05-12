@@ -16,7 +16,7 @@ DereceLab.Auth = DereceLab.Auth || {};
 DereceLab.Auth.BASE_URL = BASE_URL; // Expose globally
 
 Object.assign(DereceLab.Auth, {
-  currentUser: null,
+  currentUser: undefined,
   onReadyCallbacks: [],
 
   init() {

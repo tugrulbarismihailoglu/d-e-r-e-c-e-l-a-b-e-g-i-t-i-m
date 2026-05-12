@@ -178,13 +178,17 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             DereceLab.Auth.onReady((user) => {
-                if (!user) {
+                // Hem Firebase hem de Cache kontrolü
+                const cachedUser = JSON.parse(localStorage.getItem('derecelab_user'));
+                const finalUser = user || cachedUser;
+
+                if (!finalUser) {
                     window.location.href = '../giris/';
                     return;
                 }
                 // Kullanıcı emailini göster
                 const emailEl = document.getElementById('user-email-display');
-                if (emailEl) emailEl.textContent = user.email;
+                if (emailEl) emailEl.textContent = finalUser.email;
                 loadOrderSummary();
             });
         });
