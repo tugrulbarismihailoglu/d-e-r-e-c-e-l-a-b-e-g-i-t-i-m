@@ -63,80 +63,117 @@
 <body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100">
 
     <!-- Header -->
-    <header class="w-full bg-white border-b border-gray-200 shadow-sm py-4">
+    <header class="w-full bg-orange-600 border-b border-orange-700 shadow-sm py-4">
         <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
-            <a class="text-xl font-extrabold tracking-tight text-orange-600 flex items-center gap-0.5"
+            <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
                 href="../">
-                <img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../logo.svg"
-                    style="filter: brightness(0) saturate(100%) invert(43%) sepia(87%) saturate(2250%) hue-rotate(349deg) brightness(96%) contrast(92%);">
+                <img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../Images/logo-beyaz.png">
                 DereceLab
             </a>
-            <div class="flex items-center gap-2 text-green-600 font-bold text-sm">
+            <div class="flex items-center gap-2 text-white font-bold text-sm">
                 <span class="material-symbols-outlined text-[18px]">lock</span>
                 Güvenli Ödeme
             </div>
         </div>
     </header>
 
-    <main class="flex-grow py-12 px-6 max-w-4xl mx-auto w-full">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row">
+    <main class="flex-grow py-8 md:py-16 px-4 md:px-6 max-w-5xl mx-auto w-full">
+        <!-- Mobile Step Indicator -->
+        <div class="flex items-center gap-3 mb-8 md:hidden">
+            <div class="flex-1 h-1.5 bg-orange-600 rounded-full"></div>
+            <div class="flex-1 h-1.5 bg-gray-200 rounded-full"></div>
+            <div class="flex-1 h-1.5 bg-gray-200 rounded-full"></div>
+        </div>
 
-            <!-- Payment Form -->
-            <div class="w-full md:w-3/5 p-8 border-b md:border-b-0 md:border-r border-gray-200">
-                <h1 class="text-2xl font-extrabold text-gray-900 font-headline mb-6">Ödeme Bilgileri</h1>
+        <div class="bg-white rounded-[2rem] shadow-2xl shadow-orange-900/10 border border-gray-100 overflow-hidden flex flex-col md:flex-row">
 
-                <div class="bg-orange-50 border border-orange-100 rounded-xl p-5 mb-6 flex items-start gap-3">
-                    <span class="material-symbols-outlined text-orange-500 mt-0.5">verified_user</span>
+            <!-- Payment Form (Left) -->
+            <div class="w-full md:w-3/5 p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-100">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Ödeme Detayları</h1>
+                </div>
+
+                <div class="bg-orange-50/50 border border-orange-100 rounded-2xl p-6 mb-8 flex items-start gap-4">
+                    <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5">
+                        <span class="material-symbols-outlined text-sm">lock</span>
+                    </div>
                     <div>
-                        <h4 class="font-bold text-orange-900 text-sm">Güvenli Ödeme — Shopier</h4>
-                        <p class="text-orange-700 text-xs mt-1 leading-relaxed">
-                            Ödemeniz Shopier güvencesiyle 3D Secure sistemi kullanılarak alınmaktadır. 
-                            Kredi kartı bilgileriniz DereceLab sunucularında <strong>kesinlikle tutulmaz</strong>.
+                        <h4 class="font-bold text-orange-900 text-sm">Güvenli Shopier Altyapısı</h4>
+                        <p class="text-orange-700/80 text-xs mt-1.5 leading-relaxed">
+                            Ödemeniz 256-bit SSL sertifikalı Shopier sistemi üzerinden 3D Secure güvencesiyle alınır. Kart bilgileriniz tarafımızca asla kaydedilmez.
                         </p>
                     </div>
                 </div>
 
                 <!-- Kullanıcı bilgisi kutusu -->
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6" id="user-info-box">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Ödeme Yapılacak Hesap</p>
-                    <p class="text-sm font-bold text-gray-900" id="user-email-display">Yükleniyor...</p>
-                    <p class="text-xs text-orange-600 mt-1.5 font-medium">⚠️ Shopier'de bu e-posta adresinin dolu geldiğini kontrol edin.</p>
+                <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 mb-8" id="user-info-box">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 border border-gray-100">
+                            <span class="material-symbols-outlined">account_circle</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı E-posta</span>
+                            <span class="text-base font-bold text-gray-900 break-all" id="user-email-display">Yükleniyor...</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center gap-2 text-orange-600 text-[11px] font-bold bg-white/50 p-2 rounded-lg border border-orange-100/50">
+                        <span class="material-symbols-outlined text-xs">info</span>
+                        Kurs bu adrese otomatik tanımlanacaktır.
+                    </div>
                 </div>
 
-                <div class="pt-2 flex flex-col items-center">
+                <div class="pt-2">
                     <button id="submit-btn" onclick="goToShopier()"
-                        class="w-full bg-orange-600 text-white font-bold py-4 rounded-xl hover:bg-orange-700 transition-colors shadow-lg shadow-orange-100 flex items-center justify-center gap-2 text-sm">
-                        <span class="material-symbols-outlined">lock</span>
-                        <span id="btn-text">Shopier'e Git ve Ödemeyi Tamamla</span>
-                        <div id="btn-spinner" class="spinner hidden"></div>
+                        class="group w-full bg-orange-600 text-white font-black py-5 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-lg">
+                        <span>Shopier ile Güvenli Öde</span>
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                     </button>
-                    <p class="text-[11px] text-gray-400 mt-3 text-center leading-relaxed">
-                        Ödeme tamamlandıktan sonra <strong>brsmusicz@gmail.com</strong> adresine bildirim gelecek ve kursunuz açılacaktır.
-                    </p>
+                    <div class="mt-6 flex items-center justify-center gap-4 text-gray-300">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-4 opacity-50 grayscale hover:grayscale-0 transition-all cursor-help" alt="Visa">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-6 opacity-50 grayscale hover:grayscale-0 transition-all cursor-help" alt="Mastercard">
+                        <div class="w-px h-4 bg-gray-200"></div>
+                        <span class="text-[10px] font-bold tracking-tighter">3D SECURE</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Order Summary -->
-            <div class="w-full md:w-2/5 bg-gray-50 p-8 flex flex-col h-full">
-                <h2 class="text-lg font-bold text-gray-900 mb-6">Sipariş Özeti</h2>
-
-                <div id="order-items" class="space-y-4 mb-6 flex-grow">
-                    <!-- Javascript will load cart items here -->
-                    <p class="text-gray-500 text-sm italic">Sepetiniz yükleniyor...</p>
+            <!-- Order Summary (Right) -->
+            <div class="w-full md:w-2/5 bg-gray-50/80 p-8 md:p-12 flex flex-col">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-black text-gray-900">Siparişin</h2>
+                    <span class="px-3 py-1 bg-gray-200 rounded-full text-[10px] font-black text-gray-600 uppercase tracking-widest">Özet</span>
                 </div>
 
-                <div class="border-t border-gray-200 pt-4 mt-auto">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-500 text-sm">Ara Toplam</span>
-                        <span class="font-bold text-gray-900 text-sm" id="subtotal">₺0,00</span>
+                <div id="order-items" class="space-y-6 mb-8 flex-grow">
+                    <!-- Javascript will load cart items here -->
+                    <div class="animate-pulse flex space-x-4">
+                        <div class="rounded-lg bg-gray-200 h-16 w-16"></div>
+                        <div class="flex-1 space-y-4 py-1">
+                            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                        </div>
                     </div>
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-gray-500 text-sm">KDV (%20)</span>
-                        <span class="font-bold text-gray-900 text-sm">Dahil</span>
+                </div>
+
+                <div class="border-t border-gray-200 pt-8 mt-auto">
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-500 font-medium">Ara Toplam</span>
+                            <span class="font-bold text-gray-900" id="subtotal">₺0,00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-500 font-medium">KDV (%20)</span>
+                            <span class="font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded text-[10px]">DAHİL</span>
+                        </div>
                     </div>
-                    <div class="flex justify-between items-center text-lg">
-                        <span class="font-extrabold text-gray-900">Toplam</span>
-                        <span class="font-extrabold text-orange-600 text-xl" id="total">₺0,00</span>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="font-black text-gray-900 text-lg">Toplam</span>
+                        <div class="flex flex-col items-end">
+                            <span class="font-black text-orange-600 text-3xl tracking-tight" id="total">₺0,00</span>
+                        </div>
                     </div>
                 </div>
             </div>
