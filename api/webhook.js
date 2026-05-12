@@ -67,29 +67,36 @@ export default async function handler(req, res) {
 
         if (email && productId) {
             const courseId = PRODUCT_MAPPING[productId] || "course_1";
+            const normalizedEmail = email.toLowerCase().trim();
             
-            // E-posta adresine sahip olan kullanıcıyı ara (UID'sini bulmak için)
+            console.log(`[Shopier] Arama yapılıyor: ${normalizedEmail}`);
+
+            // E-posta adresine sahip olan kullanıcıyı ara
             const usersRef = db.collection('users');
-            const snapshot = await usersRef.where('email', '==', email).limit(1).get();
+            const snapshot = await usersRef.where('email', '==', normalizedEmail).get();
+
+            let targetDoc = null;
 
             if (!snapshot.empty) {
-                // Kullanıcı bulundu! (O karmaşık ID'li olan)
-                const userDoc = snapshot.docs[0];
-                const userRef = userDoc.ref;
-                const userData = userDoc.data();
+                // Eğer birden fazla doküman varsa (biri UID diğeri e-posta ID), UID olanı seçmeye çalış
+                targetDoc = snapshot.docs.find(doc => doc.id.length > 25) || snapshot.docs[0];
                 
-                const purchasedCourses = userData.purchasedCourses || [];
+                console.log(`[Shopier] Kullanıcı bulundu! Doküman ID: ${targetDoc.id}`);
+                
+                const userRef = targetDoc.ref;
+                const purchasedCourses = targetDoc.data().purchasedCourses || [];
+                
                 if (!purchasedCourses.includes(courseId)) {
                     purchasedCourses.push(courseId);
                     await userRef.update({ purchasedCourses });
-                    console.log(`[Shopier] Kurs UID ile tanımlandı: ${userDoc.id}`);
+                    console.log(`[Shopier] Kurs başarıyla tanımlandı: ${targetDoc.id}`);
                 }
             } else {
-                // Kullanıcı henüz kayıt olmamışsa, e-posta adresiyle yeni doküman açalım
-                console.log(`[Shopier] Kullanıcı henüz kayıtlı değil, e-posta ile doküman açılıyor: ${email}`);
-                const userRef = db.collection('users').doc(email);
+                // Hiç kullanıcı bulunamadıysa (Kayıt olmamışsa)
+                console.log(`[Shopier] Kullanıcı bulunamadı, geçici doküman oluşturuluyor: ${normalizedEmail}`);
+                const userRef = db.collection('users').doc(normalizedEmail);
                 await userRef.set({
-                    email: email,
+                    email: normalizedEmail,
                     purchasedCourses: [courseId],
                     createdAt: admin.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
