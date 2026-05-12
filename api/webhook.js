@@ -67,21 +67,32 @@ export default async function handler(req, res) {
 
         if (email && productId) {
             const courseId = PRODUCT_MAPPING[productId] || "course_1";
-            const userRef = db.collection('users').doc(email);
-            const userDoc = await userRef.get();
+            
+            // E-posta adresine sahip olan kullanıcıyı ara (UID'sini bulmak için)
+            const usersRef = db.collection('users');
+            const snapshot = await usersRef.where('email', '==', email).limit(1).get();
 
-            if (userDoc.exists) {
-                const purchasedCourses = userDoc.data().purchasedCourses || [];
+            if (!snapshot.empty) {
+                // Kullanıcı bulundu! (O karmaşık ID'li olan)
+                const userDoc = snapshot.docs[0];
+                const userRef = userDoc.ref;
+                const userData = userDoc.data();
+                
+                const purchasedCourses = userData.purchasedCourses || [];
                 if (!purchasedCourses.includes(courseId)) {
                     purchasedCourses.push(courseId);
                     await userRef.update({ purchasedCourses });
+                    console.log(`[Shopier] Kurs UID ile tanımlandı: ${userDoc.id}`);
                 }
             } else {
+                // Kullanıcı henüz kayıt olmamışsa, e-posta adresiyle yeni doküman açalım
+                console.log(`[Shopier] Kullanıcı henüz kayıtlı değil, e-posta ile doküman açılıyor: ${email}`);
+                const userRef = db.collection('users').doc(email);
                 await userRef.set({
                     email: email,
                     purchasedCourses: [courseId],
                     createdAt: admin.firestore.FieldValue.serverTimestamp()
-                });
+                }, { merge: true });
             }
         }
 
