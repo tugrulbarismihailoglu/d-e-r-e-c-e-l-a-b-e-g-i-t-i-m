@@ -79,6 +79,7 @@
                     <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Ödeme Detayları</h1>
                 </div>
 
+                <!-- Kullanıcı bilgisi kutusu -->
                 <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-4" id="user-info-box">
                     <div class="flex items-center gap-3">
                         <div
@@ -121,7 +122,7 @@
                     <a href="../#courses"
                         class="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl font-bold text-xs hover:bg-orange-100 transition-colors flex items-center gap-2 border border-orange-100">
                         <span class="material-symbols-outlined text-sm">keyboard_backspace</span>
-                        Geri Dön
+                        Alışverişe Devam Et
                     </a>
                 </div>
 
@@ -138,7 +139,8 @@
                     <button id="submit-btn" onclick="goToShopier()"
                         class="group w-full bg-orange-600 text-white font-black py-5 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-lg">
                         <span>Ödemeye Geç</span>
-                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        <span
+                            class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                     </button>
 
                     <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 opacity-80">
@@ -147,7 +149,8 @@
                         <img src="../Images/pngwing.com.png" class="h-8 w-auto" alt="Güvenli Ödeme">
                         <div class="w-px h-6 bg-gray-200 hidden sm:block"></div>
                         <div class="flex flex-col items-start leading-tight select-none">
-                            <span class="text-[8px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ ÖDE</span>
+                            <span class="text-[8px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ
+                                ÖDE</span>
                             <span class="text-[10px] font-black text-gray-500 tracking-tighter">3D SECURE</span>
                         </div>
                     </div>
@@ -214,13 +217,15 @@
             let total = 0;
             items.forEach(item => {
                 total += item.price;
+                const imageSrc = item.img || '../Images/logo-siyah.png';
                 container.innerHTML += `
-                <div class="bg-white border border-gray-100 rounded-2xl p-4 flex justify-between items-center shadow-sm">
-                    <div class="flex flex-col gap-1">
-                        <h4 class="font-bold text-gray-900 text-xs sm:text-sm leading-tight">${item.name}</h4>
-                        <span class="text-orange-600 text-[10px] font-bold uppercase tracking-widest">ÖMÜR BOYU ERİŞİM</span>
+                <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm">
+                    <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover border border-gray-50 shrink-0" alt="${item.name}">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-gray-900 text-[11px] sm:text-xs leading-tight truncate">${item.name}</h4>
+                        <span class="text-orange-600 text-[9px] font-bold uppercase tracking-widest">ÖMÜR BOYU ERİŞİM</span>
                     </div>
-                    <span class="font-black text-gray-900 text-sm whitespace-nowrap">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                    <span class="font-black text-gray-900 text-sm whitespace-nowrap ml-auto">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                 </div>
             `;
             });
