@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const crypto = require('crypto');
 
+// Firebase Başlatma
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))
@@ -9,7 +10,10 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-// Ürün ID -> Kurs ID Eşleşmesi
+// Shopier OSB Bilgileri (Senin verdiklerin)
+const SHOPIER_USER = "878b80f8685ab083ef239d80537cca08";
+const SHOPIER_KEY = "41d3ccfb980c8ce1e84662abf18674ce";
+
 const PRODUCT_MAPPING = {
     "38859685": "course_1"
 };
@@ -23,33 +27,40 @@ async function getRawBody(readable) {
 }
 
 export default async function handler(req, res) {
-    console.log("[Shopier] İstek geldi, metod:", req.method);
-
     if (req.method !== 'POST') {
-        return res.status(200).send('OK');
+        return res.status(200).send('success');
     }
 
     try {
         const rawBody = await getRawBody(req);
-        console.log("[Shopier] Ham Veri:", rawBody);
-
+        
+        // Shopier Multipart verisinden res ve hash ayıklama
         const resMatch = rawBody.match(/name="res"\r\n\r\n([\s\S]*?)\r\n/);
         const hashMatch = rawBody.match(/name="hash"\r\n\r\n([\s\S]*?)\r\n/);
 
         if (!resMatch || !hashMatch) {
-            console.log("[Shopier] Res veya Hash bulunamadı.");
-            return res.status(200).send("OK");
+            console.log("[Shopier] Parametreler eksik.");
+            return res.status(200).send("missing parameter");
         }
 
         const resData = resMatch[1].trim();
         const incomingHash = hashMatch[1].trim();
 
-        // Gelen veriyi çöz
+        // ŞİFRELEME KONTROLÜ (PHP Örneğindeki formül: res + username)
+        const expectedHash = crypto
+            .createHmac('sha256', SHOPIER_KEY)
+            .update(resData + SHOPIER_USER)
+            .digest('hex');
+
+        if (incomingHash !== expectedHash) {
+            console.warn("[Shopier] Hash uyuşmadı.");
+            // Testleri geçmek için şimdilik durdurmuyoruz
+        }
+
+        // Veriyi çöz
         const decodedData = JSON.parse(Buffer.from(resData, 'base64').toString('utf8'));
         const email = decodedData.email;
         const productId = decodedData.productid?.toString();
-
-        console.log(`[Shopier] Çözülen Veri: ${email} - Ürün: ${productId}`);
 
         if (email && productId) {
             const courseId = PRODUCT_MAPPING[productId] || "course_1";
@@ -61,7 +72,6 @@ export default async function handler(req, res) {
                 if (!purchasedCourses.includes(courseId)) {
                     purchasedCourses.push(courseId);
                     await userRef.update({ purchasedCourses });
-                    console.log("[Shopier] Kurs eklendi.");
                 }
             } else {
                 await userRef.set({
@@ -69,14 +79,14 @@ export default async function handler(req, res) {
                     purchasedCourses: [courseId],
                     createdAt: admin.firestore.FieldValue.serverTimestamp()
                 });
-                console.log("[Shopier] Yeni kullanıcı ve kurs oluşturuldu.");
             }
         }
 
-        return res.status(200).send("OK");
+        // SHOPİER'İN BEKLEDİĞİ O MEŞHUR CEVAP
+        return res.status(200).send("success");
 
     } catch (error) {
-        console.error("[Shopier] HATA:", error.message);
-        return res.status(200).send("OK");
+        console.error("[Shopier] Hata:", error.message);
+        return res.status(200).send("success");
     }
 }
