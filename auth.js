@@ -284,7 +284,7 @@ Object.assign(DereceLab.Auth, {
       return false;
     }
   }
-};
+});
 
 // Sayfa yüklendiğinde auth'u HEMEN başlat (DOMContentLoaded bekleme)
 DereceLab.Auth.init();
