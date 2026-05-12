@@ -40,6 +40,15 @@
             this.save();
         },
 
+        checkout: function() {
+            const user = window.DereceLab.Auth.currentUser;
+            if (!user) {
+                window.location.href = (window.DereceLab.Auth.BASE_URL || '') + '/giris/';
+                return;
+            }
+            // Üye ise şu anlık bir şey yapmıyoruz, beraber inşa edeceğiz.
+        },
+
                 load: function() {
             try {
                 const data = localStorage.getItem(this.STORAGE_KEY);
