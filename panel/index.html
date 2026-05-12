@@ -1,0 +1,511 @@
+<!DOCTYPE html><html class="light" lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kurslarım — DereceLab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#ea580c",
+                        "on-background": "#111827",
+                        "background": "#f3f4f6", 
+                        "surface": "#ffffff",
+                        "on-surface": "#111827",
+                        "outline": "#e5e7eb",
+                        "secondary": "#000000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../firebase-config.js"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-item.active {
+            background-color: #fff7ed;
+            color: #ea580c;
+            border-right: 3px solid #ea580c;
+        }
+        .nav-item {
+            border-right: 3px solid transparent;
+        }
+        .course-card {
+            transition: all 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="../catalog.js"></script>
+  <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100">
+
+<!-- Header -->
+<header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 shadow-sm transition-colors duration-300">
+<div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-6 z-10">
+<a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5" href="../">
+<img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../Images/logo-beyaz.png">
+<span class="hidden sm:inline">DereceLab</span>
+            </a>
+<span class="text-orange-400">|</span>
+<h2 class="text-sm font-semibold text-white hidden sm:block">Kullanıcı Paneli</h2>
+</div>
+<div class="flex items-center gap-4 z-10">
+<a href="../" class="text-sm font-semibold text-white/80 hover:text-white transition-colors hidden sm:block">Ana Sayfaya Dön</a>
+<button class="relative p-2 text-white/80 hover:text-white transition-colors group" id="open-cart" onclick="DereceLab.Cart.openCart()">
+    <span class="material-symbols-outlined text-xl">shopping_cart</span>
+    <span class="absolute top-0 right-0 w-4 h-4 bg-white text-orange-600 text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm" id="cart-badge">0</span>
+</button>
+<button onclick="DereceLab.Auth.signOut()" class="text-sm font-semibold text-white/80 hover:text-white transition-colors flex items-center gap-1">
+    <span class="material-symbols-outlined text-[18px]">logout</span>
+</button>
+</div>
+</div>
+</header>
+
+<!-- Auth & Cart JS -->
+<script src="../auth.js?v=1777565555"></script>
+<script src="../cart.js?v=1777567479"></script>
+
+<!-- Main Dashboard Layout -->
+<main class="flex-grow pt-24 pb-16 px-6 max-w-[1600px] mx-auto w-full flex flex-col md:flex-row gap-8">
+    
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 flex-shrink-0">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden sticky top-24">
+            <div class="p-6 border-b border-gray-100 flex flex-col">
+                <h3 class="font-extrabold text-gray-900 text-lg truncate w-full" id="sidebar-name">Yükleniyor...</h3>
+                <p class="text-sm text-gray-500 truncate w-full" id="sidebar-email">Lütfen bekleyin...</p>
+            </div>
+            <nav class="p-2 flex flex-col gap-1">
+                <button onclick="switchTab('courses')" id="tab-courses" class="nav-item active flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors text-left">
+                    <span class="material-symbols-outlined text-[20px]">play_circle</span>
+                    Kurslarım
+                </button>
+                <button onclick="switchTab('profile')" id="tab-profile" class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors text-left">
+                    <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+                    Profil Ayarları
+                </button>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Area -->
+    <div class="flex-1 min-w-0">
+        
+        <!-- Courses View -->
+        <div id="view-courses" class="space-y-10">
+            <!-- My Courses Section -->
+            <section>
+                <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+                    <h1 class="text-2xl font-extrabold text-gray-900 font-headline">Kurslarım</h1>
+                </div>
+
+                <!-- Loading State -->
+                <div id="courses-loading" class="flex flex-col items-center justify-center py-12">
+                    <div class="w-8 h-8 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mb-4"></div>
+                    <p class="text-gray-500 font-medium">Kurslarınız yükleniyor...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="courses-empty" class="hidden flex flex-col items-center justify-center py-12 bg-white rounded-2xl border border-gray-200 border-dashed">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-3xl text-gray-300">school</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Henüz bir kurs satın almadınız</h3>
+                    <p class="text-gray-500 text-sm text-center max-w-sm">Aşağıdaki eğitimlerden birini seçerek DereceLab farkını yaşamaya başlayın.</p>
+                </div>
+
+                <!-- My Courses Grid -->
+                <div id="courses-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                    <!-- JS will populate this -->
+                </div>
+            </section>
+
+            <!-- Explore Other Courses Section -->
+            <section id="explore-section" class="hidden pt-6">
+                <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-xl font-extrabold text-gray-900 font-headline">Diğer Kurslarımıza Göz Atın:</h2>
+                </div>
+                <div id="explore-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                    <!-- JS will populate this -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Profile View -->
+        <div id="view-profile" class="hidden space-y-6">
+            <div class="border-b border-gray-200 pb-4">
+                <h1 class="text-2xl font-extrabold text-gray-900 font-headline">Profil Ayarları</h1>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Kişisel Bilgiler</h2>
+                <form id="profile-form" class="space-y-4">
+                    <div id="profile-message" class="hidden p-3 rounded-lg text-sm font-medium"></div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Kullanıcı Adı</label>
+                        <input type="text" id="profile-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-4 text-gray-900 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">E-posta Adresi (Değiştirilemez)</label>
+                        <input type="email" id="profile-email" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl py-2.5 px-4 text-gray-500 cursor-not-allowed">
+                    </div>
+                    <button type="submit" id="profile-submit" class="bg-orange-600 text-white font-bold py-2.5 px-6 rounded-xl hover:bg-orange-700 transition-colors mt-2">Değişiklikleri Kaydet</button>
+                </form>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl border-l-4 border-l-red-500">
+                 <h2 class="text-lg font-bold text-gray-900 mb-1">Şifre Sıfırlama</h2>
+                 <p class="text-sm text-gray-500 mb-4">Şifrenizi değiştirmek için kayıtlı e-posta adresinize bir sıfırlama bağlantısı gönderebilirsiniz.</p>
+                 <button onclick="sendPasswordReset()" id="reset-pwd-btn" class="bg-white text-red-600 border border-red-200 font-bold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors text-sm">Şifre Sıfırlama E-postası Gönder</button>
+                 <div id="reset-msg" class="text-sm mt-2 font-medium hidden"></div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+<!-- Cart Overlay -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] opacity-0 pointer-events-none transition-opacity duration-300" id="cart-overlay" onclick="DereceLab.Cart.closeCart()"></div>
+
+<!-- Cart Drawer -->
+<div class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col" id="cart-drawer">
+    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-orange-600">shopping_cart</span>
+            <h2 class="text-lg font-bold text-gray-900">Sepetim</h2>
+        </div>
+        <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" id="close-cart" onclick="DereceLab.Cart.closeCart()">
+            <span class="material-symbols-outlined text-gray-500">close</span>
+        </button>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+        <!-- Empty State -->
+        <div class="flex flex-col items-center justify-center h-full text-center py-12" id="cart-empty-state">
+            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                <span class="material-symbols-outlined text-3xl text-gray-300">shopping_basket</span>
+            </div>
+            <p class="text-gray-500 font-medium">Sepetiniz şu an boş.</p>
+            <a href="../kurslar/uclu-paket/" class="mt-4 text-orange-600 font-bold text-sm hover:underline block" onclick="DereceLab.Cart.closeCart()">Tüm Kursları Görüntüle</a>
+        </div>
+        <!-- Items -->
+        <div class="space-y-4 hidden" id="cart-items-container"></div>
+    </div>
+    
+    <div class="p-6 border-t border-gray-100 bg-gray-50 hidden" id="cart-footer">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-gray-600 font-medium">Toplam</span>
+            <span class="text-xl font-extrabold text-gray-900" id="cart-total">₺0,00</span>
+        </div>
+        <button class="w-full py-4 bg-orange-600 text-white rounded-xl font-bold hover:bg-orange-700 transition-all shadow-lg shadow-orange-200" onclick="window.location.href='../odeme/'">
+            Ödemeye Geç
+        </button>
+    </div>
+</div>
+
+<!-- Auth JS & Cart JS (for catalog) -->
+<script src="../auth.js?v=1777565555"></script>
+<script src="../cart.js?v=1777567479"></script>
+
+<script>
+    // Tab Switching Logic
+    function switchTab(tab) {
+        document.getElementById('view-courses').classList.add('hidden');
+        document.getElementById('view-profile').classList.add('hidden');
+        document.getElementById('tab-courses').classList.remove('active', 'bg-orange-50', 'text-orange-600');
+        document.getElementById('tab-profile').classList.remove('active', 'bg-orange-50', 'text-orange-600');
+        
+        document.getElementById(`view-${tab}`).classList.remove('hidden');
+        document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    // Update UI based on User
+    async function updateDashboard(user) {
+        if (!user) return;
+
+        try {
+            document.getElementById('sidebar-name').textContent = user.displayName || user.email.split('@')[0];
+            document.getElementById('sidebar-email').textContent = user.email || '';
+            document.getElementById('profile-name').value = user.displayName || '';
+            document.getElementById('profile-email').value = user.email || '';
+
+            // Firestore'dan satın alınanları VE tamamlananları çek
+            let purchasedIds = await DereceLab.Auth.getPurchasedCourses(user.uid);
+            let completedParts = await DereceLab.Auth.getCompletedParts(user.uid);
+            
+            // Normalize IDs to handle old numeric IDs from previous iterations
+            purchasedIds = purchasedIds.map(id => {
+                if (id === '1') return 'course_1';
+                if (id === '2') return 'course_2';
+                if (id === '3') return 'course_3';
+                if (id === '4') return 'course_4';
+                return id;
+            });
+            
+            let ownedIds = [...purchasedIds];
+            
+            // Üçlü pakete sahipse alt kursları otomatik ekle
+            if (ownedIds.includes('course_4')) {
+                ownedIds = [...new Set([...ownedIds, 'course_1', 'course_2', 'course_3'])];
+            }
+
+            document.getElementById('courses-loading').classList.add('hidden');
+            
+            const myCoursesGrid = document.getElementById('courses-grid');
+            const exploreGrid = document.getElementById('explore-grid');
+            const exploreSection = document.getElementById('explore-section');
+
+            if (ownedIds.length === 0) {
+                document.getElementById('courses-empty').classList.remove('hidden');
+            } else {
+                myCoursesGrid.classList.remove('hidden');
+                myCoursesGrid.innerHTML = '';
+                
+                ownedIds.forEach(id => {
+                    const course = DereceLab.Catalog[id];
+                    if (!course || id === 'course_4') return; 
+
+                    let totalParts = course.parts ? course.parts.length : 0;
+                    let completedCount = course.parts ? course.parts.filter(p => completedParts.includes(p.id)).length : 0;
+                    let percentage = totalParts > 0 ? Math.round((completedCount / totalParts) * 100) : 0;
+
+                    const card = document.createElement('div');
+                    card.className = 'course-card bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col shadow-sm transition-all duration-300 hover:shadow-md';
+                    card.innerHTML = `
+                        <a href="../player/?course=${course.id}" class="aspect-video relative overflow-hidden bg-gray-100 block group">
+                            <img src="${course.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${course.name}">
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                <div class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center text-orange-600 shadow-lg transform group-hover:scale-110 transition-all">
+                                    <span class="material-symbols-outlined text-3xl ml-1">play_arrow</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <a href="../player/?course=${course.id}" class="block group/title">
+                                <h3 class="font-bold text-gray-900 text-lg mb-3 group-hover/title:text-orange-600 transition-colors">${course.name}</h3>
+                            </a>
+                            
+                            <!-- Progress Bar -->
+                            <div class="mt-1 mb-4">
+                                <div class="flex justify-between text-[11px] mb-1.5 font-bold">
+                                    <span class="text-orange-600">%${percentage} tamamlandı!</span>
+                                    <span class="text-gray-400">${completedCount}/${totalParts} Bölüm</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-orange-400 to-orange-600 h-1.5 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase tracking-wider text-green-600 bg-green-50 px-2 py-1 rounded">Ömür Boyu Erişim</span>
+                                <a href="../player/?course=${course.id}" class="text-sm font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
+                                    İzle <span class="material-symbols-outlined text-[16px]">play_circle</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    myCoursesGrid.appendChild(card);
+                });
+            }
+
+            // Bu Kurslara Da Göz Atın Bölümünü Doldur
+            exploreGrid.innerHTML = '';
+            let unownedCount = 0;
+            Object.keys(DereceLab.Catalog).forEach(id => {
+                let showCard = false;
+                if (!ownedIds.includes(id)) {
+                    showCard = true;
+                } else if (id === 'course_4' && ownedIds.includes('course_4')) {
+                    showCard = false;
+                } else if (id === 'course_4' && ownedIds.includes('course_1') && ownedIds.includes('course_2') && ownedIds.includes('course_3')) {
+                    showCard = false;
+                }
+
+                if (showCard) {
+                    unownedCount++;
+                    const course = DereceLab.Catalog[id];
+                    const featuresHtml = course.features.map(f => `
+                        <li class="flex items-center gap-2 text-[10px] text-gray-600">
+                          <span class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>
+                          ${f}
+                        </li>
+                    `).join('');
+
+                    const card = document.createElement('div');
+                    card.className = course.id === 'course_4' 
+                        ? 'group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1'
+                        : 'group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1';
+                    card.setAttribute('data-product-id', course.id);
+                    
+                    let badgeClass = 'text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-md border shadow-sm ';
+                    if (course.id === 'course_1') badgeClass += 'bg-orange-500 bg-opacity-10 text-orange-600 border-orange-500';
+                    else if (course.id === 'course_2') badgeClass += 'bg-blue-600 bg-opacity-10 text-blue-600 border-blue-600';
+                    else if (course.id === 'course_3') badgeClass += 'bg-purple-600 bg-opacity-10 text-purple-600 border-purple-600';
+                    else badgeClass += 'bg-green-500 bg-opacity-20 text-green-600 border-green-500';
+
+                    let subtitleHtml = course.id === 'course_4' 
+                        ? '<h4 class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 w-fit border border-orange-200 shadow-sm">3 VİDEO SETİ BİR ARADA</h4>'
+                        : '';
+
+                    let priceHtml = course.id === 'course_4'
+                        ? `<div class="flex flex-col">
+                            <div class="flex items-center gap-2 mb-1">
+                                <del class="text-sm text-gray-500">₺1.089</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%33 İNDİRİM</span>
+                            </div>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺729,90</span>
+                           </div>`
+                        : `<span class="text-xl font-extrabold text-gray-900 product-price">₺${course.price.toLocaleString('tr-TR', {minimumFractionDigits: 2})}</span>`;
+
+                    let imageWrapperClass = course.id === 'course_4' 
+                        ? 'block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center'
+                        : 'block aspect-[16/9] relative overflow-hidden';
+
+                    let titleClass = course.id === 'course_4'
+                        ? 'font-bold text-gray-900 leading-tight mb-1 min-h-[24px] text-[18px] group-hover/title:text-orange-600 transition-colors'
+                        : 'font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors';
+
+                    card.innerHTML = `
+                        <a href="${course.url}" class="${imageWrapperClass}">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${course.img}" alt="${course.name}">
+                        </a>
+                        <div class="flex flex-col flex-1 p-5">
+                            <div class="flex gap-2 mb-2">
+                                <span class="${badgeClass}">${course.badge}</span>
+                            </div>
+                            <a class="block group/title" href="${course.url}">
+                                <h3 class="${titleClass}">
+                                    ${course.titleHtml}
+                                </h3>
+                            </a>
+                            ${subtitleHtml}
+                            <ul class="space-y-1 mb-4 min-h-[56px]">
+                                ${featuresHtml}
+                            </ul>
+                            <div class="mt-auto">
+                                <div class="flex items-center justify-between mb-1">
+                                    ${priceHtml}
+                                </div>
+                                <button class="add-to-cart-btn w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors" data-id="${course.id}" data-name="${course.name}" data-price="${course.price}" onclick="DereceLab.Cart.toggle('${course.id}', '${course.name}', ${course.price})">
+                                    <span class="material-symbols-outlined text-base">add_shopping_cart</span> Sepete Ekle
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    exploreGrid.appendChild(card);
+                }
+            });
+
+            if (unownedCount > 0) {
+                exploreSection.classList.remove('hidden');
+            }
+
+        } catch(e) {
+            console.error("Dashboard initialization error:", e);
+            document.getElementById('courses-loading').innerHTML = '<p class="text-red-500 font-bold">Veriler yüklenirken bir hata oluştu.</p>';
+        }
+    }
+
+    // Profil Güncelleme Formu
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('profile-submit');
+        const msg = document.getElementById('profile-message');
+        const newName = document.getElementById('profile-name').value.trim();
+        
+        btn.textContent = 'Kaydediliyor...';
+        btn.disabled = true;
+        
+        try {
+            const user = auth.currentUser;
+            await user.updateProfile({ displayName: newName });
+            try {
+                await db.collection('users').doc(user.uid).set({ displayName: newName }, { merge: true });
+            } catch (fsErr) {
+                console.warn('Firestore update failed (permissions?), but auth updated:', fsErr);
+            }
+            
+            msg.className = 'p-3 rounded-lg text-sm font-medium bg-green-50 text-green-600 border border-green-200 mb-4 block';
+            msg.textContent = 'Profiliniz başarıyla güncellendi.';
+            
+            document.getElementById('sidebar-name').textContent = newName;
+            
+        } catch (error) {
+            msg.className = 'p-3 rounded-lg text-sm font-medium bg-red-50 text-red-600 border border-red-200 mb-4 block';
+            msg.textContent = 'Hata oluştu. Lütfen tekrar deneyin.';
+        } finally {
+            btn.textContent = 'Değişiklikleri Kaydet';
+            btn.disabled = false;
+        }
+    });
+
+    // Şifre Sıfırlama
+    async function sendPasswordReset() {
+        const btn = document.getElementById('reset-pwd-btn');
+        const msg = document.getElementById('reset-msg');
+        btn.disabled = true;
+        btn.textContent = 'Gönderiliyor...';
+        
+        try {
+            const user = auth.currentUser;
+            await auth.sendPasswordResetEmail(user.email);
+            msg.className = 'text-sm mt-2 font-medium text-green-600 block';
+            msg.innerHTML = 'Şifre sıfırlama e-postası gönderildi. Lütfen e-posta kutunuzu kontrol edin.<br><strong class="block mt-1.5 font-black text-green-700 underline underline-offset-2">Lütfen spam klasörünüzü kontrol etmeyi unutmayın.</strong>';
+        } catch (error) {
+            msg.className = 'text-sm mt-2 font-medium text-red-600 block';
+            msg.textContent = 'Bir hata oluştu: ' + error.message;
+            console.error("Reset pwd error:", error);
+        } finally {
+            btn.textContent = 'Şifre Sıfırlama E-postası Gönder';
+            btn.disabled = false;
+        }
+    }
+
+    // Init: Auth durumunu kontrol edip dashboard'u başlat
+    async function initDashboard() {
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = '../giris/';
+                return;
+            }
+            await updateDashboard(user);
+        });
+    }
+
+    // Start
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            initDashboard();
+        }, 300);
+    });
+</script>
+
+</body></html>

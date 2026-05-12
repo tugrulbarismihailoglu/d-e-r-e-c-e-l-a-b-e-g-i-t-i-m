@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Güvenli Ödeme — DereceLab</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#ea580c",
+                        "on-background": "#111827",
+                        "background": "#f3f4f6",
+                        "surface": "#ffffff",
+                        "on-surface": "#111827",
+                        "outline": "#e5e7eb",
+                        "secondary": "#000000"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../firebase-config.js"></script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+  <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
+</head>
+
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100">
+
+    <!-- Header -->
+    <header class="w-full bg-white border-b border-gray-200 shadow-sm py-4">
+        <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
+            <a class="text-xl font-extrabold tracking-tight text-orange-600 flex items-center gap-0.5"
+                href="../">
+                <img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../logo.svg"
+                    style="filter: brightness(0) saturate(100%) invert(43%) sepia(87%) saturate(2250%) hue-rotate(349deg) brightness(96%) contrast(92%);">
+                DereceLab
+            </a>
+            <div class="flex items-center gap-2 text-green-600 font-bold text-sm">
+                <span class="material-symbols-outlined text-[18px]">lock</span>
+                Güvenli Ödeme
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow py-12 px-6 max-w-4xl mx-auto w-full">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row">
+
+            <!-- Payment Form -->
+            <div class="w-full md:w-3/5 p-8 border-b md:border-b-0 md:border-r border-gray-200">
+                <h1 class="text-2xl font-extrabold text-gray-900 font-headline mb-6">Ödeme Bilgileri</h1>
+
+                <div class="bg-orange-50 border border-orange-100 rounded-xl p-5 mb-6 flex items-start gap-3">
+                    <span class="material-symbols-outlined text-orange-500 mt-0.5">verified_user</span>
+                    <div>
+                        <h4 class="font-bold text-orange-900 text-sm">Güvenli Ödeme — Shopier</h4>
+                        <p class="text-orange-700 text-xs mt-1 leading-relaxed">
+                            Ödemeniz Shopier güvencesiyle 3D Secure sistemi kullanılarak alınmaktadır. 
+                            Kredi kartı bilgileriniz DereceLab sunucularında <strong>kesinlikle tutulmaz</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kullanıcı bilgisi kutusu -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6" id="user-info-box">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Ödeme Yapılacak Hesap</p>
+                    <p class="text-sm font-bold text-gray-900" id="user-email-display">Yükleniyor...</p>
+                    <p class="text-xs text-orange-600 mt-1.5 font-medium">⚠️ Shopier'de bu e-posta adresinin dolu geldiğini kontrol edin.</p>
+                </div>
+
+                <div class="pt-2 flex flex-col items-center">
+                    <button id="submit-btn" onclick="goToShopier()"
+                        class="w-full bg-orange-600 text-white font-bold py-4 rounded-xl hover:bg-orange-700 transition-colors shadow-lg shadow-orange-100 flex items-center justify-center gap-2 text-sm">
+                        <span class="material-symbols-outlined">lock</span>
+                        <span id="btn-text">Shopier'e Git ve Ödemeyi Tamamla</span>
+                        <div id="btn-spinner" class="spinner hidden"></div>
+                    </button>
+                    <p class="text-[11px] text-gray-400 mt-3 text-center leading-relaxed">
+                        Ödeme tamamlandıktan sonra <strong>brsmusicz@gmail.com</strong> adresine bildirim gelecek ve kursunuz açılacaktır.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="w-full md:w-2/5 bg-gray-50 p-8 flex flex-col h-full">
+                <h2 class="text-lg font-bold text-gray-900 mb-6">Sipariş Özeti</h2>
+
+                <div id="order-items" class="space-y-4 mb-6 flex-grow">
+                    <!-- Javascript will load cart items here -->
+                    <p class="text-gray-500 text-sm italic">Sepetiniz yükleniyor...</p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4 mt-auto">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-500 text-sm">Ara Toplam</span>
+                        <span class="font-bold text-gray-900 text-sm" id="subtotal">₺0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-500 text-sm">KDV (%20)</span>
+                        <span class="font-bold text-gray-900 text-sm">Dahil</span>
+                    </div>
+                    <div class="flex justify-between items-center text-lg">
+                        <span class="font-extrabold text-gray-900">Toplam</span>
+                        <span class="font-extrabold text-orange-600 text-xl" id="total">₺0,00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Auth & Cart JS -->
+    <script src="../auth.js?v=1777565555"></script>
+    <script src="../cart.js?v=1777567479"></script>
+
+    <script>
+        // Sepet linkine göre Shopier URL eşleşmesi
+        // Sepetteki kurs ID → Shopier ürün linki
+        const SHOPIER_LINKS = {
+            'course_1': 'https://www.shopier.com/medyabit/38859685', // Verimlilik
+            'course_2': 'https://www.shopier.com/medyabit/38859685', // Zaman Yönetimi — linkini güncelle
+            'course_3': 'https://www.shopier.com/medyabit/38859685', // Çalışma Rotasyonları — linkini güncelle
+            'course_4': 'https://www.shopier.com/medyabit/38859685', // Üçlü Paket — linkini güncelle
+        };
+
+        function goToShopier() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const items = DereceLab.Cart.items;
+            if (items.length === 0) return;
+
+            // Birden fazla ürün varsa ilkinin linkini kullan
+            // Tek ürünse direkt o linke git
+            const firstCourseId = items[0].id;
+            const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/medyabit/38859685';
+
+            // Shopier'e email parametresi ile yönlendir
+            const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}`;
+
+            window.open(shopierUrl, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            DereceLab.Auth.onReady((user) => {
+                if (!user) {
+                    window.location.href = '../giris/';
+                    return;
+                }
+                // Kullanıcı emailini göster
+                const emailEl = document.getElementById('user-email-display');
+                if (emailEl) emailEl.textContent = user.email;
+                loadOrderSummary();
+            });
+        });
+
+        function loadOrderSummary() {
+            const items = DereceLab.Cart.items;
+            const container = document.getElementById('order-items');
+
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-red-500 text-sm font-bold">Sepetiniz boş. Lütfen kurs seçip tekrar gelin.</p>';
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            container.innerHTML = '';
+            let total = 0;
+
+            items.forEach(item => {
+                total += item.price;
+                container.innerHTML += `
+                <div class="flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-900 text-sm leading-tight">${item.name}</h4>
+                        <p class="text-green-600 text-[11px] font-bold mt-1">Ömür Boyu Erişim</p>
+                    </div>
+                    <span class="font-bold text-gray-900 text-sm">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                </div>
+            `;
+            });
+
+            const totalStr = `₺${total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+            document.getElementById('subtotal').textContent = totalStr;
+            document.getElementById('total').textContent = totalStr;
+        }
+
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (!user || DereceLab.Cart.items.length === 0) return;
+
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const spinner = document.getElementById('btn-spinner');
+
+            btn.disabled = true;
+            btnText.textContent = 'İşleniyor...';
+            spinner.classList.remove('hidden');
+
+            // Simulate network request
+            setTimeout(async () => {
+                const courseIds = DereceLab.Cart.items.map(item => item.id);
+                const success = await DereceLab.Auth.purchaseCourses(user.uid, courseIds);
+
+                if (success) {
+                    DereceLab.Cart.clear();
+                    btnText.textContent = 'Başarılı! Yönlendiriliyorsunuz...';
+                    spinner.classList.add('hidden');
+                    btn.classList.replace('bg-orange-600', 'bg-green-500');
+                    btn.classList.replace('hover:bg-orange-700', 'hover:bg-green-600');
+
+                    setTimeout(() => {
+                        window.location.href = '../panel/';
+                    }, 1500);
+                } else {
+                    alert("Bir hata oluştu, lütfen tekrar deneyin.");
+                    btn.disabled = false;
+                    btnText.textContent = 'Ödemeyi Tamamla ve Kurslara Başla';
+                    spinner.classList.add('hidden');
+                }
+            }, 1500);
+        });
+    </script>
+
+</body>
+
+</html>

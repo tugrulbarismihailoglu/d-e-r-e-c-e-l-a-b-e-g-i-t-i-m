@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DereceLab</title>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#ea580c', background: '#ffffff', 'on-surface': '#111827' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Scrollbar for sidebar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        .part-item.active {
+            background-color: #fff7ed;
+            border-color: #fdba74;
+        }
+
+        .part-item.active .part-title {
+            color: #ea580c;
+            font-weight: 700;
+        }
+    </style>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
+</head>
+
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Navbar -->
+    <header
+        class="bg-orange-600 border-b border-orange-700 h-16 flex-shrink-0 flex items-center justify-between px-6 z-10 shadow-sm">
+        <div class="flex items-center gap-4">
+            <a href="../" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                <span class="material-symbols-outlined">arrow_back</span>
+                <span class="font-bold text-sm hidden sm:block">Panele Dön</span>
+            </a>
+            <div class="h-6 w-px bg-white/30 mx-2"></div>
+            <h1 id="header-course-title" class="font-extrabold text-white text-lg hidden md:block">Yükleniyor...</h1>
+        </div>
+        <div class="flex items-center">
+            <img src="../Images/logo-beyaz.png" alt="DereceLab Logo" class="h-8">
+            <span class="font-black text-xl text-white ml-2 tracking-tighter">DereceLab</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center">
+            <div class="w-12 h-12 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mb-4"></div>
+            <p class="font-bold text-gray-500">Eğitim ekranı hazırlanıyor...</p>
+        </div>
+
+        <!-- Video Area (Left) -->
+        <main class="flex-1 flex flex-col bg-gray-100 overflow-hidden relative">
+            <div class="w-full flex-1 bg-black flex items-center justify-center">
+                <iframe id="video-frame" class="w-full aspect-video border-0" src="" allowfullscreen
+                    allow="autoplay"></iframe>
+            </div>
+        </main>
+
+        <!-- Sidebar (Right) -->
+        <aside
+            class="w-full lg:w-96 bg-white border-l border-gray-200 flex flex-col flex-shrink-0 h-[40vh] lg:h-auto z-30 shadow-[-10px_0_15px_rgba(0,0,0,0.03)]">
+            <div class="p-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+                <div>
+                    <h3 class="font-extrabold text-gray-900 text-lg">Kurs Bölümleri</h3>
+                    <p id="progress-text" class="text-sm font-bold text-orange-600 mt-1">%0 Tamamlandı</p>
+                </div>
+                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                    <span class="material-symbols-outlined">menu_book</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="h-1 w-full bg-gray-200">
+                <div id="progress-bar" class="h-1 bg-orange-600 transition-all duration-500" style="width: 0%"></div>
+            </div>
+
+            <div id="parts-list" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
+                <!-- JS will populate parts here -->
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../firebase-config.js"></script>
+    <script src="../auth.js"></script>
+    <script src="../catalog.js"></script>
+
+    <script>
+        let currentCourse = null;
+        let completedParts = [];
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check auth
+            currentUser = await DereceLab.Auth.requireAuth();
+
+            // Get course ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course');
+
+            if (!courseId || !DereceLab.Catalog[courseId]) {
+                alert("Kurs bulunamadı!");
+                window.location.href = "../panel/";
+                return;
+            }
+
+            currentCourse = DereceLab.Catalog[courseId];
+
+            // Validate if user owns it
+            const purchasedIds = await DereceLab.Auth.getPurchasedCourses(currentUser.uid);
+            let hasAccess = purchasedIds.includes(courseId);
+            if (!hasAccess && purchasedIds.includes('course_4') && ['course_1', 'course_2', 'course_3'].includes(courseId)) {
+                hasAccess = true;
+            }
+
+            if (!hasAccess) {
+                alert("Bu kursu izlemek için yetkiniz yok. Lütfen satın alın.");
+                window.location.href = "../panel/";
+                return;
+            }
+
+            // Fetch progress
+            completedParts = await DereceLab.Auth.getCompletedParts(currentUser.uid);
+
+            // Render UI
+            document.getElementById('header-course-title').textContent = currentCourse.name;
+            renderParts();
+            updateProgressUI();
+
+            // Auto-play first uncompleted part or first part
+            if (currentCourse.parts && currentCourse.parts.length > 0) {
+                let partToPlay = currentCourse.parts[0];
+                for (let p of currentCourse.parts) {
+                    if (!completedParts.includes(p.id)) {
+                        partToPlay = p;
+                        break;
+                    }
+                }
+                playPart(partToPlay.id);
+            }
+
+            // Hide overlay
+            document.getElementById('loading-overlay').classList.add('hidden');
+        });
+
+        function renderParts() {
+            const list = document.getElementById('parts-list');
+            list.innerHTML = '';
+
+            if (!currentCourse.parts || currentCourse.parts.length === 0) {
+                list.innerHTML = '<p class="text-center text-sm text-gray-500 mt-10">Bu kursa ait bölüm bulunamadı.</p>';
+                return;
+            }
+
+            currentCourse.parts.forEach((part, index) => {
+                const isCompleted = completedParts.includes(part.id);
+
+                const div = document.createElement('div');
+                div.id = `part-item-${part.id}`;
+                div.className = 'part-item flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-white hover:bg-gray-50 transition-colors cursor-pointer group';
+
+                // Allow clicking anywhere on the card to play, except the checkbox area
+                div.onclick = (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        playPart(part.id);
+                    }
+                };
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1 min-w-0 pr-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-600 transition-colors index-badge">
+                            ${index + 1}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="part-title text-sm font-bold text-gray-700 truncate transition-colors">${part.title}</h4>
+                            <p class="text-[11px] font-medium text-gray-400 mt-0.5 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px]">play_circle</span> Video
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 flex items-center">
+                        <label class="relative flex items-center cursor-pointer p-2 rounded-full hover:bg-gray-100 transition-colors" title="İzledi olarak işaretle">
+                            <input type="checkbox" class="sr-only check-input" ${isCompleted ? 'checked' : ''} onchange="togglePart('${part.id}', this.checked)">
+                            <div class="w-6 h-6 rounded border-2 ${isCompleted ? 'bg-green-500 border-green-500' : 'border-gray-300 bg-white'} flex items-center justify-center transition-all check-box">
+                                <span class="material-symbols-outlined text-white text-[16px] font-bold" style="opacity: ${isCompleted ? '1' : '0'}; transition: opacity 0.2s">check</span>
+                            </div>
+                        </label>
+                    </div>
+                `;
+
+                list.appendChild(div);
+            });
+        }
+
+        async function togglePart(partId, isCompleted) {
+            // Optimistic update
+            if (isCompleted) {
+                if (!completedParts.includes(partId)) completedParts.push(partId);
+            } else {
+                completedParts = completedParts.filter(id => id !== partId);
+            }
+            updateProgressUI();
+
+            // Visually update the checkbox
+            const item = document.getElementById(`part-item-${partId}`);
+            if (item) {
+                const box = item.querySelector('.check-box');
+                const icon = box ? box.querySelector('span') : null;
+                if (box) {
+                    if (isCompleted) {
+                        box.classList.remove('border-gray-300', 'bg-white');
+                        box.classList.add('bg-green-500', 'border-green-500');
+                    } else {
+                        box.classList.remove('bg-green-500', 'border-green-500');
+                        box.classList.add('border-gray-300', 'bg-white');
+                    }
+                }
+                if (icon) {
+                    icon.style.opacity = isCompleted ? '1' : '0';
+                }
+            }
+
+            // Firebase update
+            await DereceLab.Auth.togglePartCompletion(currentUser.uid, partId, isCompleted);
+        }
+
+        function updateProgressUI() {
+            if (!currentCourse.parts || currentCourse.parts.length === 0) return;
+
+            const total = currentCourse.parts.length;
+            const completedCount = currentCourse.parts.filter(p => completedParts.includes(p.id)).length;
+            const percentage = Math.round((completedCount / total) * 100);
+
+            document.getElementById('progress-text').textContent = `%${percentage} Tamamlandı`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        function playPart(partId) {
+            const part = currentCourse.parts.find(p => p.id === partId);
+            if (!part) return;
+
+            // Remove active state from all
+            document.querySelectorAll('.part-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.index-badge').forEach(el => {
+                el.classList.remove('bg-orange-600', 'text-white');
+                el.classList.add('bg-gray-100', 'text-gray-500');
+            });
+
+            // Add active state to selected
+            const activeItem = document.getElementById(`part-item-${partId}`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+                const badge = activeItem.querySelector('.index-badge');
+                if (badge) {
+                    badge.classList.remove('bg-gray-100', 'text-gray-500');
+                    badge.classList.add('bg-orange-600', 'text-white');
+                }
+            }
+
+            // Update Video Area
+            document.getElementById('video-frame').src = part.videoUrl;
+
+            // Dinamik Başlık (Sekme Adı) Güncellemesi
+            document.title = part.title + " — DereceLab";
+
+            // Scroll to top on mobile
+            if (window.innerWidth < 1024) {
+                document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+
+</html>
