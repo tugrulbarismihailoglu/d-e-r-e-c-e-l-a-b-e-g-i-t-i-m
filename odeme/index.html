@@ -170,8 +170,8 @@
             const firstCourseId = items[0].id;
             const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/medyabit/38859685';
 
-            // Shopier'e email parametresi ile yönlendir
-            const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}`;
+            // Shopier'e email ve kurs ID (custom) parametreleri ile yönlendir
+            const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}&custom=${encodeURIComponent(firstCourseId)}`;
 
             window.open(shopierUrl, '_blank');
         }
