@@ -47,7 +47,8 @@
             if (isLogged) {
                 window.location.href = '/odeme/';
             } else {
-                window.location.href = '/giris/';
+                // Giriş sonrası geri dönmesi için redirect parametresi ekliyoruz
+                window.location.href = '/giris/?redirect=cart';
             }
         },
 
