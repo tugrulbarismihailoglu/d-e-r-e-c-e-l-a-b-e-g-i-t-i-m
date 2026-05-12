@@ -46,7 +46,7 @@
                 window.location.href = (window.DereceLab.Auth.BASE_URL || '') + '/giris/';
                 return;
             }
-            // Üye ise şu anlık bir şey yapmıyoruz, beraber inşa edeceğiz.
+            window.location.href = (window.DereceLab.Auth.BASE_URL || '') + '/odeme/';
         },
 
                 load: function() {
