@@ -15,19 +15,22 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-module.exports = async (req, res) => {
-    // Sadece POST kabul et
-    if (req.method !== 'POST') {
-        return res.status(405).send('Method Not Allowed');
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method not allowed" });
     }
 
     try {
-        // Shopier verileri (req.body Vercel tarafından otomatik parse edilir)
-        const data = req.body;
+        // Shopier verileri x-www-form-urlencoded olarak gönderir.
+        // Vercel normalde parse eder ama garantiye alalım.
+        const data = req.body || {};
         
-        // Shopier parametreleri: buyer_email, custom (kursId), status
-        const buyerEmail = data.buyer_email;
-        const courseId = data.custom; 
+        console.log("[Shopier] Gelen Ham Veri:", JSON.stringify(data));
+
+        const buyerEmail = data.buyer_email || data.email;
+        const courseId = data.custom;
+        const status = data.status; // success veya failed
+        const orderId = data.order_id;
         
         if (!buyerEmail || !courseId) {
             console.log("Geçersiz veri paketi:", data);
