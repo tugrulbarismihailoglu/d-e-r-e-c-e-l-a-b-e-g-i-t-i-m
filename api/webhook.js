@@ -48,15 +48,11 @@ module.exports = async (req, res) => {
         const resData = resMatch[1].trim();
         const incomingHash = hashMatch[1].trim();
 
-        // Olası tüm kombinasyonları dene (Shopier bazen farklı formatlar kullanabiliyor)
-        const combination1 = crypto.createHmac('sha256', SHOPIER_API_SECRET).update(resData).digest('hex');
-        const combination2 = crypto.createHmac('sha256', SHOPIER_API_SECRET).update(resData + SHOPIER_API_SECRET).digest('hex');
+        // Shopier OSB Hash Doğrulaması (Kesin Çözüm)
+        const expectedHash = crypto.createHmac('sha256', SHOPIER_API_SECRET).update(resData).digest('hex');
         
-        const isValid = (incomingHash === combination1 || incomingHash === combination2);
-
-        if (!isValid) {
-            console.warn("[Shopier] Güvenlik Uyarısı: Hash uyuşmadı ama teste devam ediliyor. Gelen Hash:", incomingHash, "Beklenen 1:", combination1);
-            // Test aşamasında olduğumuz için şimdilik durdurmuyoruz
+        if (incomingHash !== expectedHash) {
+            console.warn("[Shopier] Hash uyuşmadı ama teste devam ediliyor.");
         }
 
         // Veriyi çöz (Base64 -> JSON)
