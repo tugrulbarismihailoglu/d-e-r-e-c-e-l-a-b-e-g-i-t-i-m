@@ -15,26 +15,49 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+// Ham gövdeyi okumak için yardımcı fonksiyon
+async function getRawBody(readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    }
+    return Buffer.concat(chunks).toString('utf8');
+}
+
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
     try {
-        // Shopier verileri x-www-form-urlencoded olarak gönderir.
-        // Vercel normalde parse eder ama garantiye alalım.
-        const data = req.body || {};
-        
-        console.log("[Shopier] Gelen Ham Veri:", JSON.stringify(data));
+        // Ham veriyi oku
+        const rawBody = await getRawBody(req);
+        console.log("[Shopier] Ham Body:", rawBody);
+
+        // Form verisi mi yoksa JSON mı?
+        let data = {};
+        try {
+            if (rawBody.startsWith('{')) {
+                data = JSON.parse(rawBody);
+            } else {
+                // query string gibi parse et
+                const params = new URLSearchParams(rawBody);
+                data = Object.fromEntries(params.entries());
+            }
+        } catch (e) {
+            console.log("[Shopier] Parse Hatası:", e.message);
+        }
+
+        console.log("[Shopier] İşlenen Veri:", JSON.stringify(data));
 
         const buyerEmail = data.buyer_email || data.email;
         const courseId = data.custom;
-        const status = data.status; // success veya failed
-        const orderId = data.order_id;
+        const status = data.status;
         
+        // Test aşamasında her zaman OK dön
         if (!buyerEmail || !courseId) {
-            console.log("Geçersiz veri paketi:", data);
-            return res.status(400).send("Eksik veri");
+            console.log("[Shopier] Test veya Eksik Veri Geldi.");
+            return res.status(200).send("OK");
         }
 
         console.log(`[Shopier] İşlem Başladı: ${buyerEmail} -> ${courseId}`);
