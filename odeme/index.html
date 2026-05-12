@@ -69,12 +69,12 @@
         </div>
     </header>
 
-    <main class="flex-grow py-8 md:py-16 px-4 md:px-6 max-w-5xl mx-auto w-full">
+    <main class="flex-grow py-8 md:py-12 px-4 md:px-6 max-w-4xl mx-auto w-full">
         <div
             class="bg-white rounded-[2rem] shadow-2xl shadow-orange-900/10 border border-gray-100 overflow-hidden flex flex-col md:flex-row mb-12">
 
-            <!-- Left: User Info -->
-            <div class="w-full md:w-3/5 p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-100">
+            <!-- Left: User Info (Smaller %40) -->
+            <div class="w-full md:w-[40%] p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col justify-start">
                 <div class="mb-8">
                     <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Ödeme Detayları</h1>
                 </div>
@@ -87,14 +87,11 @@
                             <span class="material-symbols-outlined text-xl">account_circle</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı
-                                E-posta</span>
-                            <span class="text-base font-bold text-gray-900 break-all"
-                                id="user-email-display">Yükleniyor...</span>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı E-posta</span>
+                            <span class="text-base font-bold text-gray-900 break-all" id="user-email-display">Yükleniyor...</span>
                         </div>
                     </div>
-                    <div
-                        class="mt-3 flex items-center gap-3 text-orange-600 bg-orange-50 p-3 rounded-xl border border-orange-100">
+                    <div class="mt-4 flex items-center gap-3 text-orange-600 bg-orange-50 p-4 rounded-xl border border-orange-100">
                         <span class="material-symbols-outlined text-xl shrink-0">warning</span>
                         <p class="text-sm font-black leading-tight">
                             Ödemeyi yaparken girdiğiniz mailin hesabınızın maili ile uyuştuğundan emin olun.
@@ -115,43 +112,42 @@
                 </div>
             </div>
 
-            <!-- Right: Order Summary & Checkout Action -->
-            <div class="w-full md:w-2/5 bg-gray-50/80 p-8 md:p-12 flex flex-col">
+            <!-- Right: Order Summary (Larger %60) -->
+            <div class="w-full md:w-[60%] bg-gray-50/80 p-8 md:p-12 flex flex-col">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-xl font-black text-gray-900">Siparişin</h2>
+                    <h2 class="text-2xl font-black text-gray-900">Siparişin</h2>
                     <a href="../#courses"
-                        class="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl font-bold text-xs hover:bg-orange-100 transition-colors flex items-center gap-2 border border-orange-100">
+                        class="bg-orange-50 text-orange-600 px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-orange-100 transition-colors flex items-center gap-2 border border-orange-100">
                         <span class="material-symbols-outlined text-sm">keyboard_backspace</span>
                         Alışverişe Devam Et
                     </a>
                 </div>
 
-                <div id="order-items" class="space-y-3 mb-8 flex-grow">
+                <div id="order-items" class="space-y-4 mb-8 flex-grow">
                     <!-- Javascript will load cart items here -->
                 </div>
 
-                <div class="border-t border-gray-200 pt-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="font-black text-gray-900 text-lg">Toplam</span>
-                        <span class="font-black text-orange-600 text-3xl tracking-tight" id="total">₺0,00</span>
+                <div class="border-t border-gray-200 pt-8 mt-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <span class="font-black text-gray-900 text-xl">Toplam</span>
+                        <span class="font-black text-orange-600 text-4xl tracking-tight" id="total">₺0,00</span>
                     </div>
 
                     <button id="submit-btn" onclick="goToShopier()"
-                        class="group w-full bg-orange-600 text-white font-black py-5 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-lg">
+                        class="group w-full bg-orange-600 text-white font-black py-6 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-xl">
                         <span>Ödemeye Geç</span>
                         <span
                             class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                     </button>
 
-                    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 opacity-80">
-                        <img src="../Images/shopier" class="h-5 w-auto" alt="Shopier">
-                        <div class="w-px h-6 bg-gray-200 hidden sm:block"></div>
-                        <img src="../Images/pngwing.com.png" class="h-8 w-auto" alt="Güvenli Ödeme">
-                        <div class="w-px h-6 bg-gray-200 hidden sm:block"></div>
+                    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-4 opacity-90">
+                        <img src="../Images/shopier" class="h-6 w-auto" alt="Shopier">
+                        <div class="w-px h-8 bg-gray-200 hidden sm:block"></div>
+                        <img src="../Images/pngwing.com.png" class="h-10 w-auto" alt="Güvenli Ödeme">
+                        <div class="w-px h-8 bg-gray-200 hidden sm:block"></div>
                         <div class="flex flex-col items-start leading-tight select-none">
-                            <span class="text-[8px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ
-                                ÖDE</span>
-                            <span class="text-[10px] font-black text-gray-500 tracking-tighter">3D SECURE</span>
+                            <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ ÖDE</span>
+                            <span class="text-xs font-black text-gray-500 tracking-tighter">3D SECURE</span>
                         </div>
                     </div>
                 </div>
@@ -161,7 +157,7 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 py-8 px-6">
-        <div class="max-w-5xl mx-auto flex justify-start items-center">
+        <div class="max-w-4xl mx-auto flex justify-start items-center">
             <div class="flex items-center gap-1">
                 <img src="../Images/logo-siyah.png" alt="Logo" class="h-8 w-8 object-contain">
                 <span class="font-black text-xl text-gray-900 tracking-tighter">DereceLab</span>
@@ -217,15 +213,16 @@
             let total = 0;
             items.forEach(item => {
                 total += item.price;
-                const imageSrc = item.img || '../Images/logo-siyah.png';
+                
                 container.innerHTML += `
-                <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm">
-                    <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover border border-gray-50 shrink-0" alt="${item.name}">
+                <div class="bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm hover:shadow-md transition-all">
                     <div class="flex-1 min-w-0">
-                        <h4 class="font-bold text-gray-900 text-[11px] sm:text-xs leading-tight truncate">${item.name}</h4>
-                        <span class="text-orange-600 text-[9px] font-bold uppercase tracking-widest">ÖMÜR BOYU ERİŞİM</span>
+                        <h4 class="font-bold text-gray-900 text-sm sm:text-base leading-tight">${item.name}</h4>
+                        <span class="text-orange-600 text-[10px] font-black uppercase tracking-widest mt-1 block">ÖMÜR BOYU ERİŞİM</span>
                     </div>
-                    <span class="font-black text-gray-900 text-sm whitespace-nowrap ml-auto">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                    <div class="text-right">
+                        <span class="font-black text-gray-900 text-lg sm:text-xl whitespace-nowrap">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                    </div>
                 </div>
             `;
             });

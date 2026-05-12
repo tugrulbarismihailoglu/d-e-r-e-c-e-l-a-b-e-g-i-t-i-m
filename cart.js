@@ -79,11 +79,16 @@
             this.updateUI();
         },
 
-        add: function(id, name, price) {
+        add: function(id, name, price, img) {
             id = String(id);
             const exists = this.items.find(i => String(i.id) === id);
             if (!exists) {
-                this.items.push({ id, name, price: parseFloat(price) || 0 });
+                this.items.push({ 
+                    id, 
+                    name, 
+                    price: parseFloat(price) || 0,
+                    img: img || '../Images/logo-siyah.png'
+                });
                 this.save();
                 this.openCart();
             }
@@ -95,7 +100,7 @@
             this.save();
         },
 
-        toggle: function(id, name, price) {
+        toggle: function(id, name, price, img) {
             id = String(id);
             // Satın alınan ürün sepetten çıkarılamaz/eklenemez
             if (this.purchasedIds.includes(id)) return;
@@ -104,7 +109,7 @@
             if (exists) {
                 this.remove(id);
             } else {
-                this.add(id, name, price);
+                this.add(id, name, price, img);
             }
         },
 
@@ -262,7 +267,7 @@
 
     window.openCart = () => Cart.openCart();
     window.closeCart = () => Cart.closeCart();
-    window.toggleCartItem = (id, name, price) => Cart.toggle(id, name, price);
+    window.toggleCartItem = (id, name, price, img) => Cart.toggle(id, name, price, img);
 
     document.addEventListener('DOMContentLoaded', () => Cart.init());
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
