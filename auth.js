@@ -15,7 +15,7 @@ window.DereceLab = DereceLab;
 DereceLab.Auth = DereceLab.Auth || {};
 DereceLab.Auth.BASE_URL = BASE_URL; // Expose globally
 
-DereceLab.Auth = {
+Object.assign(DereceLab.Auth, {
   currentUser: null,
   onReadyCallbacks: [],
 

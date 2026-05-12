@@ -41,12 +41,17 @@
         },
 
         checkout: function() {
-            const user = window.DereceLab.Auth.currentUser;
+            // Firebase veya Cache'den kullanıcıyı kontrol et
+            const user = window.DereceLab.Auth.currentUser || JSON.parse(localStorage.getItem('derecelab_user'));
+            
             if (!user) {
-                window.location.href = (window.DereceLab.Auth.BASE_URL || '') + '/giris/';
+                const baseUrl = window.DereceLab.Auth.BASE_URL || '';
+                window.location.href = baseUrl + '/giris/';
                 return;
             }
-            window.location.href = (window.DereceLab.Auth.BASE_URL || '') + '/odeme/';
+            
+            const baseUrl = window.DereceLab.Auth.BASE_URL || '';
+            window.location.href = baseUrl + '/odeme/';
         },
 
                 load: function() {
