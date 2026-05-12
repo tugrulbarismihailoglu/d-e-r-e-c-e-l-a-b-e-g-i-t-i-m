@@ -42,22 +42,14 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .select-none {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
-  <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
+    <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
 </head>
 
 <body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100">
@@ -65,159 +57,146 @@
     <!-- Header -->
     <header class="w-full bg-orange-600 border-b border-orange-700 shadow-sm py-4">
         <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
-            <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
+            <a class="text-xl font-black tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
                 href="../">
                 <img alt="DereceLab Logo" class="w-auto mr-1 h-10" src="../Images/logo-beyaz.png">
+                <span class="hidden sm:inline">DereceLab</span>
             </a>
             <div class="flex items-center gap-2 text-white font-bold text-sm">
                 <span class="material-symbols-outlined text-[18px]">lock</span>
-                Güvenli Ödeme
+                <span class="hidden sm:inline">Güvenli Ödeme</span>
             </div>
         </div>
     </header>
 
     <main class="flex-grow py-8 md:py-16 px-4 md:px-6 max-w-5xl mx-auto w-full">
-        <!-- Mobile Step Indicator -->
-        <div class="flex items-center gap-3 mb-8 md:hidden">
-            <div class="flex-1 h-1.5 bg-orange-600 rounded-full"></div>
-            <div class="flex-1 h-1.5 bg-gray-200 rounded-full"></div>
-            <div class="flex-1 h-1.5 bg-gray-200 rounded-full"></div>
-        </div>
+        <div
+            class="bg-white rounded-[2rem] shadow-2xl shadow-orange-900/10 border border-gray-100 overflow-hidden flex flex-col md:flex-row mb-12">
 
-        <div class="bg-white rounded-[2rem] shadow-2xl shadow-orange-900/10 border border-gray-100 overflow-hidden flex flex-col md:flex-row">
-
-            <!-- Payment Form (Left) -->
+            <!-- Left: User Info -->
             <div class="w-full md:w-3/5 p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-100">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
-                        <span class="material-symbols-outlined">payments</span>
-                    </div>
+                <div class="mb-8">
                     <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Ödeme Detayları</h1>
                 </div>
 
-                <div class="bg-orange-50/50 border border-orange-100 rounded-2xl p-6 mb-8 flex items-start gap-4">
-                    <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5">
-                        <span class="material-symbols-outlined text-sm">lock</span>
+                <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-4" id="user-info-box">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 border border-gray-100">
+                            <span class="material-symbols-outlined text-xl">account_circle</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı
+                                E-posta</span>
+                            <span class="text-base font-bold text-gray-900 break-all"
+                                id="user-email-display">Yükleniyor...</span>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-orange-900 text-sm">Güvenli Shopier Altyapısı</h4>
-                        <p class="text-orange-700/80 text-xs mt-1.5 leading-relaxed">
-                            Ödemeniz 256-bit SSL sertifikalı Shopier sistemi üzerinden 3D Secure güvencesiyle alınır. Kart bilgileriniz tarafımızca asla kaydedilmez.
+                    <div
+                        class="mt-3 flex items-center gap-3 text-orange-600 bg-orange-50 p-3 rounded-xl border border-orange-100">
+                        <span class="material-symbols-outlined text-xl shrink-0">warning</span>
+                        <p class="text-sm font-black leading-tight">
+                            Ödemeyi yaparken girdiğiniz mailin hesabınızın maili ile uyuştuğundan emin olun.
                         </p>
                     </div>
                 </div>
 
-                <!-- Kullanıcı bilgisi kutusu -->
-                <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 mb-8" id="user-info-box">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 border border-gray-100">
-                            <span class="material-symbols-outlined">account_circle</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı E-posta</span>
-                            <span class="text-base font-bold text-gray-900 break-all" id="user-email-display">Yükleniyor...</span>
-                        </div>
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white shrink-0">
+                        <span class="material-symbols-outlined text-sm">verified_user</span>
                     </div>
-                    <div class="mt-4 flex items-center gap-2 text-orange-600 text-[11px] font-bold bg-white/50 p-2 rounded-lg border border-orange-100/50">
-                        <span class="material-symbols-outlined text-xs">info</span>
-                        Kurs bu adrese otomatik tanımlanacaktır.
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button id="submit-btn" onclick="goToShopier()"
-                        class="group w-full bg-orange-600 text-white font-black py-5 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-lg">
-                        <span>Shopier ile Güvenli Öde</span>
-                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                    </button>
-                    <div class="mt-6 flex items-center justify-center gap-4 text-gray-300">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg" class="h-3 opacity-60 grayscale hover:grayscale-0 transition-all cursor-help" alt="Visa">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-6 opacity-60 grayscale hover:grayscale-0 transition-all cursor-help" alt="Mastercard">
-                        <div class="w-px h-4 bg-gray-200"></div>
-                        <span class="text-[10px] font-black tracking-tighter">3D SECURE</span>
+                    <div class="flex flex-col">
+                        <h4 class="font-bold text-blue-900 text-sm">Anında Erişim</h4>
+                        <p class="text-blue-700/80 text-xs font-bold leading-tight">
+                            Ödemeniz onaylandığı anda kurslarınız hesabınıza otomatik olarak tanımlanacaktır.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Order Summary (Right) -->
+            <!-- Right: Order Summary & Checkout Action -->
             <div class="w-full md:w-2/5 bg-gray-50/80 p-8 md:p-12 flex flex-col">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-xl font-black text-gray-900">Siparişin</h2>
+                    <a href="../#courses"
+                        class="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl font-bold text-xs hover:bg-orange-100 transition-colors flex items-center gap-2 border border-orange-100">
+                        <span class="material-symbols-outlined text-sm">keyboard_backspace</span>
+                        Geri Dön
+                    </a>
                 </div>
 
-                <div id="order-items" class="space-y-6 mb-8 flex-grow">
+                <div id="order-items" class="space-y-3 mb-8 flex-grow">
                     <!-- Javascript will load cart items here -->
-                    <div class="animate-pulse flex space-x-4">
-                        <div class="rounded-lg bg-gray-200 h-16 w-16"></div>
-                        <div class="flex-1 space-y-4 py-1">
-                            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="border-t border-gray-200 pt-8 mt-auto">
-                    <div class="space-y-3 mb-6">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-500 font-medium">Ara Toplam</span>
-                            <span class="font-bold text-gray-900" id="subtotal">₺0,00</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                <div class="border-t border-gray-200 pt-8">
+                    <div class="flex justify-between items-center mb-6">
                         <span class="font-black text-gray-900 text-lg">Toplam</span>
-                        <div class="flex flex-col items-end">
-                            <span class="font-black text-orange-600 text-3xl tracking-tight" id="total">₺0,00</span>
+                        <span class="font-black text-orange-600 text-3xl tracking-tight" id="total">₺0,00</span>
+                    </div>
+
+                    <button id="submit-btn" onclick="goToShopier()"
+                        class="group w-full bg-orange-600 text-white font-black py-5 rounded-2xl hover:bg-orange-700 active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 flex items-center justify-center gap-3 text-lg">
+                        <span>Ödemeye Geç</span>
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 opacity-80">
+                        <img src="../Images/shopier" class="h-5 w-auto" alt="Shopier">
+                        <div class="w-px h-6 bg-gray-200 hidden sm:block"></div>
+                        <img src="../Images/pngwing.com.png" class="h-8 w-auto" alt="Güvenli Ödeme">
+                        <div class="w-px h-6 bg-gray-200 hidden sm:block"></div>
+                        <div class="flex flex-col items-start leading-tight select-none">
+                            <span class="text-[8px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ ÖDE</span>
+                            <span class="text-[10px] font-black text-gray-500 tracking-tighter">3D SECURE</span>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-8 px-6">
+        <div class="max-w-5xl mx-auto flex justify-start items-center">
+            <div class="flex items-center gap-1">
+                <img src="../Images/logo-siyah.png" alt="Logo" class="h-8 w-8 object-contain">
+                <span class="font-black text-xl text-gray-900 tracking-tighter">DereceLab</span>
+            </div>
+        </div>
+    </footer>
 
     <!-- Auth & Cart JS -->
     <script src="../auth.js?v=1777565555"></script>
     <script src="../cart.js?v=1777567479"></script>
 
     <script>
-        // Sepet linkine göre Shopier URL eşleşmesi
-        // Sepetteki kurs ID → Shopier ürün linki
         const SHOPIER_LINKS = {
-            'course_1': 'https://www.shopier.com/medyabit/38859685', // Verimlilik
-            'course_2': 'https://www.shopier.com/medyabit/38859685', // Zaman Yönetimi — linkini güncelle
-            'course_3': 'https://www.shopier.com/medyabit/38859685', // Çalışma Rotasyonları — linkini güncelle
-            'course_4': 'https://www.shopier.com/medyabit/38859685', // Üçlü Paket — linkini güncelle
+            'course_1': 'https://www.shopier.com/medyabit/38859685',
+            'course_2': 'https://www.shopier.com/medyabit/38859685',
+            'course_3': 'https://www.shopier.com/medyabit/38859685',
+            'course_4': 'https://www.shopier.com/medyabit/38859685',
         };
 
         function goToShopier() {
             const user = auth.currentUser;
             if (!user) return;
-
             const items = DereceLab.Cart.items;
             if (items.length === 0) return;
-
-            // Birden fazla ürün varsa ilkinin linkini kullan
-            // Tek ürünse direkt o linke git
             const firstCourseId = items[0].id;
             const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/medyabit/38859685';
-
-            // Shopier'e email ve kurs ID (custom) parametreleri ile yönlendir
             const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}&custom=${encodeURIComponent(firstCourseId)}`;
-
             window.open(shopierUrl, '_blank');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             DereceLab.Auth.onReady((user) => {
-                // Hem Firebase hem de Cache kontrolü
                 const cachedUser = JSON.parse(localStorage.getItem('derecelab_user'));
                 const finalUser = user || cachedUser;
-
                 if (!finalUser) {
                     window.location.href = '../giris/';
                     return;
                 }
-                // Kullanıcı emailini göster
                 const emailEl = document.getElementById('user-email-display');
                 if (emailEl) emailEl.textContent = finalUser.email;
                 loadOrderSummary();
@@ -227,71 +206,26 @@
         function loadOrderSummary() {
             const items = DereceLab.Cart.items;
             const container = document.getElementById('order-items');
-
             if (items.length === 0) {
-                container.innerHTML = '<p class="text-red-500 text-sm font-bold">Sepetiniz boş. Lütfen kurs seçip tekrar gelin.</p>';
-                document.getElementById('submit-btn').disabled = true;
-                document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                container.innerHTML = '<p class="text-red-500 text-sm font-bold">Sepetiniz boş.</p>';
                 return;
             }
-
             container.innerHTML = '';
             let total = 0;
-
             items.forEach(item => {
                 total += item.price;
                 container.innerHTML += `
-                <div class="flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-900 text-sm leading-tight">${item.name}</h4>
-                        <p class="text-green-600 text-[11px] font-bold mt-1">Ömür Boyu Erişim</p>
+                <div class="bg-white border border-gray-100 rounded-2xl p-4 flex justify-between items-center shadow-sm">
+                    <div class="flex flex-col gap-1">
+                        <h4 class="font-bold text-gray-900 text-xs sm:text-sm leading-tight">${item.name}</h4>
+                        <span class="text-orange-600 text-[10px] font-bold uppercase tracking-widest">ÖMÜR BOYU ERİŞİM</span>
                     </div>
-                    <span class="font-bold text-gray-900 text-sm">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                    <span class="font-black text-gray-900 text-sm whitespace-nowrap">₺${parseFloat(item.price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                 </div>
             `;
             });
-
-            const totalStr = `₺${total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
-            document.getElementById('subtotal').textContent = totalStr;
-            document.getElementById('total').textContent = totalStr;
+            document.getElementById('total').textContent = `₺${total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
         }
-
-        document.getElementById('payment-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const user = auth.currentUser;
-            if (!user || DereceLab.Cart.items.length === 0) return;
-
-            const btn = document.getElementById('submit-btn');
-            const btnText = document.getElementById('btn-text');
-            const spinner = document.getElementById('btn-spinner');
-
-            btn.disabled = true;
-            btnText.textContent = 'İşleniyor...';
-            spinner.classList.remove('hidden');
-
-            // Simulate network request
-            setTimeout(async () => {
-                const courseIds = DereceLab.Cart.items.map(item => item.id);
-                const success = await DereceLab.Auth.purchaseCourses(user.uid, courseIds);
-
-                if (success) {
-                    DereceLab.Cart.clear();
-                    btnText.textContent = 'Başarılı! Yönlendiriliyorsunuz...';
-                    spinner.classList.add('hidden');
-                    btn.classList.replace('bg-orange-600', 'bg-green-500');
-                    btn.classList.replace('hover:bg-orange-700', 'hover:bg-green-600');
-
-                    setTimeout(() => {
-                        window.location.href = '../panel/';
-                    }, 1500);
-                } else {
-                    alert("Bir hata oluştu, lütfen tekrar deneyin.");
-                    btn.disabled = false;
-                    btnText.textContent = 'Ödemeyi Tamamla ve Kurslara Başla';
-                    spinner.classList.add('hidden');
-                }
-            }, 1500);
-        });
     </script>
 
 </body>
