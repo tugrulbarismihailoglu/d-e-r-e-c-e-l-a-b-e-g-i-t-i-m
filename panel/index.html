@@ -76,10 +76,6 @@
 </div>
 <div class="flex items-center gap-4 z-10">
 <a href="../" class="text-sm font-semibold text-white/80 hover:text-white transition-colors hidden sm:block">Ana Sayfaya Dön</a>
-<button class="relative p-2 text-white/80 hover:text-white transition-colors group" id="open-cart" onclick="DereceLab.Cart.openCart()">
-    <span class="material-symbols-outlined text-xl">shopping_cart</span>
-    <span class="absolute top-0 right-0 w-4 h-4 bg-white text-orange-600 text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm" id="cart-badge">0</span>
-</button>
 <button onclick="DereceLab.Auth.signOut()" class="text-sm font-semibold text-white/80 hover:text-white transition-colors flex items-center gap-1">
     <span class="material-symbols-outlined text-[18px]">logout</span>
 </button>
@@ -192,44 +188,7 @@
 </main>
 
 
-<!-- Cart Overlay -->
-<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] opacity-0 pointer-events-none transition-opacity duration-300" id="cart-overlay" onclick="DereceLab.Cart.closeCart()"></div>
-
-<!-- Cart Drawer -->
-<div class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col" id="cart-drawer">
-    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-orange-600">shopping_cart</span>
-            <h2 class="text-lg font-bold text-gray-900">Sepetim</h2>
-        </div>
-        <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" id="close-cart" onclick="DereceLab.Cart.closeCart()">
-            <span class="material-symbols-outlined text-gray-500">close</span>
-        </button>
-    </div>
-    
-    <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
-        <!-- Empty State -->
-        <div class="flex flex-col items-center justify-center h-full text-center py-12" id="cart-empty-state">
-            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                <span class="material-symbols-outlined text-3xl text-gray-300">shopping_basket</span>
-            </div>
-            <p class="text-gray-500 font-medium">Sepetiniz şu an boş.</p>
-            <a href="../kurslar/uclu-paket/" class="mt-4 text-orange-600 font-bold text-sm hover:underline block" onclick="DereceLab.Cart.closeCart()">Tüm Kursları Görüntüle</a>
-        </div>
-        <!-- Items -->
-        <div class="space-y-4 hidden" id="cart-items-container"></div>
-    </div>
-    
-    <div class="p-6 border-t border-gray-100 bg-gray-50 hidden" id="cart-footer">
-        <div class="flex items-center justify-between mb-4">
-            <span class="text-gray-600 font-medium">Toplam</span>
-            <span class="text-xl font-extrabold text-gray-900" id="cart-total">₺0,00</span>
-        </div>
-        <button class="w-full py-4 bg-orange-600 text-white rounded-xl font-bold hover:bg-orange-700 transition-all shadow-lg shadow-orange-200" onclick="DereceLab.Cart.checkout()">
-            Ödemeye Geç
-        </button>
-    </div>
-</div>
+<!-- END: ShoppingCartDrawer -->
 
 <!-- Auth JS & Cart JS (for catalog) -->
 <script src="../auth.js?v=1777565555"></script>
@@ -378,10 +337,10 @@
                     let priceHtml = course.id === 'course_4'
                         ? `<div class="flex flex-col">
                             <div class="flex items-center gap-2 mb-1">
-                                <del class="text-sm text-gray-500">₺1.089</del>
-                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%33 İNDİRİM</span>
+                                <del class="text-sm text-gray-500">₺689,70</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%24 İNDİRİM</span>
                             </div>
-                            <span class="text-xl font-extrabold text-orange-600 product-price">₺729,90</span>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺519,90</span>
                            </div>`
                         : `<span class="text-xl font-extrabold text-gray-900 product-price">₺${course.price.toLocaleString('tr-TR', {minimumFractionDigits: 2})}</span>`;
 
@@ -392,6 +351,8 @@
                     let titleClass = course.id === 'course_4'
                         ? 'font-bold text-gray-900 leading-tight mb-1 min-h-[24px] text-[18px] group-hover/title:text-orange-600 transition-colors'
                         : 'font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors';
+
+                    const btnText = course.id === 'course_4' ? 'Paketi Görüntüle' : 'Kursu Görüntüle';
 
                     card.innerHTML = `
                         <a href="${course.url}" class="${imageWrapperClass}">
@@ -414,9 +375,9 @@
                                 <div class="flex items-center justify-between mb-1">
                                     ${priceHtml}
                                 </div>
-                                <button class="add-to-cart-btn w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors" data-id="${course.id}" data-name="${course.name}" data-price="${course.price}" onclick="DereceLab.Cart.toggle('${course.id}', '${course.name}', ${course.price})">
-                                    <span class="material-symbols-outlined text-base">add_shopping_cart</span> Sepete Ekle
-                                </button>
+                                <a class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors" href="${course.url}">
+                                    <span class="material-symbols-outlined text-base">search</span> ${btnText}
+                                </a>
                             </div>
                         </div>
                     `;

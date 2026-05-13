@@ -116,6 +116,19 @@
             }
         }
 
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        #purchase-action-container {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+
     </style>
 
 <!-- Firebase SDK -->
@@ -127,37 +140,7 @@
 </head>
 <body class="bg-background text-on-surface">
 <!-- Shopping Cart Drawer -->
-<div class="fixed inset-0 bg-black/50 z-[60] opacity-0 pointer-events-none transition-opacity duration-300" id="cart-overlay"></div>
-<div class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white z-[70] translate-x-full shadow-2xl flex flex-col" id="cart-drawer">
-<div class="p-6 border-b border-gray-100 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-orange-600">shopping_cart</span>
-<h2 class="text-lg font-bold text-gray-900">Sepetim</h2>
-</div>
-<button class="p-2 hover:bg-gray-100 rounded-full transition-colors" onclick="DereceLab.Cart.closeCart()">
-<span class="material-symbols-outlined text-gray-500">close</span>
-</button>
-</div>
-<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
-<!-- Empty State -->
-<div class="flex flex-col items-center justify-center h-full text-center py-12" id="cart-empty-state">
-<div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-<span class="material-symbols-outlined text-3xl text-gray-300">shopping_basket</span>
-</div>
-<p class="text-gray-500 font-medium">Sepetiniz şu an boş.</p>
-<a href="../uclu-paket/" class="mt-4 text-orange-600 font-bold text-sm hover:underline block" onclick="DereceLab.Cart.closeCart()">Tüm Kursları Görüntüle</a>
-</div>
-<div class="space-y-4 hidden" id="cart-items-container"></div>
-</div>
-<!-- Cart Footer (Only visible when items are in cart) -->
-<div class="p-6 border-t border-gray-100 bg-gray-50 hidden" id="cart-footer">
-<div class="flex items-center justify-between mb-4">
-<span class="text-gray-500 font-medium">Toplam</span>
-<span class="text-xl font-bold text-gray-900" id="cart-total">₺0,00</span>
-</div>
-<button class="w-full bg-orange-600 text-white py-4 rounded-xl font-bold hover:bg-orange-700 transition-colors" onclick="DereceLab.Cart.checkout()">Ödemeye Geç</button>
-</div>
-</div>
+  <!-- END: ShoppingCartDrawer -->
 <!-- Header -->
 <header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 transition-colors duration-300">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between relative">
@@ -174,10 +157,6 @@
 <div id="nav-indicator"></div>
 </nav>
 <div class="flex items-center gap-2 sm:gap-4 z-10">
-<button class="flex items-center justify-center p-2 rounded-lg text-white hover:bg-orange-700 transition-colors relative group" id="open-cart" onclick="DereceLab.Cart.openCart()">
-<span class="material-symbols-outlined text-xl">shopping_cart</span>
-<span class="absolute top-0 right-0 w-4 h-4 bg-white text-orange-600 text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm" id="cart-count">0</span>
-</button>
 </div>
 </div>
 </header>
@@ -219,29 +198,41 @@
 </div>
 <div class="lg:col-span-5 flex h-auto lg:h-[350px]">
 <div class="bg-white p-6 rounded-xl border-2 border-primary shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full">
-<div class="absolute top-0 right-0">
+<div class="absolute -top-[2px] -right-[2px] rounded-tr-xl overflow-hidden">
 <div class="bg-primary px-4 py-1.5 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-xl">
                             EN AVANTAJLI
                         </div>
 </div>
 <div class="mb-4 pt-2">
-<span class="text-neutral-400 line-through text-xs font-medium">₺1089,00</span>
+<span class="text-neutral-400 line-through text-xs font-medium">₺689,70</span>
 <div class="flex items-center gap-3 mt-0.5">
-<span class="text-3xl font-black text-neutral-900">₺729,90</span>
-<span class="bg-success text-white px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-sm">-%33 İNDİRİM</span>
+<span class="text-3xl font-black text-neutral-900">₺519,90</span>
+<span class="bg-success text-white px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-sm">-%24 İNDİRİM</span>
 </div>
 </div>
-<ul class="space-y-2 mb-4 flex-grow overflow-hidden">
-<p class="text-neutral-900 font-bold text-xs mb-2">Şunları içerir:</p>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-base">check_circle</span><span class="text-neutral-600 text-xs font-medium">Verimlilik Optimizasyonu Video Seti</span></li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-base">check_circle</span><span class="text-neutral-600 text-xs font-medium">Zaman Yönetimi Video Seti</span></li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-base">check_circle</span><span class="text-neutral-600 text-xs font-medium">Çalışma Rotasyonları Video Seti</span></li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-base">check_circle</span><span class="text-neutral-600 text-xs font-medium">Ömür Boyu Erişim</span></li>
-</ul>
-<button class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-200 transition-all flex items-center justify-center gap-2 mt-auto shadow-md" id="add-to-cart-btn" onclick="DereceLab.Cart.toggle('bundle_1', 'DereceLab Üçlü Paket', 729.90)">
-<span class="material-symbols-outlined text-lg">add_shopping_cart</span>
-<span class="btn-text">Sepete Ekle</span>
+
+<div id="purchase-action-container" data-course-id="course_4" data-check-ownership>
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-200 transition-all flex items-center justify-center gap-2 mt-auto shadow-md" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_4')">
+<span class="material-symbols-outlined text-lg">bolt</span>
+<span class="btn-text">Shopier Üzerinden Satın Al</span>
 </button>
+
+<!-- Ödeme Bilgilendirme -->
+<div class="mt-4 space-y-2">
+  <div class="flex items-start gap-2 text-orange-600 bg-orange-50 p-3 rounded-lg border border-orange-100">
+    <span class="material-symbols-outlined text-base shrink-0 mt-0.5">warning</span>
+    <p class="text-[10px] font-bold leading-tight">
+      Ödemeyi yaparken girdiğiniz mailin hesabınızın maili ile uyuştuğundan emin olun.
+    </p>
+  </div>
+  <div class="flex items-start gap-2 text-blue-600 bg-blue-50 p-3 rounded-lg border border-blue-100">
+    <span class="material-symbols-outlined text-base shrink-0 mt-0.5">verified_user</span>
+    <p class="text-[10px] font-bold leading-tight">
+      Ödemeniz onaylandığı anda kurslarınız hesabınıza otomatik olarak tanımlanacaktır.
+    </p>
+  </div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -292,11 +283,11 @@
                 <div class="flex items-center justify-between mb-3">
                   <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺229,90</span>
                 </div>
-                <button
-                  class="add-to-cart-btn w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors"
-                  data-price="229.90" style="" onclick="DereceLab.Cart.toggle('course_1', 'Verimlilik Optimizasyonu Video Seti', 229.90)">
-                  <span class="material-symbols-outlined text-base" style="">add_shopping_cart</span> Sepete Ekle
-                </button>
+                <a
+                  class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors"
+                  href="../verimlilik-optimizasyonu/" style="">
+                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                </a>
               </div>
             </div>
           </div>
@@ -340,11 +331,11 @@
                 <div class="flex items-center justify-between mb-3">
                   <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺229,90</span>
                 </div>
-                <button
-                  class="add-to-cart-btn w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors"
-                  data-price="229.90" style="" onclick="DereceLab.Cart.toggle('course_2', 'Zaman Yönetimi Video Seti', 229.90)">
-                  <span class="material-symbols-outlined text-base" style="">add_shopping_cart</span> Sepete Ekle
-                </button>
+                <a
+                  class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors"
+                  href="../zaman-yonetimi/" style="">
+                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                </a>
               </div>
             </div>
           </div>
@@ -386,13 +377,13 @@
               </ul>
               <div class="mt-auto">
                 <div class="flex items-center justify-between mb-3">
-                  <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺629,90</span>
+                  <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺229,90</span>
                 </div>
-                <button
-                  class="add-to-cart-btn w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors"
-                  data-price="629.90" style="" onclick="DereceLab.Cart.toggle('course_3', 'Çalışma Rotasyonları Video Seti', 629.90)">
-                  <span class="material-symbols-outlined text-base" style="">add_shopping_cart</span> Sepete Ekle
-                </button>
+                <a
+                  class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                  href="../calisma-rotasyonlari/" style="">
+                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                </a>
               </div>
             </div>
           </div>

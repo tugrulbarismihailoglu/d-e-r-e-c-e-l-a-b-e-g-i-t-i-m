@@ -15,7 +15,10 @@ const SHOPIER_USER = "878b80f8685ab083ef239d80537cca08";
 const SHOPIER_KEY = "41d3ccfb980c8ce1e84662abf18674ce";
 
 const PRODUCT_MAPPING = {
-    "38859685": "course_1"
+    "47135332": "course_1",
+    "47159074": "course_2",
+    "47159083": "course_3",
+    "47159325": "course_4"
 };
 
 async function getRawBody(readable) {
@@ -65,8 +68,8 @@ export default async function handler(req, res) {
         const email = decodedData.email;
         const productId = decodedData.productid?.toString();
 
-        if (email && productId) {
-            const courseId = PRODUCT_MAPPING[productId] || "course_1";
+        if (email) {
+            const courseId = decodedData.custom || PRODUCT_MAPPING[productId] || "course_1";
             const normalizedEmail = email.toLowerCase().trim();
             
             console.log(`[Shopier] Arama yapılıyor: ${normalizedEmail}`);

@@ -484,15 +484,32 @@
 
                 showMessage('Hesabınız başarıyla oluşturuldu! Yönlendiriliyorsunuz...', false);
 
-                // Dashboard'a yönlendir
+                // Yönlendirme mantığı
                 setTimeout(() => {
-                    window.location.href = '../panel/';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect');
+                    
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        window.location.href = '../panel/';
+                    }
                 }, 1500);
 
             } catch (error) {
                 console.error('Kayıt hatası:', error);
                 showMessage(getErrorMessage(error.code));
                 setLoading(false);
+            }
+        });
+
+        // Preserve redirect in link
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            if (redirect) {
+                const loginLink = document.querySelector('a[href="../giris/"]');
+                if (loginLink) loginLink.href += '?redirect=' + encodeURIComponent(redirect);
             }
         });
     </script>

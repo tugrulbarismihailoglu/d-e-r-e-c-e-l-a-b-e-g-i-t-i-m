@@ -34,7 +34,7 @@ window.DereceLab.Catalog = {
         ]
     },
     'course_3': {
-        id: 'course_3', name: 'Çalışma Rotasyonları Video Seti', price: 629.90, url: CATALOG_BASE_URL + '/kurslar/calisma-rotasyonlari/',
+        id: 'course_3', name: 'Çalışma Rotasyonları Video Seti', price: 229.90, url: CATALOG_BASE_URL + '/kurslar/calisma-rotasyonlari/',
         img: CATALOG_BASE_URL + '/Images/calisma-rotasyon.png',
         badge: 'KAPSAMLI',
         titleHtml: 'Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
@@ -46,7 +46,7 @@ window.DereceLab.Catalog = {
         ]
     },
     'course_4': {
-        id: 'course_4', name: 'DereceLab Üçlü Paket', price: 729.90, url: CATALOG_BASE_URL + '/kurslar/uclu-paket/',
+        id: 'course_4', name: 'DereceLab Üçlü Paket', price: 519.90, url: CATALOG_BASE_URL + '/kurslar/uclu-paket/',
         img: CATALOG_BASE_URL + '/Images/avantajli.png',
         badge: 'AVANTAJLI',
         titleHtml: 'DereceLab Üçlü Paket <span class="block text-sm mt-1 font-semibold text-gray-500">Tüm Video Setleri</span>',

@@ -283,7 +283,110 @@ Object.assign(DereceLab.Auth, {
       console.error('Satın alma hatası:', error);
       return false;
     }
+  },
+
+  // Shopier'e yönlendir (Satın Al butonu için)
+  buyNow(courseId) {
+    const user = this.currentUser;
+    if (!user) {
+      const currentUrl = window.location.href;
+      window.location.href = this.BASE_URL + '/giris/?redirect=' + encodeURIComponent(currentUrl);
+      return;
+    }
+
+    const SHOPIER_LINKS = {
+      'course_1': 'https://www.shopier.com/DereceLab/47135332',
+      'course_2': 'https://www.shopier.com/DereceLab/47159074',
+      'course_3': 'https://www.shopier.com/DereceLab/47159083',
+      'course_4': 'https://www.shopier.com/DereceLab/47159325'
+    };
+
+    const shopierBase = SHOPIER_LINKS[courseId];
+    if (!shopierBase) {
+      console.error('Hata: Geçersiz Kurs ID');
+      return;
+    }
+
+    const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}&custom=${encodeURIComponent(courseId)}`;
+    window.open(shopierUrl, '_blank');
+  },
+
+  // Kurs sahipliğini kontrol et ve UI'ı güncelle
+  async checkCourseOwnership(courseId) {
+    const purchaseContainer = document.getElementById('purchase-action-container');
+    if (!purchaseContainer) return;
+
+    let isUIRendered = false;
+
+    // 1. Hızlı gösterim için localStorage kontrolü
+    const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
+    if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
+        this.renderOwnedState(purchaseContainer);
+        isUIRendered = true;
+    }
+
+    // 2. Firebase'den doğrula ve güncelle
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const profile = await this.getUserProfile(user.uid);
+        const ownedCourses = profile?.purchasedCourses || [];
+        
+        // LocalStorage'ı sessizce güncelle
+        localStorage.setItem('derecelab_purchased', JSON.stringify(ownedCourses));
+        
+        const isOwned = ownedCourses.includes(courseId) || ownedCourses.includes('course_4');
+
+        if (isOwned) {
+          // Eğer zaten cache'den render edildiyse tekrar render etme (titremeyi önler)
+          if (!isUIRendered) {
+            this.renderOwnedState(purchaseContainer);
+            isUIRendered = true;
+          }
+        } else {
+          // Eğer cache hatalıysa veya kullanıcı sahip değilse orijinal butonu göster
+          purchaseContainer.style.opacity = '1';
+          isUIRendered = true;
+        }
+      } else {
+        // Giriş yapılmamışsa butonu göster
+        purchaseContainer.style.opacity = '1';
+        isUIRendered = true;
+      }
+    });
+  },
+
+  renderOwnedState(container) {
+    // Sadece eğer zaten owned state'de değilse içeriği değiştir
+    if (container.querySelector('.bg-green-50')) {
+        container.style.opacity = '1';
+        return;
+    }
+
+    container.style.opacity = '0';
+    container.innerHTML = `
+      <div class="bg-green-50 border border-green-200 rounded-xl p-6 text-center shadow-sm animate-fade-in">
+        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-green-600 text-2xl">verified</span>
+        </div>
+        <h3 class="text-green-800 font-extrabold text-lg mb-1">Bu kursa zaten sahipsin</h3>
+        <p class="text-green-700/70 text-xs mb-4">Harika! Bu içerik kütüphanende erişime açık.</p>
+        <a href="${this.BASE_URL}/panel/" class="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-black text-sm hover:bg-green-700 transition-all shadow-md shadow-green-100">
+          <span class="material-symbols-outlined text-base">dashboard</span>
+          Kurslarıma Git
+        </a>
+      </div>
+    `;
+    setTimeout(() => { container.style.opacity = '1'; }, 50);
   }
+});
+
+// Otomatik sahiplik kontrolü (Eğer sayfada data-check-ownership varsa)
+document.addEventListener('DOMContentLoaded', () => {
+    const el = document.querySelector('[data-course-id]');
+    if (el && el.hasAttribute('data-check-ownership')) {
+        const cid = el.getAttribute('data-course-id');
+        DereceLab.Auth.checkCourseOwnership(cid);
+    }
 });
 
 // Sayfa yüklendiğinde auth'u HEMEN başlat (DOMContentLoaded bekleme)

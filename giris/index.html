@@ -434,12 +434,16 @@
 
                 showMessage('Giriş başarılı! Yönlendiriliyorsunuz...', false);
 
-                // Dashboard'a yönlendir
+                // Yönlendirme mantığı
                 setTimeout(() => {
                     const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.get('redirect') === 'cart') {
-                        window.location.href = '../odeme/';
+                    const redirectUrl = urlParams.get('redirect');
+                    
+                    if (redirectUrl) {
+                        // Eğer özel bir redirect URL'i varsa ona git
+                        window.location.href = redirectUrl;
                     } else {
+                        // Varsayılan olarak panele git
                         window.location.href = '../panel/';
                     }
                 }, 1000);
@@ -469,6 +473,16 @@
                 }
             }
         }
+
+        // Preserve redirect in link
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            if (redirect) {
+                const registerLink = document.querySelector('a[href="../kayit/"]');
+                if (registerLink) registerLink.href += '?redirect=' + encodeURIComponent(redirect);
+            }
+        });
     </script>
 
 
