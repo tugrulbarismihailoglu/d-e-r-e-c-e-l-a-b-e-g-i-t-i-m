@@ -206,7 +206,7 @@
 </div>
 
 <div id="purchase-action-container" data-course-id="course_1" data-check-ownership>
-<button class="add-to-cart-btn w-full bg-primary text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 mt-auto shadow-lg hover:shadow-orange-200 hover:-translate-y-0.5" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
+<button class="add-to-cart-btn w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 mt-auto shadow-lg hover:shadow-orange-200 hover:-translate-y-0.5 active:scale-95" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
 <span class="material-symbols-outlined text-2xl">shopping_cart</span>
 <span class="btn-text">Shopier ile Satın Al</span>
 </button>
@@ -322,7 +322,7 @@
 </div>
 <span class="text-xl font-extrabold text-orange-600 leading-none">₺549,90</span>
 </div>
-<a class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all" href="../uclu-paket/">
+<a class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95" href="../uclu-paket/">
 <span class="material-symbols-outlined text-lg">search</span>
 <span class="btn-text">Paketi Görüntüle</span>
 </a>
@@ -371,28 +371,30 @@
 </section>
 </main>
 <!-- Footer -->
-<footer class="w-full border-t border-neutral-100 bg-neutral-50 py-10">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-8 w-full max-w-7xl mx-auto px-8">
-        <div class="flex flex-col items-center md:items-start gap-4">
-            <div class="font-black text-xl text-neutral-900 tracking-tighter">
+<footer class="w-full px-8 border-t border-gray-100 bg-white py-12">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+        <!-- Left Section: Logo & Social -->
+        <div class="flex flex-col items-center md:items-start gap-6">
+            <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 <div class="flex items-center gap-0.5">
-                    <img alt="DereceLab Logo" class="w-8 h-8 object-contain mr-1" src="../../Images/logo-siyah.png"/>
+                    <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="../../Images/logo-siyah.png"/>
                     <span>DereceLab</span>
                 </div>
             </div>
-            <!-- Social Media Icons -->
-            <div class="flex items-center gap-4 text-gray-400">
-                <a href="#" class="hover:text-orange-600 transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <!-- Social Media Icons (Centered under Logo) -->
+            <div class="flex items-center gap-6 text-orange-600 w-full justify-center md:justify-start">
+                <a href="https://www.instagram.com/derecelabcom/" target="_blank" class="hover:scale-110 transition-transform">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="#" class="hover:text-orange-600 transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg>
+                <a href="https://www.youtube.com/@DereceLab" target="_blank" class="hover:scale-110 transition-transform">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg>
                 </a>
             </div>
         </div>
-        <!-- Payment Logos -->
-        <div class="flex items-center gap-4">
-            <img src="../../Images/visamasttroy.png" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity">
+        <!-- Right Section: Payment Logos -->
+        <div class="flex flex-col items-center md:items-end gap-3">
+            <img src="../../Images/visamasttroy.png" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
+            <img src="../../Images/shopier.png" alt="Shopier" class="h-8 w-auto object-contain">
         </div>
     </div>
 </footer>
