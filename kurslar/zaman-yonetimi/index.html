@@ -153,8 +153,7 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
         #purchase-action-container {
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0;
+            opacity: 1;
         }
     </style>
 
@@ -243,11 +242,11 @@
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-auto">
                     <div
-                        class="lg:col-span-7 relative bg-neutral-100 rounded-xl overflow-hidden shadow-sm border h-64 lg:h-[350px] border-2 border-black">
+                        class="lg:col-span-7 relative bg-neutral-100 rounded-xl overflow-hidden shadow-sm h-64 lg:min-h-[400px] border-2 border-black">
                         <img alt="Zaman Yönetimi Video Seti" class="w-full h-full object-cover"
                             src="../../Images/zaman-yonetimi.png" />
                     </div>
-                    <div class="lg:col-span-5 flex h-auto lg:h-[350px]">
+                    <div class="lg:col-span-5 flex h-auto lg:min-h-[400px]">
                         <div
                             class="bg-white p-6 rounded-xl border shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full border-2 border-primary">
                             <div class="absolute -top-[2px] -right-[2px] rounded-tr-xl overflow-hidden">
@@ -258,31 +257,46 @@
                             </div>
                             <div class="mb-4 pt-2">
                                 <div class="flex items-center gap-3 mt-0.5">
-                                    <span class="text-3xl font-black text-neutral-900">₺229,90</span>
+                                    <span class="text-3xl font-black text-neutral-900">₺249,90</span>
                                 </div>
                             </div>
 
                             <div id="purchase-action-container" data-course-id="course_2" data-check-ownership>
                             <button
-                                class="add-to-cart-btn w-full bg-primary text-white py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 mt-auto shadow-md"
+                                class="add-to-cart-btn w-full bg-primary text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 mt-auto shadow-lg hover:shadow-orange-200 hover:-translate-y-0.5"
                                 id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_2')">
-                                <span class="material-symbols-outlined text-lg">bolt</span>
+                                <span class="material-symbols-outlined text-2xl">shopping_cart</span>
                                 <span class="btn-text">Shopier Üzerinden Satın Al</span>
                             </button>
 
                             <!-- Ödeme Bilgilendirme -->
-                            <div class="mt-4 space-y-2">
-                              <div class="flex items-start gap-2 text-orange-600 bg-orange-50 p-3 rounded-lg border border-orange-100">
-                                <span class="material-symbols-outlined text-base shrink-0 mt-0.5">warning</span>
-                                <p class="text-[10px] font-bold leading-tight">
-                                  Ödemeyi yaparken girdiğiniz mailin hesabınızın maili ile uyuştuğundan emin olun.
-                                </p>
+                            <div class="mt-6 space-y-3">
+                              <div class="flex items-center gap-4 text-orange-700 bg-orange-50/80 p-4 rounded-xl border-2 border-orange-100 shadow-sm transition-all hover:bg-orange-50">
+                                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100/50 shrink-0">
+                                  <span class="material-symbols-outlined text-2xl">warning</span>
+                                </div>
+                                <div class="flex-1">
+                                  <p class="text-[14px] font-bold leading-tight mb-1">
+                                    E-posta Uyumluluğu Önemlidir
+                                  </p>
+                                  <p class="text-[12px] font-medium text-orange-700/80 leading-snug">
+                                    Ödeme yaparken girdiğiniz mailin, hesabınızın maili ile aynı olduğundan emin olun.
+                                    <a href="../../panel/#profile" class="underline decoration-orange-300 hover:text-orange-900 transition-colors">Profil ayarlarından</a> kontrol edebilirsiniz.
+                                  </p>
+                                </div>
                               </div>
-                              <div class="flex items-start gap-2 text-blue-600 bg-blue-50 p-3 rounded-lg border border-blue-100">
-                                <span class="material-symbols-outlined text-base shrink-0 mt-0.5">verified_user</span>
-                                <p class="text-[10px] font-bold leading-tight">
-                                  Ödemeniz onaylandığı anda kurslarınız hesabınıza otomatik olarak tanımlanacaktır.
-                                </p>
+                              <div class="flex items-center gap-4 text-blue-700 bg-blue-50/80 p-4 rounded-xl border-2 border-blue-100 shadow-sm transition-all hover:bg-blue-50">
+                                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100/50 shrink-0">
+                                  <span class="material-symbols-outlined text-2xl">verified_user</span>
+                                </div>
+                                <div class="flex-1">
+                                  <p class="text-[14px] font-bold leading-tight mb-1">
+                                    Anında Kurs Tanımlama
+                                  </p>
+                                  <p class="text-[12px] font-medium text-blue-700/80 leading-snug">
+                                    Ödemeniz onaylandığı anda kurslarınız hesabınıza otomatik olarak tanımlanacaktır.
+                                  </p>
+                                </div>
                               </div>
                             </div>
                             </div>
@@ -298,7 +312,8 @@
                 <h2 class="text-2xl font-extrabold mb-8 text-center text-neutral-900">Diğer Kurslarımıza Göz Atın:</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
                     <!-- Card 1: Verimlilik Optimizasyonu -->
-                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1"
+                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                        onclick="window.location.href='../verimlilik-optimizasyonu/'"
                         data-product-id="course_1">
                         <a href="../verimlilik-optimizasyonu/"
                             class="block aspect-[16/9] relative overflow-hidden">
@@ -317,29 +332,22 @@
                                     Verimlilik Optimizasyonu <span
                                         class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span></h3>
                             </a>
-                            <ul class="space-y-1 mb-4 min-h-[56px]">
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Stratejik
-                                    Planlama</li>
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Odaklanma
-                                    Egzersizleri</li>
-                            </ul>
                             <div class="mt-auto">
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xl font-extrabold text-gray-900">₺229,90</span>
+                                    <span class="text-xl font-extrabold text-gray-900">₺249,90</span>
                                 </div>
                                 <a
-                                    class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                                    class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all"
                                     href="../verimlilik-optimizasyonu/">
-                                    <span class="material-symbols-outlined text-base">search</span>
+                                    <span class="material-symbols-outlined text-lg">search</span>
                                     <span class="btn-text">Kursu Görüntüle</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                     <!-- Card 3: Çalışma Rotasyonları -->
-                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1"
+                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                        onclick="window.location.href='../calisma-rotasyonlari/'"
                         data-product-id="course_3">
                         <a href="../calisma-rotasyonlari/"
                             class="block aspect-[16/9] relative overflow-hidden">
@@ -359,29 +367,22 @@
                                     Çalışma Rotasyonları <span
                                         class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span></h3>
                             </a>
-                            <ul class="space-y-1 mb-4 min-h-[56px]">
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Zihin
-                                    Haritalama</li>
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Aktif
-                                    Geri Çağırma</li>
-                            </ul>
                             <div class="mt-auto">
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xl font-extrabold text-gray-900">₺229,90</span>
+                                    <span class="text-xl font-extrabold text-gray-900">₺249,90</span>
                                 </div>
                                 <a
-                                    class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                                    class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all"
                                     href="../calisma-rotasyonlari/">
-                                    <span class="material-symbols-outlined text-base">search</span>
+                                    <span class="material-symbols-outlined text-lg">search</span>
                                     <span class="btn-text">Kursu Görüntüle</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                     <!-- Card 4: DereceLab Üçlü Paket -->
-                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1"
+                    <div class="group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                        onclick="window.location.href='../uclu-paket/'"
                         data-product-id="course_4">
                         <a href="../uclu-paket/"
                             class="block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center">
@@ -403,31 +404,20 @@
                             <h4
                                 class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 w-fit border border-orange-200 shadow-sm">
                                 3 VİDEO SETİ BİR ARADA</h4>
-                            <ul class="space-y-1 mb-4 min-h-[56px]">
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Verimlilik
-                                    Optimizasyonu Video Seti</li>
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Zaman
-                                    Yönetimi Video Seti</li>
-                                <li class="flex items-center gap-2 text-[10px] text-gray-600"><span
-                                        class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>Çalışma
-                                    Rotasyonları Video Seti</li>
-                            </ul>
                             <div class="mt-auto">
                                 <div class="flex flex-col mb-3">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <del class="text-sm text-gray-500">₺689,70</del>
+                                        <del class="text-sm text-gray-500">₺749,70</del>
                                         <span
-                                            class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%24
+                                            class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%27
                                             İNDİRİM</span>
                                     </div>
-                                    <span class="text-xl font-extrabold text-orange-600 leading-none">₺519,90</span>
+                                    <span class="text-xl font-extrabold text-orange-600 leading-none">₺549,90</span>
                                 </div>
                                 <a
-                                    class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                                    class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all"
                                     href="../uclu-paket/">
-                                    <span class="material-symbols-outlined text-base">search</span>
+                                    <span class="material-symbols-outlined text-lg">search</span>
                                     <span class="btn-text">Paketi Görüntüle</span>
                                 </a>
                             </div>

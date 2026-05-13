@@ -310,12 +310,7 @@
                 if (showCard) {
                     unownedCount++;
                     const course = DereceLab.Catalog[id];
-                    const featuresHtml = course.features.map(f => `
-                        <li class="flex items-center gap-2 text-[10px] text-gray-600">
-                          <span class="material-symbols-outlined text-[14px] text-green-500">check_circle</span>
-                          ${f}
-                        </li>
-                    `).join('');
+
 
                     const card = document.createElement('div');
                     card.className = course.id === 'course_4' 
@@ -367,9 +362,7 @@
                                 </h3>
                             </a>
                             ${subtitleHtml}
-                            <ul class="space-y-1 mb-4 min-h-[56px]">
-                                ${featuresHtml}
-                            </ul>
+
                             <div class="mt-auto">
                                 <div class="flex items-center justify-between mb-1">
                                     ${priceHtml}
