@@ -319,40 +319,52 @@ Object.assign(DereceLab.Auth, {
     let isUIRendered = false;
 
     // 1. Hızlı gösterim için localStorage kontrolü
-    const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
-    if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
-        this.renderOwnedState(purchaseContainer);
-        isUIRendered = true;
+    try {
+        const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
+        if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
+            this.renderOwnedState(purchaseContainer);
+            isUIRendered = true;
+        }
+    } catch (e) {
+        console.warn('Cache check failed:', e);
     }
 
     // 2. Firebase'den doğrula ve güncelle
     auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const profile = await this.getUserProfile(user.uid);
-        const ownedCourses = profile?.purchasedCourses || [];
-        
-        // LocalStorage'ı sessizce güncelle
-        localStorage.setItem('derecelab_purchased', JSON.stringify(ownedCourses));
-        
-        const isOwned = ownedCourses.includes(courseId) || ownedCourses.includes('course_4');
+      try {
+        if (user) {
+          const profile = await this.getUserProfile(user.uid);
+          const ownedCourses = profile?.purchasedCourses || [];
+          
+          localStorage.setItem('derecelab_purchased', JSON.stringify(ownedCourses));
+          
+          const isOwned = ownedCourses.includes(courseId) || ownedCourses.includes('course_4');
 
-        if (isOwned) {
-          // Eğer zaten cache'den render edildiyse tekrar render etme (titremeyi önler)
-          if (!isUIRendered) {
-            this.renderOwnedState(purchaseContainer);
+          if (isOwned) {
+            if (!isUIRendered) {
+              this.renderOwnedState(purchaseContainer);
+              isUIRendered = true;
+            }
+          } else {
+            purchaseContainer.style.opacity = '1';
             isUIRendered = true;
           }
         } else {
-          // Eğer cache hatalıysa veya kullanıcı sahip değilse orijinal butonu göster
           purchaseContainer.style.opacity = '1';
           isUIRendered = true;
         }
-      } else {
-        // Giriş yapılmamışsa butonu göster
+      } catch (err) {
+        console.error('Ownership check error:', err);
         purchaseContainer.style.opacity = '1';
-        isUIRendered = true;
       }
     });
+
+    // 3. Güvenlik: Eğer 3 saniye içinde hala render edilmediyse (bağlantı hatası vb.) göster
+    setTimeout(() => {
+        if (!isUIRendered) {
+            purchaseContainer.style.opacity = '1';
+        }
+    }, 3000);
   },
 
   renderOwnedState(container) {
@@ -380,14 +392,20 @@ Object.assign(DereceLab.Auth, {
   }
 });
 
-// Otomatik sahiplik kontrolü (Eğer sayfada data-check-ownership varsa)
-document.addEventListener('DOMContentLoaded', () => {
-    const el = document.querySelector('[data-course-id]');
-    if (el && el.hasAttribute('data-check-ownership')) {
+// Otomatik sahiplik kontrolü
+const initOwnershipCheck = () => {
+    const el = document.querySelector('[data-check-ownership]');
+    if (el) {
         const cid = el.getAttribute('data-course-id');
-        DereceLab.Auth.checkCourseOwnership(cid);
+        if (cid) DereceLab.Auth.checkCourseOwnership(cid);
     }
-});
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOwnershipCheck);
+} else {
+    initOwnershipCheck();
+}
 
 // Sayfa yüklendiğinde auth'u HEMEN başlat (DOMContentLoaded bekleme)
 DereceLab.Auth.init();
