@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Bilgilendirme — DereceLab</title>
+    <meta name="description"
+        content="DereceLab iletişim bilgileri, kullanım koşulları, KVKK aydınlatma metni, iptal ve iade koşulları ile mesafeli satış sözleşmesi.">
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../firebase-config.js"></script>
+    <link rel="icon" type="image/jpeg" href="../Images/favicon.jpg">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .nav-item {
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            background-color: #fff7ed;
+            color: #ea580c;
+            border-left-color: #ea580c;
+        }
+
+        .nav-item.active .material-symbols-outlined {
+            color: #ea580c !important;
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: #f9fafb;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .prose-content h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #111827;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #fed7aa;
+        }
+
+        .prose-content h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #374151;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .prose-content p {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 0.925rem;
+        }
+
+        /* Fine print style */
+        .fine-print {
+            font-size: 12px !important;
+            line-height: 1.2 !important;
+            letter-spacing: -0.1px !important;
+            color: #6b7280 !important;
+            word-break: break-word;
+        }
+
+        .fine-print h2 {
+            font-size: 13px !important;
+            margin-top: 8px !important;
+            margin-bottom: 4px !important;
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
+
+        .fine-print p,
+        .fine-print strong {
+            margin-bottom: 2px !important;
+            font-size: 12px !important;
+        }
+
+        .prose-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .prose-content ul li {
+            color: #4b5563;
+            font-size: 0.925rem;
+            line-height: 1.8;
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.25rem;
+        }
+
+        .prose-content ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: #ea580c;
+            font-weight: 700;
+        }
+
+        .prose-content strong {
+            color: #111827;
+            font-weight: 700;
+        }
+
+        .prose-content a {
+            color: #ea580c;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .prose-content a:hover {
+            color: #c2410c;
+        }
+
+        /* Mobile sidebar toggle */
+        #mobile-menu-btn {
+            display: none;
+        }
+
+        @media (max-width: 767px) {
+            #mobile-menu-btn {
+                display: flex;
+            }
+
+            #sidebar-panel {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 100;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 280px !important;
+            }
+
+            #sidebar-panel.open {
+                transform: translateX(0);
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            }
+
+            #sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.4);
+                z-index: 99;
+            }
+
+            #sidebar-overlay.open {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3 z-10">
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" onclick="toggleSidebar()"
+                    class="items-center justify-center w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white">
+                    <span class="material-symbols-outlined text-[22px]">menu</span>
+                </button>
+                <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
+                    href="../">
+                    <img alt="DereceLab Logo" class="w-auto h-8" src="../Images/logo-beyaz.png">
+                    <span class="hidden sm:inline">DereceLab</span>
+                </a>
+                <span class="text-orange-400">|</span>
+                <h2 class="text-[11px] sm:text-sm font-semibold text-white">Bilgilendirme</h2>
+            </div>
+            <div class="flex items-center gap-4 z-10">
+                <a href="../"
+                    class="text-[11px] sm:text-sm font-semibold text-white/80 hover:text-white transition-colors">Ana
+                    Sayfaya Dön</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth JS -->
+    <script src="../auth.js?v=1777565555"></script>
+    <script src="../cart.js?v=1777567479"></script>
+
+    <!-- Mobile sidebar overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Layout -->
+    <main
+        class="flex-grow pt-20 pb-16 max-w-[1400px] mx-auto w-full flex flex-col md:flex-row gap-0 md:gap-8 px-4 md:px-8">
+
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 flex-shrink-0 md:pt-6" id="sidebar-panel">
+            <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden md:sticky md:top-24 mt-14 md:mt-0">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">Menü</p>
+                </div>
+                <nav class="p-2 flex flex-col gap-0.5">
+                    <button onclick="switchTab('iletisim')" id="tab-iletisim"
+                        class="nav-item active flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">mail</span>
+                        Kullanıcı Yardım Merkezi
+                    </button>
+                    <button onclick="switchTab('sss')" id="tab-sss"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">quiz</span>
+                        Sık Sorulan Sorular
+                    </button>
+                    <button onclick="switchTab('on-bilgilendirme')" id="tab-on-bilgilendirme"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">info</span>
+                        Ön Bilgilendirme Formu
+                    </button>
+                    <button onclick="switchTab('kvkk')" id="tab-kvkk"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">shield</span>
+                        KVKK Aydınlatma Metni
+                    </button>
+                    <button onclick="switchTab('kullanim-sartlari')" id="tab-kullanim-sartlari"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">assignment_return</span>
+                        Kullanım Şartları
+                    </button>
+                    <button onclick="switchTab('satis-teslimat')" id="tab-satis-teslimat"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
+                        <span class="material-symbols-outlined text-[20px]">description</span>
+                        Satış ve Teslimat Bilgilendirmesi
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="flex-1 min-w-0 pt-6">
+
+            <!-- İletişim -->
+            <div id="view-iletisim" class="content-section active">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-orange-600 text-[22px]">mail</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">Kullanıcı Yardım Merkezi</h1>
+                    </div>
+                    <div class="prose-content">
+                        <p>Herhangi bir sorunuz, görüşünüz ve destek talebiniz için bize dilediğiniz saatte mail
+                            atabilirsiniz, en kısa sürede size dönüş sağlayacağız.</p>
+
+                        <div class="my-6">
+                            <div
+                                class="flex items-start gap-4 p-5 bg-orange-50 border border-orange-100 rounded-xl max-w-sm">
+                                <div
+                                    class="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-white text-[20px]">mail</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-wider text-orange-600 mb-0.5"
+                                        style="margin:0 0 2px">E-posta</p>
+                                    <p class="text-sm font-bold text-gray-900 select-all"
+                                        style="margin:0; color:#111827">destekbit@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sık Sorulan Sorular -->
+            <div id="view-sss" class="content-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-indigo-600 text-[22px]">quiz</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">Sık Sorulan Sorular</h1>
+                    </div>
+                    <div class="prose-content space-y-6">
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <h3 class="flex items-center gap-2 text-indigo-900 mt-0">
+                                <span class="material-symbols-outlined text-indigo-500 text-[20px]">help_outline</span>
+                                Satın aldığım kursa nasıl erişirim?
+                            </h3>
+                            <p class="mb-0 text-sm leading-relaxed">Sürecin en hızlı şekilde tamamlanması için
+                                <strong>öncelikle DereceLab'a kayıt olmanızı</strong>, ardından satın alma işlemini
+                                Shopier üzerinden aynı e-posta adresi ile gerçekleştirmenizi öneririz. Ödemeniz
+                                onaylandığında kursunuz "Kurslarım" kısmında otomatik olarak aktif olacaktır.</p>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <h3 class="flex items-center gap-2 text-indigo-900 mt-0">
+                                <span class="material-symbols-outlined text-indigo-500 text-[20px]">help_outline</span>
+                                Kurslara mobil cihazlardan erişebilir miyim?
+                            </h3>
+                            <p class="mb-0 text-sm leading-relaxed">Evet, DereceLab tamamen mobil uyumlu bir
+                                platformdur. Akıllı telefon, tablet veya bilgisayar üzerinden dilediğiniz her yerden
+                                dersleri izleyebilirsiniz.</p>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <h3 class="flex items-center gap-2 text-indigo-900 mt-0">
+                                <span class="material-symbols-outlined text-indigo-500 text-[20px]">help_outline</span>
+                                Şifremi unuttum, ne yapmalıyım?
+                            </h3>
+                            <p class="mb-0 text-sm leading-relaxed">Giriş ekranındaki "Şifremi Unuttum" butonunu
+                                kullanarak e-posta adresinize yeni şifre oluşturma bağlantısı isteyebilirsiniz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ön Bilgilendirme Formu -->
+            <div id="view-on-bilgilendirme" class="content-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600 text-[22px]">info</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">Ön Bilgilendirme Formu</h1>
+                    </div>
+                    <div class="prose-content fine-print" id="content-on-bilgilendirme">
+                        <h2>1. SÖZLEŞME KONUSU HİZMETİN NİTELİĞİ VE MODELİ</h2>
+                        <p>İşbu form, DereceLab platformunda tanıtılan ve bağımsız aracı kurum (Shopier) üzerinden
+                            erişim hakkı temin edilen dijital eğitim hizmetlerinin (video dersler, dokümanlar, dijital
+                            materyaller) kullanım ve erişim sürecine ilişkin bilgilendirmeyi kapsar.</p>
+                        <p><strong>İşleyiş:</strong> derecelab.com bir "Vitrin" ve "Kurslarım" sayfasıdır. Platform
+                            üzerinden doğrudan bir satış veya tahsilat gerçekleşmez. derecelab.com, Hizmet Sağlayıcı'ya
+                            ait Shopier mağazasındaki içeriklerin tanıtımını yapar.</p>
+                        <p><strong>Erişim:</strong> Hizmete erişim hakkı, Shopier üzerinden yapılan satın alım onayının
+                            ardından, kullanıcının DereceLab üzerindeki hesabına dijital yetkilendirme tanımlanmasıyla
+                            gerçekleşir.</p>
+
+                        <h2>2. HİZMET BEDELİ VE VERGİLENDİRME</h2>
+                        <p><strong>Ücretlendirme:</strong> Sunulan hizmetin erişim bedeli, Shopier ödeme sayfasında ilan
+                            edildiği gibidir.</p>
+                        <p><strong>Vergi Beyanı:</strong> Hizmet, 193 Sayılı GVK Mükerrer Madde 20/B kapsamındaki
+                            istisnaya tabidir. İlgili ödemeler banka kanalıyla otomatik stopaj kesintisine tabi
+                            tutulduğundan, ilan edilen fiyatlar nihai bedeldir ve KDV'den muaftır.</p>
+
+                        <h2>3. İFA VE ERİŞİM KOŞULLARI</h2>
+                        <p><strong>Hizmet Sunumu:</strong> Sunulan hizmet "Dijital İçerik" niteliğinde olup, fiziksel
+                            bir product gönderimi (kargo) söz konusu değildir.</p>
+                        <p><strong>Aktivasyon:</strong> Kullanıcının Shopier ödemesinde kullandığı e-posta adresi ile
+                            DereceLab kayıt e-posta adresinin eşleşmesi durumunda erişim yetkisi aktif edilir.
+                            Kullanıcı, internet erişimi olan uyumlu cihazlar üzerinden panele 7/24 erişebilir.</p>
+
+                        <h2>4. HİZMET SAĞLAYICI BİLGİLERİ</h2>
+                        <p><strong>Adı Soyadı:</strong> Tuğrul Barış Mihailoğlu</p>
+                        <p><strong>Adres:</strong> Karahüseyinli Mah. Akkent Sitesi Sk. A/5 No: 5 İç Kapı: 2 Arsuz /
+                            Hatay</p>
+                        <p><strong>E-posta:</strong> destekbit@gmail.com</p>
+                        <p><strong>Telefon:</strong> 0539 407 7559</p>
+                        <p><strong>Vergi Statüsü:</strong> Yapılan tahsilatlar, 193 Sayılı GVK Mükerrer Madde 20/B
+                            kapsamında Sosyal İçerik Üreticiliği ve Mobil Cihazlar İçin Uygulama Geliştiriciliği
+                            İstisnası kapsamında vergilendirilmektedir.</p>
+
+                        <h2>5. CAYMA HAKKI VE İSTİSNALARI</h2>
+                        <p>6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 15/ğ
+                            maddesi uyarınca; "Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında
+                            teslim edilen gayrimaddi mallara ilişkin sözleşmeler" cayma hakkının istisnası
+                            kapsamındadır.</p>
+                        <p>Kullanıcı, DereceLab paneli üzerinden ilgili hizmete (video izleme veya doküman görüntüleme)
+                            erişim sağladığı andan itibaren hizmet ifa edilmiş sayılır.</p>
+                        <p>Hizmetun dijital niteliği ve anında ifa edilmesi sebebiyle, bu aşamadan sonra cayma hakkı
+                            kullanılamaz ve bedel iadesi yapılamaz.</p>
+
+                        <h2>6. GEÇERLİLİK</h2>
+                        <p>Hizmetin içeriği, erişim şartları ve bedeli, Hizmet Sağlayıcı tarafından güncellenene kadar
+                            geçerlidir.</p>
+
+                        <h2>7. DESTEK VE UYUŞMAZLIK</h2>
+                        <p>Kullanıcı, hizmete ilişkin her türlü teknik destek talebini
+                            <strong>destekbit@gmail.com</strong> adresine iletebilir.
+                        </p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KVKK Aydınlatma Metni -->
+            <div id="view-kvkk" class="content-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-green-600 text-[22px]">shield</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">KVKK Aydınlatma Metni</h1>
+                    </div>
+                    <div class="prose-content fine-print" id="content-kvkk">
+                        <p><strong>DERECELAB KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</strong></p>
+
+                        <h2>1. VERİ SORUMLUSU</h2>
+                        <p>6698 sayılı Kişisel Verileri Korunması Kanunu (“KVKK”) uyarınca, kişisel verileriniz; veri
+                            sorumlusu sıfatıyla DereceLab (“Platform” veya “Hizmet Sağlayıcı”) tarafından aşağıda
+                            açıklanan kapsamda işlenebilecektir.</p>
+
+                        <h2>2. KİŞİSEL VERİLERİN HANGİ AMAÇLA İŞLENECEĞİ</h2>
+                        <p>Toplanan kişisel verileriniz (İsim, soyisim, e-posta adresi, IP bilgisi vb.), aşağıdaki
+                            amaçlarla işlenmektedir:</p>
+                        <ul>
+                            <li>Platform üzerinde kullanıcı kaydının oluşturulması ve üyelik yönetimi,</li>
+                            <li>Satın alınan dijital içeriklere erişim yetkisinin tanımlanması,</li>
+                            <li>Teknik destek süreçlerinin yürütülmesi,</li>
+                            <li>Yasal yükümlülüklerin (vergi mevzuatı vb.) yerine getirilmesi.</li>
+                        </ul>
+
+                        <h2>3. KİŞİSEL VERİLERİN AKTARIMI</h2>
+                        <p>Kişisel verileriniz, üçüncü kişilere pazarlama amacıyla aktarılmaz. Verileriniz yalnızca
+                            yasal bir zorunluluk olduğunda ilgili kamu kurumlarıyla veya ödeme sürecinin tamamlanması
+                            adına aracı ödeme kuruluşu (Shopier) ve teknik altyapı sağlayıcıları ile sınırlı olarak
+                            paylaşılabilir.</p>
+
+                        <h2>4. KİŞİSEL VERİ TOPLAMANIN YÖNTEMİ VE HUKUKİ SEBEBİ</h2>
+                        <p>Verileriniz, platforma üye olduğunuzda veya hizmet satın aldığınızda tamamen dijital ortamda
+                            toplanmaktadır. Bu faaliyet, bir sözleşmenin kurulması veya ifası ile veri sorumlusunun
+                            hukuki yükümlülüklerini yerine getirebilmesi hukuki sebeplerine dayanmaktadır.</p>
+
+                        <h2>5. VERİ SAHİBİNİN HAKLARI (KVKK Madde 11)</h2>
+                        <p>Kanun uyarınca her kullanıcı, veri sorumlusuna başvurarak kendisiyle ilgili; verilerinin
+                            işlenip işlenmediğini öğrenme, düzeltilmesini isteme veya silinmesini talep etme haklarına
+                            sahiptir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanım Şartları -->
+            <div id="view-kullanim-sartlari" class="content-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-amber-600 text-[22px]">assignment_return</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">Kullanım Şartları</h1>
+                    </div>
+                    <div class="prose-content fine-print" id="content-kullanim-sartlari">
+                        <p><strong>DERECELAB KULLANIM ŞARTLARI VE ÜYELİK SÖZLEŞMESİ</strong></p>
+
+                        <h2>1. TARAFLAR VE KABUL</h2>
+                        <p>İşbu Kullanım Şartları, derecelab.com ("Platform") üzerinden sunulan dijital içeriklere
+                            erişim sağlayan kullanıcılar ("Kullanıcı") ile platformun işletmecisi olan Hizmet Sağlayıcı
+                            arasındadır. Platforma üye olan veya içerik satın alan her kullanıcı, bu şartları okumuş ve
+                            kabul etmiş sayılır.</p>
+
+                        <h2>2. HİZMETİN KAPSAMI</h2>
+                        <p>DereceLab, kullanıcılara video eğitimler, dijital dökümanlar ve sınav hazırlık materyalleri
+                            sunan bir dijital platformdur. Sunulan hizmetler "olduğu gibi" sunulmakta olup, Hizmet
+                            Sağlayıcı içerikleri dilediği zaman güncelleme, değiştirme veya yayından kaldırma hakkını
+                            saklı tutar.</p>
+
+                        <h2>3. ÜYELİK VE HESAP GÜVENLİĞİ</h2>
+                        <p>Kullanıcı, kayıt esnasında verdiği bilgilerin doğruluğundan sorumludur.</p>
+                        <ul>
+                            <li><strong>Hesap Paylaşımı Yasaktır:</strong> Üyelik hesabı kişiye özeldir. Bir hesabın
+                                birden fazla kişi tarafından kullanılması, şifre paylaşımı veya hesap satışı tespiti
+                                halinde; üyelik, iade yapılmaksızın kalıcı olarak kapatılır.</li>
+                            <li>Hesabın güvenliğinden ve şifre gizliliğinden tamamen kullanıcı sorumludur.</li>
+                        </ul>
+
+                        <h2>4. FİKRİ MÜLKİYET VE TELİF HAKLARI</h2>
+                        <p>Platformda yer alan tüm videolar, görseller, metinler ve yazılımlar Hizmet Sağlayıcı'ya
+                            aittir ve telif hakları yasalarıyla korunmaktadır.</p>
+                        <ul>
+                            <li><strong>Kısıtlamalar:</strong> İçeriklerin izinsiz olarak indirilmesi (download), ekran
+                                kaydı alınması, kopyalanması, çoğaltılması veya herhangi bir platformda (YouTube,
+                                Telegram vb.) paylaşılması kesinlikle yasaktır.</li>
+                            <li>İhlal durumunda Hizmet Sağlayıcı, ilgili kullanıcı hakkında 5846 sayılı FSEK uyarınca
+                                yasal işlem başlatma ve tazminat davası açma hakkına sahiptir.</li>
+                        </ul>
+
+                        <h2>5. ÖDEME VE ERİŞİM YETKİSİ</h2>
+                        <ul>
+                            <li><strong>Satış İşlemi:</strong> DereceLab platformu bir e-ticaret sitesi olmayıp,
+                                doğrudan satış işlemi gerçekleştirmemektedir. Satın alma işlemleri, güvenli ödeme
+                                altyapısı sunan Shopier üzerinden tamamlanmaktadır.</li>
+                            <li><strong>Erişim Tanımlama:</strong> Platform, yalnızca Shopier üzerinden başarılı bir
+                                şekilde ödeme yapmış olan kullanıcılara "Erişim Hakkı" tanımlayan bir öğrenme yönetim
+                                sistemidir.</li>
+                            <li><strong>Sorumluluk:</strong> Ödeme sürecine ilişkin teknik sorunlar ve faturalandırma
+                                süreçleri Shopier platformu üzerinden yürütülür; DereceLab ise sadece satın alınan
+                                içeriğin teknik olarak izlenmesinden sorumludur.</li>
+                        </ul>
+
+                        <h2>6. CAYMA HAKKI VE İADE KOŞULLARI</h2>
+                        <p><strong>Cayma Hakkı İstisnası:</strong> 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve
+                            Mesafeli Sözleşmeler Yönetmeliği’nin 15/ğ maddesi uyarınca; "Elektronik ortamda anında ifa
+                            edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin
+                            sözleşmelerde" cayma hakkı kullanılamaz.</p>
+                        <p>Satın alınan içerik dijital bir hizmet olduğu ve anında erişime açıldığı için satın alma
+                            sonrası iade yapılması mümkün değildir.</p>
+
+                        <h2>7. SORUMLULUK SINIRLANDIRILMASI</h2>
+                        <p>DereceLab bir eğitim destek platformudur. Sunulan içeriklerin sınav başarısı veya kesin bir
+                            sonuç garanti etmesi hukuken beklenemez.</p>
+                        <p>Platformun teknik aksaklıklar (internet kesintisi, sunucu bakımı vb.) nedeniyle geçici olarak
+                            ulaşılamaması durumunda Hizmet Sağlayıcı sorumlu tutulamaz.</p>
+
+                        <h2>8. DEĞİŞİKLİKLER VE YETKİLİ MAHKEME</h2>
+                        <p>Hizmet Sağlayıcı, bu şartları dilediği zaman güncelleme hakkını saklı tutar. Güncel şartlar
+                            sitede yayınlandığı andan itibaren geçerlidir.</p>
+                        <p>İşbu sözleşmeden doğan uyuşmazlıklarda Hizmet Sağlayıcı’nın yerleşim yeri mahkemeleri ve icra
+                            daireleri yetkilidir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Satış ve Teslimat Bilgilendirmesi -->
+            <div id="view-satis-teslimat" class="content-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-purple-600 text-[22px]">description</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-gray-900">Satış ve Teslimat Bilgilendirmesi</h1>
+                    </div>
+                    <div class="prose-content fine-print" id="content-satis-teslimat">
+                        <h2>1. PLATFORMUN İŞLEYİŞİ VE MODELİ</h2>
+                        <p>DereceLab (derecelab.com), dijital eğitim içeriklerinin ve video derslerin izlenebildiği bir
+                            eğitim yönetim platformudur. Bu web sitesi üzerinde doğrudan bir ödeme tahsilatı
+                            yapılmamaktadır. DereceLab, sunulan içeriklerin tanıtıldığı bir "Vitrin" ve kursları başka
+                            bir platformdan satın alan kullanıcıların eğitimlere eriştiği "Kurslarım" sayfası görevini
+                            görür. Satın
+                            alma işlemleri, güvenli ödeme altyapısı sağlayan aracı kurum Shopier üzerinden
+                            gerçekleştirilir ve bu kurumun DereceLab ile bir bağlantısı yoktur, aracı kurum olarak görev
+                            almaktadır. Derecelab.com'dan bağımsız çalışmakta olan Shopier kurumu üzerinden kurs satın
+                            alan müşteriler, satın aldıkları bu kurslara sitemizden kolaylıkla erişebilirler.</p>
+
+                        <h2>2. ÖDEME VE ERİŞİM SÜRECİ</h2>
+                        <p><strong>Ödeme:</strong> Kullanıcı, satın almak istediği içeriği inceler ve almak istediği
+                            içeriğin Shopier satış sayfasına yönlendirilir. Ödeme işlemi Shopier platformu üzerinden
+                            tamamlanır.</p>
+                        <p><strong>Erişim:</strong> Ödemesi onaylanan kullanıcıya, DereceLab paneli üzerinden ilgili
+                            içeriğe erişim yetkisi tanımlanır. Kullanıcının Shopier'de kullandığı e-posta adresi ile
+                            DereceLab'a kayıt olduğu e-posta adresinin aynı olması, aktivasyonun hızla tamamlanması için
+                            önerilir. Shopier ile DereceLab'in resmi bir bağlantısı yoktur. Hizmet sağlayıcı, kurslarını
+                            Shopier üzerinde satmaktadır ve DereceLab(derecelab.com) üzerinden sattığı ürüne erişim
+                            sunmaktadır.</p>
+                        <p><strong>Teslimat:</strong> Sunulan hizmet dijital içerik (video, PDF, doküman) olduğu için
+                            herhangi bir fiziksel kargo gönderimi yapılmamaktadır. Kullanıcı, başka bir platformdan
+                            satılmakta olan dijital içeriğe, DereceLab üzerinden kolayca erişebilir.</p>
+
+                        <h2>3. İPTAL, İADE VE CAYMA HAKKI</h2>
+                        <p>Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesinin (ğ) bendi uyarınca; "Elektronik ortamda
+                            anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin
+                            sözleşmelerde" cayma hakkı kullanılamaz. Eğitim içeriklerine erişim sağlandığı andan
+                            itibaren hizmet "ifa edilmiş" sayılır. Bu nedenle, satın alınan dijital eğitim paketlerinde
+                            iptal ve iade yapılması mümkün değildir.</p>
+
+                        <h2>4. HİZMET SAĞLAYICI BİLGİLERİ</h2>
+                        <p><strong>Adı Soyadı:</strong> Tuğrul Barış Mihailoğlu</p>
+                        <p><strong>Adres:</strong> Karahüseyinli Mah. Akkent Sitesi Sk. A/5 No: 5 İç Kapı: 2 Arsuz /
+                            Hatay</p>
+                        <p><strong>E-posta:</strong> destekbit@gmail.com</p>
+                        <p><strong>Telefon:</strong> 0539 407 7559</p>
+                        <p><strong>Vergi Statüsü:</strong> Yapılan tahsilatlar, 193 Sayılı GVK Mükerrer Madde 20/B
+                            kapsamında Sosyal İçerik Üreticiliği ve Mobil Cihazlar İçin Uygulama Geliştiriciliği
+                            İstisnası kapsamında vergilendirilecektir.</p>
+
+                        <h2>5. FİYATLANDIRMA VE VERGİ</h2>
+                        <p>Platformda belirtilen tüm fiyatlar nihai bedellerdir. Tahsilat yapıldığı vakit, 20/B vergi
+                            istisnası kapsamında, ilgili ödemeler banka kanalıyla otomatik stopaj kesintisine tabi
+                            tutulduğundan, işlemler KDV'den muaftır.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="w-full px-8 border-t border-gray-100 bg-white py-12 mt-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+            <!-- Left Section: Logo & Social -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
+                    onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="flex items-center gap-0.5">
+                        <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="../Images/logo-siyah.png">
+                        <span>DereceLab</span>
+                    </div>
+                </div>
+                <!-- Social Media Icons -->
+                <div class="flex items-center gap-6 text-orange-600">
+                    <a href="https://www.instagram.com/derecelabcom/" target="_blank"
+                        class="hover:scale-110 transition-transform">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/@DereceLab" target="_blank"
+                        class="hover:scale-110 transition-transform">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z">
+                            </path>
+                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Center Section: Legal Links -->
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                <a href="#iletisim" onclick="switchTab('iletisim')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
+                <a href="#sss" onclick="switchTab('sss')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+                <a href="#on-bilgilendirme" onclick="switchTab('on-bilgilendirme')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
+                <a href="#kvkk" onclick="switchTab('kvkk')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK Aydınlatma Metni</a>
+                <a href="#kullanim-sartlari" onclick="switchTab('kullanim-sartlari')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
+                <a href="#satis-teslimat" onclick="switchTab('satis-teslimat')"
+                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Satış ve Teslimat Bilgilendirmesi</a>
+            </div>
+
+            <!-- Right Section: Payment Logos -->
+            <div class="flex flex-col items-center gap-1">
+                <img src="../Images/visamasttroy.png" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
+                <img src="../Images/shopier.png" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const TABS = ['iletisim', 'sss', 'on-bilgilendirme', 'kvkk', 'kullanim-sartlari', 'satis-teslimat'];
+
+        function switchTab(tab) {
+            // Hide all sections
+            TABS.forEach(t => {
+                document.getElementById(`view-${t}`)?.classList.remove('active');
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) {
+                    btn.classList.remove('active', 'text-orange-600');
+                    btn.querySelector('.material-symbols-outlined').style.color = '';
+                }
+            });
+
+            // Show selected
+            document.getElementById(`view-${tab}`)?.classList.add('active');
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            // Close mobile sidebar
+            if (window.innerWidth < 768) {
+                closeSidebar();
+            }
+
+            // Scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update URL hash without scroll
+            history.replaceState(null, '', `#${tab}`);
+        }
+
+        function toggleSidebar() {
+            const panel = document.getElementById('sidebar-panel');
+            const overlay = document.getElementById('sidebar-overlay');
+            panel.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar-panel').classList.remove('open');
+            document.getElementById('sidebar-overlay').classList.remove('open');
+        }
+
+        // Handle URL hash on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && TABS.includes(hash)) {
+                switchTab(hash);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

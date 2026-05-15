@@ -302,6 +302,19 @@
                                 id="password_confirm" placeholder="••••••••" type="password" required minlength="6">
                         </div>
                     </div>
+                    <div class="flex items-start gap-3 px-1 py-1">
+                        <div class="flex items-center h-5">
+                            <input id="terms-checkbox" type="checkbox"
+                                class="w-4 h-4 text-orange-600 bg-gray-50 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer">
+                        </div>
+                        <label for="terms-checkbox" class="text-xs text-gray-500 leading-snug cursor-pointer select-none">
+                            <button type="button" onclick="openLegalModal('kullanim-sartlari')"
+                                class="text-orange-600 font-bold hover:underline">Kullanım Şartları</button> ve
+                            <button type="button" onclick="openLegalModal('kvkk')"
+                                class="text-orange-600 font-bold hover:underline">KVKK Aydınlatma Metni</button>'ni okudum,
+                            kabul ediyorum.
+                        </label>
+                    </div>
                     <button
                         class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-headline font-bold py-4 rounded-xl shadow-lg shadow-orange-100 hover:from-orange-600 hover:to-orange-700 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 mt-2 flex items-center justify-center gap-2"
                         type="submit" id="submit-btn">
@@ -309,6 +322,132 @@
                         <div id="btn-spinner" class="spinner hidden"></div>
                     </button>
                 </form>
+
+                <!-- Legal Modal -->
+                <div id="legal-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+                    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLegalModal()"></div>
+                    <div class="relative bg-white w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="legal-modal-content">
+                        <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                            <h3 class="text-lg font-extrabold text-gray-900" id="legal-modal-title">Hukuki Metin</h3>
+                            <button onclick="closeLegalModal()" class="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                                <span class="material-symbols-outlined text-gray-500">close</span>
+                            </button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-8 prose prose-orange max-w-none text-sm text-gray-600 leading-relaxed custom-scrollbar" id="legal-modal-body">
+                            <!-- Content will be injected here -->
+                        </div>
+                        <div class="p-4 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+                            <button onclick="closeLegalModal()" class="px-6 py-2 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors">Kapat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .custom-scrollbar::-webkit-scrollbar {
+                        width: 6px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-track {
+                        background: #f1f1f1;
+                        border-radius: 10px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: #ea580c;
+                        border-radius: 10px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                        background: #c2410c;
+                    }
+                </style>
+
+                <div id="legal-content-store" class="hidden">
+                    <div id="text-kvkk">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">KVKK Aydınlatma Metni</h2>
+                        <div class="space-y-4">
+                            <p><strong>DERECELAB KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</strong></p>
+                            
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">1. VERİ SORUMLUSU</h3>
+                                <p>6698 sayılı Kişisel Verileri Korunması Kanunu (“KVKK”) uyarınca, kişisel verileriniz; veri sorumlusu sıfatıyla DereceLab (“Platform” veya “Hizmet Sağlayıcı”) tarafından işlenebilecektir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">2. KİŞİSEL VERİLERİN HANGİ AMAÇLA İŞLENECEĞİ</h3>
+                                <p>Toplanan kişisel verileriniz (İsim, e-posta adresi, IP bilgisi vb.), aşağıdaki amaçlarla işlenmektedir:</p>
+                                <ul class="list-disc pl-5 mt-2 space-y-1">
+                                    <li>Platform üzerinde kullanıcı kaydının oluşturulması ve üyelik yönetimi,</li>
+                                    <li>Satın alınan dijital içeriklere erişim yetkisinin tanımlanması,</li>
+                                    <li>Teknik destek süreçlerinin yürütülmesi,</li>
+                                    <li>Yasal yükümlülüklerin (vergi mevzuatı vb.) yerine getirilmesi.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">3. KİŞİSEL VERİLERİN AKTARIMI</h3>
+                                <p>Kişisel verileriniz, üçüncü kişilere pazarlama amacıyla aktarılmaz. Verileriniz yalnızca yasal bir zorunluluk olduğunda ilgili kamu kurumlarıyla veya ödeme sürecinin tamamlanması adına aracı ödeme kuruluşu (Shopier) ve teknik altyapı sağlayıcıları ile sınırlı olarak paylaşılabilir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">4. VERİ TOPLAMA YÖNTEMİ VE HUKUKİ SEBEBİ</h3>
+                                <p>Verileriniz, platforma üye olduğunuzda veya hizmet satın aldığınızda tamamen dijital ortamda toplanmaktadır. Bu faaliyet, bir sözleşmenin kurulması veya ifası ile veri sorumlusunun hukuki yükümlülüklerini yerine getirebilmesi hukuki sebeplerine dayanmaktadır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">5. VERİ SAHİBİNİN HAKLARI (KVKK Madde 11)</h3>
+                                <p>Kanun uyarınca her kullanıcı, veri sorumlusuna başvurarak kendisiyle ilgili; verilerinin işlenip işlenmediğini öğrenme, düzeltilmesini isteme veya silinmesini talep etme haklarına sahiptir.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="text-kullanim-sartlari">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Kullanım Şartları</h2>
+                        <div class="space-y-4">
+                            <p><strong>DERECELAB KULLANIM ŞARTLARI VE ÜYELİK SÖZLEŞMESİ</strong></p>
+                            
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">1. TARAFLAR VE KABUL</h3>
+                                <p>İşbu Kullanım Şartları, derecelab.com ("Platform") üzerinden sunulan dijital içeriklere erişim sağlayan kullanıcılar ("Kullanıcı") ile platformun işletmecisi olan Hizmet Sağlayıcı arasındadır. Platforma üye olan veya içerik satın alan her kullanıcı, bu şartları okumuş ve kabul etmiş sayılır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">2. HİZMETİN KAPSAMI</h3>
+                                <p>DereceLab, kullanıcılara video eğitimler, dijital dökümanlar ve sınav hazırlık materyalleri sunan bir dijital platformdur. Sunulan hizmetler "olduğu gibi" sunulmakta olup, Hizmet Sağlayıcı içerikleri dilediği zaman güncelleme, değiştirme veya yayından kaldırma hakkını saklı tutar.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">3. ÜYELİK VE HESAP GÜVENLİĞİ</h3>
+                                <p>Kullanıcı, kayıt esnasında verdiği bilgilerin doğruluğundan sorumludur.</p>
+                                <ul class="list-disc pl-5 mt-2 space-y-1">
+                                    <li><strong>Hesap Paylaşımı Yasaktır:</strong> Üyelik hesabı kişiye özeldir. Bir hesabın birden fazla kişi tarafından kullanılması, şifre paylaşımı veya hesap satışı tespiti halinde; üyelik, iade yapılmaksızın kalıcı olarak kapatılır.</li>
+                                    <li>Hesabın güvenliğinden ve şifre gizliliğinden tamamen kullanıcı sorumludur.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">4. FİKRİ MÜLKİYET VE TELİF HAKLARI</h3>
+                                <p>Platformda yer alan tüm videolar, görseller, metinler ve yazılımlar Hizmet Sağlayıcı'ya aittir ve telif hakları yasalarıyla korunmaktadır. İçeriklerin izinsiz olarak indirilmesi, ekran kaydı alınması, kopyalanması, çoğaltılması veya herhangi bir platformda paylaşılması kesinlikle yasaktır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">5. ÖDEME VE ERİŞİM YETKİSİ</h3>
+                                <p>Satın alma işlemleri, güvenli ödeme altyapısı sunan Shopier üzerinden tamamlanmaktadır. DereceLab platformu bir e-ticaret sitesi olmayıp, doğrudan satış işlemi gerçekleştirmemektedir; yalnızca Shopier üzerinden başarılı bir şekilde ödeme yapmış olan kullanıcılara "Erişim Hakkı" tanımlayan bir öğrenme yönetim sistemidir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">6. CAYMA HAKKI VE İADE KOŞULLARI</h3>
+                                <p>Satın alınan içerik dijital bir hizmet olduğu ve anında erişime açıldığı için Mesafeli Sözleşmeler Yönetmeliği’nin 15/ğ maddesi uyarınca satın alma sonrası iade yapılması mümkün değildir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">7. SORUMLULUK SINIRLANDIRILMASI</h3>
+                                <p>DereceLab bir eğitim destek platformudur. Sunulan içeriklerin sınav başarısı veya kesin bir sonuç garanti etmesi hukuken beklenemez.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">8. DEĞİŞİKLİKLER VE YETKİLİ MAHKEME</h3>
+                                <p>Hizmet Sağlayıcı, bu şartları dilediği zaman güncelleme hakkını saklı tutar. İşbu sözleşmeden doğan uyuşmazlıklarda Hizmet Sağlayıcı’nın yerleşim yeri mahkemeleri yetkilidir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="mt-8 pt-8 border-t border-gray-100 text-center">
                     <p class="text-sm text-gray-500 font-body">Zaten hesabın var mı? <a
                             class="font-bold text-orange-600 hover:text-orange-700 transition-colors"
@@ -329,20 +468,48 @@
             <span>DereceLab</span>
           </div>
         </div>
-        <!-- Social Media Icons (Centered under Logo) -->
+        <!-- Social Media Icons -->
         <div class="flex items-center gap-6 text-orange-600">
-          <a href="https://www.instagram.com/derecelabcom/" target="_blank" class="hover:scale-110 transition-transform">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          <a href="https://www.instagram.com/derecelabcom/" target="_blank"
+            class="hover:scale-110 transition-transform">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
           </a>
           <a href="https://www.youtube.com/@DereceLab" target="_blank" class="hover:scale-110 transition-transform">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z">
+              </path>
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+            </svg>
           </a>
         </div>
       </div>
+
+      <!-- Center Section: Legal Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <a href="../bilgi/#iletisim"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
+        <a href="../bilgi/#sss"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+        <a href="../bilgi/#on-bilgilendirme"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
+        <a href="../bilgi/#kvkk" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK Aydınlatma Metni</a>
+        <a href="../bilgi/#kullanim-sartlari"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
+        <a href="../bilgi/#satis-teslimat"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Satış ve Teslimat Bilgilendirmesi</a>
+      </div>
+
       <!-- Right Section: Payment Logos -->
-      <div class="flex flex-col items-center md:items-end gap-1">
+      <div class="flex flex-col items-center gap-1">
         <img src="../Images/visamasttroy.png" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
-        <img src="../Images/shopier.png" alt="Shopier" class="h-8 w-auto object-contain">
+        <img src="../Images/shopier.png" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
       </div>
     </div>
   </footer>
@@ -410,6 +577,7 @@
         // Firebase Registration Logic
         // =====================================================
         const registerForm = document.getElementById('register-form');
+        const termsCheckbox = document.getElementById('terms-checkbox');
         const authMessage = document.getElementById('auth-message');
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
@@ -465,6 +633,11 @@
             // Validasyonlar
             if (!fullName) {
                 showMessage('Lütfen kullanıcı adınızı girin.');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                showMessage('Lütfen Kullanım Şartları ve KVKK Aydınlatma Metni\'ni onaylayın.');
                 return;
             }
 
@@ -525,6 +698,39 @@
             if (redirect) {
                 const loginLink = document.querySelector('a[href="../giris/"]');
                 if (loginLink) loginLink.href += '?redirect=' + encodeURIComponent(redirect);
+            }
+        });
+
+        // Legal Modal Logic
+        const legalModal = document.getElementById('legal-modal');
+        const legalModalContent = document.getElementById('legal-modal-content');
+        const legalModalTitle = document.getElementById('legal-modal-title');
+        const legalModalBody = document.getElementById('legal-modal-body');
+
+        window.openLegalModal = function(type) {
+            const content = document.getElementById(`text-${type}`);
+            if (!content) return;
+
+            legalModalTitle.textContent = type === 'kvkk' ? 'KVKK Aydınlatma Metni' : 'Kullanım Şartları';
+            legalModalBody.innerHTML = content.innerHTML;
+
+            legalModal.classList.remove('opacity-0', 'pointer-events-none');
+            legalModalContent.classList.remove('scale-95');
+            legalModalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.closeLegalModal = function() {
+            legalModal.classList.add('opacity-0', 'pointer-events-none');
+            legalModalContent.classList.remove('scale-100');
+            legalModalContent.classList.add('scale-95');
+            document.body.style.overflow = '';
+        }
+
+        // Close on ESC key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !legalModal.classList.contains('opacity-0')) {
+                closeLegalModal();
             }
         });
     </script>

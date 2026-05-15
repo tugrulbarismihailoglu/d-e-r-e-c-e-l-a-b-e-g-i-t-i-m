@@ -25,12 +25,12 @@ Object.assign(DereceLab.Auth, {
     if (cachedUser) {
       try {
         this.updateHeaderUI(JSON.parse(cachedUser));
-      } catch(e) {}
+      } catch (e) { }
     }
 
     auth.onAuthStateChanged(async (user) => {
       this.currentUser = user;
-      
+
       if (user) {
         // Kullanıcı verisini cache'e at
         localStorage.setItem('derecelab_user', JSON.stringify({
@@ -68,7 +68,7 @@ Object.assign(DereceLab.Auth, {
   // Header'a auth butonları ekler
   updateHeaderUI(user) {
     const headerRight = document.querySelector('.flex.items-center.gap-2.sm\\:gap-4.z-10') ||
-                        document.querySelector('.flex.items-center.gap-2.z-10');
+      document.querySelector('.flex.items-center.gap-2.z-10');
     if (!headerRight) return;
 
     // Eski auth butonlarını kontrol et
@@ -79,7 +79,7 @@ Object.assign(DereceLab.Auth, {
       authDiv = document.createElement('div');
       authDiv.id = 'auth-buttons';
       authDiv.className = 'flex items-center gap-2 transition-opacity duration-500';
-      
+
       // Eğer önbellekte veri yoksa başlangıçta gizli başlasın (fade-in için)
       // Önbellekte veri varsa direkt görünür başlasın
       if (!localStorage.getItem('derecelab_user')) {
@@ -91,7 +91,7 @@ Object.assign(DereceLab.Auth, {
       }
     }
 
-    
+
     if (user) {
       const initial = (user.displayName || user.email || '?')[0].toUpperCase();
       authDiv.innerHTML = `
@@ -123,14 +123,14 @@ Object.assign(DereceLab.Auth, {
 
     if (user) {
       if (heroTitle) {
-          const name = user.displayName || user.email.split('@')[0];
-          heroTitle.innerHTML = `<span class="block">Hoş geldin,</span>\n<span class="block text-orange-600">${name}!</span>`;
-          // Eğer önbellekten geliyorsa animasyonsuz göster, yoksa fade-in yap
-          if (localStorage.getItem('derecelab_user')) {
-              heroTitle.classList.remove('opacity-0', 'transition-opacity');
-          } else {
-              heroTitle.classList.remove('opacity-0');
-          }
+        const name = user.displayName || user.email.split('@')[0];
+        heroTitle.innerHTML = `<span class="block">Hoş geldin,</span>\n<span class="block text-orange-600">${name}!</span>`;
+        // Eğer önbellekten geliyorsa animasyonsuz göster, yoksa fade-in yap
+        if (localStorage.getItem('derecelab_user')) {
+          heroTitle.classList.remove('opacity-0', 'transition-opacity');
+        } else {
+          heroTitle.classList.remove('opacity-0');
+        }
       }
       if (heroButtons) {
         heroButtons.innerHTML = `
@@ -139,15 +139,15 @@ Object.assign(DereceLab.Auth, {
           </a>
         `;
         if (localStorage.getItem('derecelab_user')) {
-            heroButtons.classList.remove('opacity-0', 'transition-opacity');
+          heroButtons.classList.remove('opacity-0', 'transition-opacity');
         } else {
-            heroButtons.classList.remove('opacity-0');
+          heroButtons.classList.remove('opacity-0');
         }
       }
     } else {
       if (heroTitle) {
-          heroTitle.innerHTML = `<span class="block">Kurslarımız ile</span>\n<span class="block">derece yolunda</span>\n<span class="block text-orange-600">rakiplerinin önüne geç.</span>`;
-          heroTitle.classList.remove('opacity-0');
+        heroTitle.innerHTML = `<span class="block">Kurslarımız ile</span>\n<span class="block">derece yolunda</span>\n<span class="block text-orange-600">rakiplerinin önüne geç.</span>`;
+        heroTitle.classList.remove('opacity-0');
       }
       if (heroButtons) {
         heroButtons.innerHTML = `
@@ -247,14 +247,14 @@ Object.assign(DereceLab.Auth, {
       if (doc.exists) {
         existing = doc.data().completedParts || [];
       }
-      
+
       let newParts;
       if (isCompleted) {
         newParts = [...new Set([...existing, partId])];
       } else {
         newParts = existing.filter(id => id !== partId);
       }
-      
+
       await db.collection('users').doc(uid).update({
         completedParts: newParts
       });
@@ -320,13 +320,13 @@ Object.assign(DereceLab.Auth, {
 
     // 1. Hızlı gösterim için localStorage kontrolü
     try {
-        const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
-        if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
-            this.renderOwnedState(purchaseContainer);
-            isUIRendered = true;
-        }
+      const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
+      if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
+        this.renderOwnedState(purchaseContainer);
+        isUIRendered = true;
+      }
     } catch (e) {
-        console.warn('Cache check failed:', e);
+      console.warn('Cache check failed:', e);
     }
 
     // 2. Firebase'den doğrula ve güncelle
@@ -335,9 +335,9 @@ Object.assign(DereceLab.Auth, {
         if (user) {
           const profile = await this.getUserProfile(user.uid);
           const ownedCourses = profile?.purchasedCourses || [];
-          
+
           localStorage.setItem('derecelab_purchased', JSON.stringify(ownedCourses));
-          
+
           const isOwned = ownedCourses.includes(courseId) || ownedCourses.includes('course_4');
 
           if (isOwned) {
@@ -361,17 +361,17 @@ Object.assign(DereceLab.Auth, {
 
     // 3. Güvenlik: Eğer 3 saniye içinde hala render edilmediyse (bağlantı hatası vb.) göster
     setTimeout(() => {
-        if (!isUIRendered) {
-            purchaseContainer.style.opacity = '1';
-        }
+      if (!isUIRendered) {
+        purchaseContainer.style.opacity = '1';
+      }
     }, 3000);
   },
 
   renderOwnedState(container) {
     // Sadece eğer zaten owned state'de değilse içeriği değiştir
     if (container.querySelector('.bg-green-50')) {
-        container.style.opacity = '1';
-        return;
+      container.style.opacity = '1';
+      return;
     }
 
     container.style.opacity = '0';
@@ -394,17 +394,17 @@ Object.assign(DereceLab.Auth, {
 
 // Otomatik sahiplik kontrolü
 const initOwnershipCheck = () => {
-    const el = document.querySelector('[data-check-ownership]');
-    if (el) {
-        const cid = el.getAttribute('data-course-id');
-        if (cid) DereceLab.Auth.checkCourseOwnership(cid);
-    }
+  const el = document.querySelector('[data-check-ownership]');
+  if (el) {
+    const cid = el.getAttribute('data-course-id');
+    if (cid) DereceLab.Auth.checkCourseOwnership(cid);
+  }
 };
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initOwnershipCheck);
+  document.addEventListener('DOMContentLoaded', initOwnershipCheck);
 } else {
-    initOwnershipCheck();
+  initOwnershipCheck();
 }
 
 // Sayfa yüklendiğinde auth'u HEMEN başlat (DOMContentLoaded bekleme)
