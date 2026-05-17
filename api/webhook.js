@@ -45,6 +45,33 @@ async function getRawBody(readable) {
     return Buffer.concat(chunks).toString('utf8');
 }
 
+/**
+ * Shopier'in gönderdiği body'den res ve hash değerlerini ayıklar.
+ * Hem multipart/form-data hem de application/x-www-form-urlencoded formatını destekler.
+ */
+function parseShopierBody(rawBody) {
+    // 1. URL-encoded format: res=...&hash=...
+    if (rawBody.includes('res=') && !rawBody.includes('name="res"')) {
+        const params = new URLSearchParams(rawBody);
+        return {
+            res: params.get('res'),
+            hash: params.get('hash'),
+            orderid: params.get('orderid')
+        };
+    }
+
+    // 2. Multipart format (hem \r\n hem \n destekli)
+    const resMatch   = rawBody.match(/name="res"[\r\n]+([^\r\n-][^\r\n]*)/);
+    const hashMatch  = rawBody.match(/name="hash"[\r\n]+([^\r\n-][^\r\n]*)/);
+    const orderMatch = rawBody.match(/name="orderid"[\r\n]+([^\r\n-][^\r\n]*)/);
+
+    return {
+        res: resMatch?.[1]?.trim() || null,
+        hash: hashMatch?.[1]?.trim() || null,
+        orderid: orderMatch?.[1]?.trim() || null
+    };
+}
+
 // ─── İdempotent Sipariş Kontrolü ─────────────────────────────────────────────
 /**
  * Bir sipariş ID'sinin daha önce işlenip işlenmediğini kontrol eder.
@@ -78,19 +105,15 @@ export default async function handler(req, res) {
     try {
         const rawBody = await getRawBody(req);
 
-        // 1. Shopier multipart verisinden res, hash ve sipariş ID'sini ayıkla
-        const resMatch    = rawBody.match(/name="res"\r\n\r\n([\s\S]*?)\r\n/);
-        const hashMatch   = rawBody.match(/name="hash"\r\n\r\n([\s\S]*?)\r\n/);
-        // Shopier bazı örneklerde "orderid" field'ını ayrıca gönderir
-        const orderMatch  = rawBody.match(/name="orderid"\r\n\r\n([\s\S]*?)\r\n/);
+        // 1. Shopier body'sini parse et (multipart veya url-encoded)
+        const parsed = parseShopierBody(rawBody);
+        const resData      = parsed.res;
+        const incomingHash = parsed.hash;
 
-        if (!resMatch || !hashMatch) {
-            console.log('[Shopier] Parametreler eksik.');
+        if (!resData || !incomingHash) {
+            console.log('[Shopier] Parametreler eksik. Raw body:', rawBody.substring(0, 200));
             return res.status(200).send('missing parameter');
         }
-
-        const resData      = resMatch[1].trim();
-        const incomingHash = hashMatch[1].trim();
 
         // 2. HMAC-SHA256 ile Shopier imzasını doğrula
         const expectedHash = crypto
