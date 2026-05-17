@@ -206,9 +206,10 @@
 </div>
 
 <div id="purchase-action-container" data-course-id="course_1" data-check-ownership>
-<button class="add-to-cart-btn w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 mt-auto shadow-lg hover:shadow-orange-200 hover:-translate-y-0.5 active:scale-95" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
-<span class="material-symbols-outlined text-2xl">shopping_cart</span>
-<span class="btn-text">Shopier ile Satın Al</span>
+<button class="add-to-cart-btn group/buy relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white py-4 rounded-xl font-extrabold text-lg flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.5)] hover:-translate-y-1 border border-orange-400/50 overflow-hidden" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
+<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover/buy:opacity-40 blur transition-opacity duration-500"></span>
+<span class="material-symbols-outlined text-2xl relative z-10 opacity-90 group-hover/buy:scale-110 group-hover/buy:-rotate-3 transition-transform duration-300">shopping_cart</span>
+<span class="btn-text relative z-10 drop-shadow-sm tracking-wide">Shopier ile Satın Al</span>
 </button>
 
 <!-- Ödeme Bilgilendirme -->
@@ -253,7 +254,7 @@
 <h2 class="text-2xl font-extrabold mb-8 text-center text-neutral-900">Diğer Kurslarımıza Göz Atın:</h2>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
 <!-- Card 2: Zaman Yönetimi -->
-<div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer relative z-10" onclick="window.location.href='../zaman-yonetimi/'" data-product-id="course_2">
+<div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../zaman-yonetimi/'" data-product-id="course_2">
 <a href="../zaman-yonetimi/" class="block aspect-[16/9] relative overflow-hidden">
 <img alt="Zaman Yönetimi" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/zaman-yonetimi.png"/>
 </a>
@@ -269,15 +270,16 @@
 <div class="flex items-center justify-between mb-3">
 <span class="text-xl font-extrabold text-gray-900">₺249,90</span>
 </div>
-<a class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all" href="../zaman-yonetimi/">
-<span class="material-symbols-outlined text-lg">search</span>
-<span class="btn-text">Kursu Görüntüle</span>
+<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../zaman-yonetimi/">
+<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+<span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
 </a>
 </div>
 </div>
 </div>
 <!-- Card 3: Çalışma Rotasyonları -->
-<div class="group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer relative z-10" onclick="window.location.href='../calisma-rotasyonlari/'" data-product-id="course_3">
+<div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../calisma-rotasyonlari/'" data-product-id="course_3">
 <a href="../calisma-rotasyonlari/" class="block aspect-[16/9] relative overflow-hidden">
 <img alt="Çalışma Rotasyonları" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/calisma-rotasyon.png"/>
 </a>
@@ -293,15 +295,16 @@
 <div class="flex items-center justify-between mb-3">
 <span class="text-xl font-extrabold text-gray-900">₺249,90</span>
 </div>
-<a class="w-full py-3 bg-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all" href="../calisma-rotasyonlari/">
-<span class="material-symbols-outlined text-lg">search</span>
-<span class="btn-text">Kursu Görüntüle</span>
+<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../calisma-rotasyonlari/">
+<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+<span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
 </a>
 </div>
 </div>
 </div>
 <!-- Card 4: DereceLab Üçlü Paket -->
-<div class="group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer relative z-10" onclick="window.location.href='../uclu-paket/'" data-product-id="course_4">
+<div class="group bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(234,88,12,0.1)] hover:shadow-[0_8px_30px_rgba(234,88,12,0.25)] border-2 border-orange-500 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../uclu-paket/'" data-product-id="course_4">
 <a href="../uclu-paket/" class="block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center">
 <img alt="DereceLab Üçlü Paket" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/avantajli.png"/>
 </a>
@@ -322,9 +325,10 @@
 </div>
 <span class="text-xl font-extrabold text-orange-600 leading-none">₺549,90</span>
 </div>
-<a class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95" href="../uclu-paket/">
-<span class="material-symbols-outlined text-lg">search</span>
-<span class="btn-text">Paketi Görüntüle</span>
+<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../uclu-paket/">
+<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+<span class="relative z-10 drop-shadow-sm tracking-wide">Paketi Görüntüle</span>
 </a>
 </div>
 </div>

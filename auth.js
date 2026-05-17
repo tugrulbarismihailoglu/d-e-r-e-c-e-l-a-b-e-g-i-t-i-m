@@ -96,13 +96,23 @@ Object.assign(DereceLab.Auth, {
       const initial = (user.displayName || user.email || '?')[0].toUpperCase();
       authDiv.innerHTML = `
         <div class="relative group">
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white hover:bg-orange-700 transition-colors text-[13px] font-semibold">
-            <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold text-white border border-white/30">${initial}</span>
-            Hesabım
+          <button class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md rounded-xl text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] text-[14px] font-bold group">
+            <span class="relative w-7 h-7 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 flex items-center justify-center text-[13px] font-black text-white shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 border border-white/40 overflow-hidden">
+              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></span>
+              ${initial}
+            </span>
+            <span class="tracking-wide">Hesabım</span>
+            <span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100 group-hover:translate-y-0.5 transition-all duration-300">keyboard_arrow_down</span>
           </button>
           <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
             <div class="w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1">
-              <a href="${BASE_URL}/panel/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-bold">Kurslarıma Git</a>
+              <a href="${BASE_URL}/panel/" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-bold">
+                  <span class="material-symbols-outlined text-[18px]">school</span> Kurslarıma Git
+              </a>
+              <a href="${BASE_URL}/panel/#profile" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-bold">
+                  <span class="material-symbols-outlined text-[18px]">manage_accounts</span> Profil Ayarları
+              </a>
+              <div class="border-t border-gray-100 my-1"></div>
               <button onclick="DereceLab.Auth.signOut()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 font-bold">
                   <span class="material-symbols-outlined text-[18px]">logout</span> Çıkış Yap
               </button>
@@ -112,8 +122,12 @@ Object.assign(DereceLab.Auth, {
       `;
     } else {
       authDiv.innerHTML = `
-        <a href="${BASE_URL}/giris/" class="px-2 md:px-3 py-1.5 rounded-lg text-white hover:bg-orange-700 transition-colors text-[11px] md:text-[13px] font-semibold">Giriş Yap</a>
-        <a href="${BASE_URL}/kayit/" class="px-2 md:px-3 py-1.5 rounded-lg bg-white text-orange-600 hover:bg-orange-50 transition-colors text-[11px] md:text-[13px] font-bold">Kayıt Ol</a>
+        <a href="${BASE_URL}/giris/" class="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white transition-all duration-300 text-[11px] md:text-[13px] font-bold shadow-sm hover:shadow-md">
+          <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:-translate-x-0.5">login</span> Giriş Yap
+        </a>
+        <a href="${BASE_URL}/kayit/" class="group flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-br from-white to-orange-50 hover:from-white hover:to-white text-orange-600 transition-all duration-300 text-[11px] md:text-[13px] font-extrabold shadow-sm hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 overflow-hidden border border-white/50">
+          <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:rotate-12">person_add</span> Kayıt Ol
+        </a>
       `;
     }
 
@@ -134,8 +148,13 @@ Object.assign(DereceLab.Auth, {
       }
       if (heroButtons) {
         heroButtons.innerHTML = `
-          <a href="${BASE_URL}/panel/" class="px-8 py-3 rounded-xl font-bold text-sm bg-orange-600 text-white hover:bg-orange-700 transition-all duration-200 shadow-lg shadow-orange-100">
-            Kurslarıma Git
+          <a href="${BASE_URL}/panel/" class="group relative flex items-center justify-center gap-3 px-8 py-3.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl font-extrabold text-[15px] transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:-translate-y-1 border border-orange-400/50">
+            <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover:opacity-40 blur transition-opacity duration-500"></span>
+            <div class="relative z-10 flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 group-hover:bg-white/30 transition-colors duration-300">
+              <span class="material-symbols-outlined text-[20px]">school</span>
+            </div>
+            <span class="relative z-10 tracking-wide drop-shadow-sm">Kurslarıma Git</span>
+            <span class="relative z-10 material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">arrow_forward</span>
           </a>
         `;
         if (localStorage.getItem('derecelab_user')) {
@@ -151,11 +170,15 @@ Object.assign(DereceLab.Auth, {
       }
       if (heroButtons) {
         heroButtons.innerHTML = `
-          <a href="${BASE_URL}/giris/" class="px-8 py-3 rounded-xl font-bold text-sm bg-white text-orange-600 border-2 border-orange-600 hover:bg-orange-50 transition-all duration-200 shadow-sm">
-            Giriş Yap
+          <a href="${BASE_URL}/giris/" class="group relative flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-orange-600 rounded-xl font-extrabold text-[15px] transition-all duration-500 shadow-sm hover:shadow-[0_0_20px_rgba(234,88,12,0.15)] hover:-translate-y-1 border-2 border-orange-100 hover:border-orange-300 overflow-hidden">
+            <span class="absolute inset-0 bg-orange-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span class="relative z-10 material-symbols-outlined text-[20px] transition-transform duration-300 group-hover:-translate-x-0.5">login</span>
+            <span class="relative z-10 tracking-wide">Giriş Yap</span>
           </a>
-          <a href="${BASE_URL}/kayit/" class="px-8 py-3 rounded-xl font-bold text-sm bg-orange-600 text-white hover:bg-orange-700 transition-all duration-200 shadow-lg shadow-orange-100">
-            Kayıt Ol
+          <a href="${BASE_URL}/kayit/" class="group relative flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl font-extrabold text-[15px] transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.5)] hover:-translate-y-1 border border-orange-400/50 overflow-hidden">
+            <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover:opacity-40 blur transition-opacity duration-500"></span>
+            <span class="relative z-10 material-symbols-outlined text-[20px] opacity-90 transition-transform duration-300 group-hover:rotate-12">person_add</span>
+            <span class="relative z-10 tracking-wide drop-shadow-sm">Kayıt Ol</span>
           </a>
         `;
         heroButtons.classList.remove('opacity-0');

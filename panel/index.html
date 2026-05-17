@@ -462,8 +462,10 @@
                                 <div class="flex items-center justify-between mb-1">
                                     ${priceHtml}
                                 </div>
-                                <a class="w-full py-2 bg-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors" href="${course.url}">
-                                    <span class="material-symbols-outlined text-base">search</span> ${btnText}
+                                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="${course.url}">
+                                    <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                                    <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+                                    <span class="relative z-10 drop-shadow-sm tracking-wide">${btnText}</span>
                                 </a>
                             </div>
                         </div>
@@ -550,6 +552,11 @@
 
         // Start
         document.addEventListener('DOMContentLoaded', () => {
+            // URL hash ile sekme yönlendirmesi (örn: panel/#profile)
+            const hash = window.location.hash;
+            if (hash === '#profile') {
+                switchTab('profile');
+            }
             setTimeout(() => {
                 initDashboard();
             }, 300);

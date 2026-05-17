@@ -9,7 +9,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap"
     rel="stylesheet">
   <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <!-- BEGIN: Custom CSS -->
@@ -357,7 +357,10 @@
             class="flex flex-col items-center gap-2 animate-bounce-slow text-gray-400 hover:text-orange-600 cursor-pointer transition-colors"
             onclick="document.getElementById('courses').scrollIntoView({behavior: 'smooth'})">
             <span class="text-[10px] font-bold uppercase tracking-[0.2em]" style="">KURSLARA GÖZ AT</span>
-            <span class="material-symbols-outlined text-4xl" style="">keyboard_arrow_down</span>
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </div>
         </div>
       </div>
@@ -374,7 +377,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           <!-- Card 1: Verimlilik Optimizasyonu -->
           <div
-            class="animate-on-scroll group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 is-visible cursor-pointer relative z-10"
+            class="animate-on-scroll group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 is-visible cursor-pointer relative z-10"
             data-product-id="course_1" onclick="window.location.href='./kurslar/verimlilik-optimizasyonu/'">
             <a class="block aspect-[16/9] relative overflow-hidden" href="./kurslar/verimlilik-optimizasyonu/" style="">
               <img alt="Verimlilik Optimizasyonu"
@@ -398,16 +401,18 @@
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺249,90</span>
                 </div>
-                <a class="w-full py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95"
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
                   href="./kurslar/verimlilik-optimizasyonu/" style="">
-                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                  <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300" style="">search</span> 
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
                 </a>
               </div>
             </div>
           </div>
           <!-- Card 2: Zaman Yönetimi -->
           <div
-            class="animate-on-scroll group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 is-visible cursor-pointer relative z-10"
+            class="animate-on-scroll group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 is-visible cursor-pointer relative z-10"
             data-product-id="course_2" onclick="window.location.href='./kurslar/zaman-yonetimi/'">
             <a class="block aspect-[16/9] relative overflow-hidden" href="./kurslar/zaman-yonetimi/" style="">
               <img alt="Zaman Yönetimi"
@@ -431,16 +436,18 @@
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺249,90</span>
                 </div>
-                <a class="w-full py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95"
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
                   href="./kurslar/zaman-yonetimi/" style="">
-                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                  <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300" style="">search</span> 
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
                 </a>
               </div>
             </div>
           </div>
           <!-- Card 3: Çalışma Rotasyonları -->
           <div
-            class="animate-on-scroll group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1 is-visible cursor-pointer relative z-10"
+            class="animate-on-scroll group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 is-visible cursor-pointer relative z-10"
             data-product-id="course_3" onclick="window.location.href='./kurslar/calisma-rotasyonlari/'">
             <a class="block aspect-[16/9] relative overflow-hidden" href="./kurslar/calisma-rotasyonlari/" style="">
               <img alt="Çalışma Rotasyonları"
@@ -464,16 +471,18 @@
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-xl font-extrabold text-gray-900 product-price" style="">₺249,90</span>
                 </div>
-                <a class="w-full py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95"
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
                   href="./kurslar/calisma-rotasyonlari/" style="">
-                  <span class="material-symbols-outlined text-base" style="">search</span> Kursu Görüntüle
+                  <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300" style="">search</span> 
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
                 </a>
               </div>
             </div>
           </div>
           <!-- Card 4: DereceLab Full Paket -->
           <div
-            class="animate-on-scroll group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1 is-visible cursor-pointer relative z-10"
+            class="animate-on-scroll group bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(234,88,12,0.1)] hover:shadow-[0_8px_30px_rgba(234,88,12,0.25)] border-2 border-orange-500 flex flex-col transition-all duration-500 hover:-translate-y-1.5 is-visible cursor-pointer relative z-10"
             data-product-id="course_4" onclick="window.location.href='./kurslar/uclu-paket/'">
             <a class="block aspect-[16/9] relative overflow-hidden bg-gray-50" href="./kurslar/uclu-paket/" style="">
               <img alt="DereceLab Üçlü Paket"
@@ -507,9 +516,11 @@
                     <span class="text-xl font-extrabold text-orange-600 product-price" style="">₺549,90</span>
                   </div>
                 </div>
-                <a class="w-full py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-orange-200 active:scale-95"
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
                   href="./kurslar/uclu-paket/" style="">
-                  <span class="material-symbols-outlined text-base" style="">search</span> Paketi Görüntüle
+                  <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300" style="">search</span> 
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Paketi Görüntüle</span>
                 </a>
               </div>
             </div>
