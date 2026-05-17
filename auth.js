@@ -191,7 +191,7 @@ Object.assign(DereceLab.Auth, {
     try {
       localStorage.removeItem('derecelab_cart');
       localStorage.removeItem('derecelab_user');
-      localStorage.removeItem('derecelab_purchased');
+      this._clearCache(); // timestamp’lu önbelleği de temizle
       await auth.signOut();
       window.location.href = BASE_URL + '/';
     } catch (error) {
@@ -234,19 +234,96 @@ Object.assign(DereceLab.Auth, {
     }
   },
 
-  // Satın alınan kursları getir
-  async getPurchasedCourses(uid) {
+  // ─── ÖNBELLEKLEME YARDIMCILARI ─────────────────────────────────────────────
+  // Önbellek anahtarı ve geçerlilik süresi (dakika cinsinden)
+  _CACHE_KEY: 'derecelab_purchased',
+  _CACHE_TTL_MS: 15 * 60 * 1000, // 15 dakika
+
+  /** Önbellekte taze veri var mı? */
+  _isCacheFresh() {
     try {
-      const doc = await db.collection('users').doc(uid).get();
-      if (doc.exists) {
-        return doc.data().purchasedCourses || [];
-      }
-      return [];
-    } catch (error) {
-      console.error('Kurs getirme hatası:', error);
-      return [];
+      const raw = localStorage.getItem(this._CACHE_KEY);
+      if (!raw) return false;
+      const { ts } = JSON.parse(raw);
+      return (Date.now() - ts) < this._CACHE_TTL_MS;
+    } catch { return false; }
+  },
+
+  /** Önbellekteki kurs listesini döndürür (boş array fallback). */
+  _readCache() {
+    try {
+      const raw = localStorage.getItem(this._CACHE_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw).data || [];
+    } catch { return []; }
+  },
+
+  /** Kurs listesini timestamp ile önbelleğe yazar. */
+  _writeCache(courses) {
+    try {
+      localStorage.setItem(this._CACHE_KEY, JSON.stringify({
+        ts: Date.now(),
+        data: courses
+      }));
+    } catch (e) {
+      console.warn('[Cache] localStorage yazılamadı:', e);
     }
   },
+
+  /** Önbelleği temizler (zorla Firebase'den çekim için). */
+  _clearCache() {
+    localStorage.removeItem(this._CACHE_KEY);
+  },
+
+  // ─── SATIN ALINAN KURSLARI GETİR (ÖNBELLEKLE) ───────────────────────────────
+  /**
+   * Kullanıcının satın aldığı kursları döndürür.
+   * - Önbellekte 15 dakikadan taze veri varsa → Firebase'e gitme.
+   * - Eskiyse veya yoksa → Firebase'den çek, önbelleği güncelle.
+   * @param {string} uid
+   * @param {boolean} [force=false] - true ise önbelleği atlayıp Firebase'den çeker.
+   */
+  async getPurchasedCourses(uid, force = false) {
+    try {
+      // 1. Önbellek kontrolü
+      if (!force && this._isCacheFresh()) {
+        console.log('[Cache] Taze önbellekten okunuyor.');
+        return this._readCache();
+      }
+
+      // 2. Firebase'den çek
+      console.log('[Cache] Firebase\'den çekiliyor...');
+      const doc = await db.collection('users').doc(uid).get();
+      const courses = doc.exists ? (doc.data().purchasedCourses || []) : [];
+
+      // 3. Önbelleğe yaz
+      this._writeCache(courses);
+      console.log('[Cache] Önbellek güncellendi, kurs sayısı:', courses.length);
+
+      return courses;
+    } catch (error) {
+      console.error('Kurs getirme hatası:', error);
+      // Hata durumunda önbellekte ne varsa dön (ESKİ DE OLSA)
+      return this._readCache();
+    }
+  },
+
+  /**
+   * Önbelleği temizler ve Firebase'den güncel kurs listesini zorla çeker.
+   * Yeni kurs satın alındığında veya "Kursları Güncelle" butonuna basıldığında çağrılır.
+   * @param {string} uid
+   */
+  async refreshPurchasedCourses(uid) {
+    console.log('[Cache] Force-refresh başlatıldı...');
+    this._clearCache();
+    const courses = await this.getPurchasedCourses(uid, true);
+    // Cart modülünü de güncelle
+    if (window.DereceLab?.Cart) {
+      window.DereceLab.Cart.setPurchased(courses);
+    }
+    return courses;
+  },
+
 
   // Tamamlanan bölümleri getir
   async getCompletedParts(uid) {
@@ -334,33 +411,28 @@ Object.assign(DereceLab.Auth, {
     window.open(shopierUrl, '_blank');
   },
 
-  // Kurs sahipliğini kontrol et ve UI'ı güncelle
+  // Kurs sahipliğini kontrol et ve UI’ı güncelle
   async checkCourseOwnership(courseId) {
     const purchaseContainer = document.getElementById('purchase-action-container');
     if (!purchaseContainer) return;
 
     let isUIRendered = false;
 
-    // 1. Hızlı gösterim için localStorage kontrolü
-    try {
-      const cachedOwned = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
+    // 1. Hızlı gösterim: önbellekte taze veri varsa hemen UI’ı çiz
+    if (this._isCacheFresh()) {
+      const cachedOwned = this._readCache();
       if (cachedOwned.includes(courseId) || cachedOwned.includes('course_4')) {
         this.renderOwnedState(purchaseContainer);
         isUIRendered = true;
       }
-    } catch (e) {
-      console.warn('Cache check failed:', e);
     }
 
-    // 2. Firebase'den doğrula ve güncelle
+    // 2. Firebase’den doğrula (veya önbellek bayatsa yenile)
     auth.onAuthStateChanged(async (user) => {
       try {
         if (user) {
-          const profile = await this.getUserProfile(user.uid);
-          const ownedCourses = profile?.purchasedCourses || [];
-
-          localStorage.setItem('derecelab_purchased', JSON.stringify(ownedCourses));
-
+          // getPurchasedCourses önbelleği kendi yönetir
+          const ownedCourses = await this.getPurchasedCourses(user.uid);
           const isOwned = ownedCourses.includes(courseId) || ownedCourses.includes('course_4');
 
           if (isOwned) {
