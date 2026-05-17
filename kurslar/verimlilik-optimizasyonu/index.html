@@ -1,380 +1,625 @@
 <!DOCTYPE html>
 
-<html class="light" lang="tr"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Verimlilik Optimizasyonu — DereceLab</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#ea580c',
-                        background: '#ffffff',
-                    }
-                }
-            }
-        }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
-        
-        .nav-link {
-            position: relative;
-            padding: 0.5rem 0.75rem;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 600;
-            font-size: 14px;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: #ffffff;
-        }
+<html class="light" lang="tr">
 
-        #cart-drawer {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Verimlilik Optimizasyonu — DereceLab</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ea580c',
+            background: '#ffffff',
+          }
         }
-        #cart-drawer.translate-x-full {
-            transform: translateX(100%);
-        }
-        #cart-drawer.translate-x-0 {
-            transform: translateX(0);
-        }
-        #cart-overlay {
-            transition: opacity 0.3s ease;
-        }
-    
-        #nav-indicator {
-            position: absolute;
-            bottom: 4px;
-            height: 2px;
-            background-color: white;
-            border-radius: 9999px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-            opacity: 0;
-        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
 
-        /* Button States - Matching Home Page */
-        .btn-added {
-            background-color: white !important;
-            color: #ea580c !important;
-            border: 2px solid #ea580c !important;
-        }
-        .btn-added .normal-text { display: flex; }
-        .btn-added .hover-text { display: none; }
-        
-        .btn-added:hover {
-            background-color: #fef2f2 !important;
-            color: #dc2626 !important;
-            border-color: #dc2626 !important;
-        }
-        .btn-added:hover .normal-text { display: none; }
-        .btn-added:hover .hover-text { display: flex; }
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
 
-        .card-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-    
-        /* Floating Math & Code Elements */
-        .math-float {
-            position: absolute;
-            font-family: 'Courier New', monospace;
-            font-weight: 800;
-            color: rgba(234, 88, 12, 0.40);
-            animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
-            animation-delay: var(--delay, 0s);
-            will-change: transform;
-            user-select: none;
-            white-space: nowrap;
-        }
+    h1,
+    h2,
+    h3 {
+      font-family: 'Manrope', sans-serif;
+    }
 
-        .geo-float {
-            position: absolute;
-            animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
-            animation-delay: var(--delay, 0s);
-            will-change: transform;
-        }
+    .nav-link {
+      position: relative;
+      padding: 0.5rem 0.75rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
 
-        .geo-float svg {
-            stroke: rgba(234, 88, 12, 0.30);
-            fill: none;
-            stroke-width: 1.5;
-        }
+    .nav-link:hover,
+    .nav-link.active {
+      color: #ffffff;
+    }
 
-        @keyframes gentleDrift {
-            from { transform: translate(0, 0) rotate(var(--rot, 0deg)); }
-            to { transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg)) scale(var(--sc, 1)); }
-        }
+    #cart-drawer {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-        #purchase-action-container {
-            opacity: 1;
-        }
-    </style>
+    #cart-drawer.translate-x-full {
+      transform: translateX(100%);
+    }
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="../../firebase-config.js"></script>
+    #cart-drawer.translate-x-0 {
+      transform: translateX(0);
+    }
+
+    #cart-overlay {
+      transition: opacity 0.3s ease;
+    }
+
+    #nav-indicator {
+      position: absolute;
+      bottom: 4px;
+      height: 2px;
+      background-color: white;
+      border-radius: 9999px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    /* Button States - Matching Home Page */
+    .btn-added {
+      background-color: white !important;
+      color: #ea580c !important;
+      border: 2px solid #ea580c !important;
+    }
+
+    .btn-added .normal-text {
+      display: flex;
+    }
+
+    .btn-added .hover-text {
+      display: none;
+    }
+
+    .btn-added:hover {
+      background-color: #fef2f2 !important;
+      color: #dc2626 !important;
+      border-color: #dc2626 !important;
+    }
+
+    .btn-added:hover .normal-text {
+      display: none;
+    }
+
+    .btn-added:hover .hover-text {
+      display: flex;
+    }
+
+    .card-shadow {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Floating Math & Code Elements */
+    .math-float {
+      position: absolute;
+      font-family: 'Courier New', monospace;
+      font-weight: 800;
+      color: rgba(234, 88, 12, 0.40);
+      animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+      will-change: transform;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .geo-float {
+      position: absolute;
+      animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+      will-change: transform;
+    }
+
+    .geo-float svg {
+      stroke: rgba(234, 88, 12, 0.30);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    @keyframes gentleDrift {
+      from {
+        transform: translate(0, 0) rotate(var(--rot, 0deg));
+      }
+
+      to {
+        transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg)) scale(var(--sc, 1));
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    #purchase-action-container {
+      opacity: 1;
+    }
+
+    /* Owned Course Styles */
+    .course-card-owned {
+      border-color: #22c55e !important;
+      /* green-500 */
+      border-width: 2px !important;
+    }
+
+    .owned-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      height: 28px;
+      background-color: #22c55e;
+      color: white;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px 0 12px;
+      gap: 6px;
+      z-index: 10;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      border: 2px solid white;
+    }
+
+    .owned-badge .badge-text {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .owned-badge .badge-icon {
+      width: 20px;
+      height: 20px;
+      background: white;
+      color: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .owned-badge .badge-icon span {
+      font-size: 14px !important;
+      font-weight: 900 !important;
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="../../firebase-config.js"></script>
   <link rel="icon" type="image/jpeg" href="../../Images/favicon.jpg">
 </head>
+
 <body class="bg-background text-neutral-900">
-<!-- Shopping Cart Drawer -->
+  <!-- Shopping Cart Drawer -->
   <!-- END: ShoppingCartDrawer -->
-<!-- Header -->
-<header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 transition-colors duration-300">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between relative">
-<div class="z-10">
-<a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5" href="../../">
-<img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../../Images/logo-beyaz.png"/>
-<span class="hidden sm:inline">DereceLab</span>
-            </a>
-</div>
-<nav class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 h-full">
-<a class="nav-link" data-section="home" href="../../">Ana Sayfa</a>
-<button class="nav-link active" data-section="courses" onclick="document.getElementById('home-section').scrollIntoView({behavior: 'smooth'})">Kurslar</button>
-<button class="nav-link" data-section="about" onclick="document.getElementById('about-us').scrollIntoView({behavior: 'smooth'})">Hakkımızda</button>
-<div id="nav-indicator"></div>
-</nav>
-<div class="flex items-center gap-2 sm:gap-4 z-10">
-</div>
-</div>
-</header>
-<main class="pt-24 lg:pt-32">
-<!-- Hero Section & Package Overview -->
-<div class="relative overflow-hidden mb-10">
+  <!-- Header -->
+  <header
+    class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between relative">
+      <div class="z-10">
+        <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
+          href="../../">
+          <img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../../Images/logo-beyaz.png" />
+          <span class="hidden sm:inline">DereceLab</span>
+        </a>
+      </div>
+      <nav class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 h-full">
+        <a class="nav-link" data-section="home" href="../../">Ana Sayfa</a>
+        <button class="nav-link active" data-section="courses"
+          onclick="document.getElementById('home-section').scrollIntoView({behavior: 'smooth'})">Kurslar</button>
+        <button class="nav-link" data-section="about"
+          onclick="document.getElementById('about-us').scrollIntoView({behavior: 'smooth'})">Hakkımızda</button>
+        <div id="nav-indicator"></div>
+      </nav>
+      <div class="flex items-center gap-2 sm:gap-4 z-10">
+      </div>
+    </div>
+  </header>
+  <main class="pt-24 lg:pt-32">
+    <!-- Hero Section & Package Overview -->
+    <div class="relative overflow-hidden mb-10">
 
-                        <!-- Floating Math & Geometric Elements (Sparse) -->
+      <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0] hidden xl:block">
-          <!-- Math Formulas -->
-          <span class="math-float" style="top: 10%; left: 2%; --dx: 8px; --dy: -13px; --rot: -3deg; --delay: 2.2s; --dur: 4.4s; font-size: 21px;">PV=nRT</span>
-          <span class="math-float" style="top: 76%; left: 9%; --dx: -7px; --dy: 3px; --rot: 1deg; --delay: 1.7s; --dur: 3.9s; font-size: 20px;">√(a²+b²)</span>
-          <span class="math-float" style="top: 23%; right: 4%; --dx: 2px; --dy: -15px; --rot: -1deg; --delay: 1.5s; --dur: 3.3s; font-size: 22px;">F=ma</span>
-          <span class="math-float" style="top: 66%; right: 7%; --dx: 10px; --dy: -6px; --rot: 4deg; --delay: 2.2s; --dur: 4.4s; font-size: 19px;">Δx·Δp ≥ ℏ/2</span>
+        <!-- Math Formulas -->
+        <span class="math-float"
+          style="top: 10%; left: 2%; --dx: 8px; --dy: -13px; --rot: -3deg; --delay: 2.2s; --dur: 4.4s; font-size: 21px;">PV=nRT</span>
+        <span class="math-float"
+          style="top: 76%; left: 9%; --dx: -7px; --dy: 3px; --rot: 1deg; --delay: 1.7s; --dur: 3.9s; font-size: 20px;">√(a²+b²)</span>
+        <span class="math-float"
+          style="top: 23%; right: 4%; --dx: 2px; --dy: -15px; --rot: -1deg; --delay: 1.5s; --dur: 3.3s; font-size: 22px;">F=ma</span>
+        <span class="math-float"
+          style="top: 66%; right: 7%; --dx: 10px; --dy: -6px; --rot: 4deg; --delay: 2.2s; --dur: 4.4s; font-size: 19px;">Δx·Δp
+          ≥ ℏ/2</span>
 
-          <!-- Geometric Wireframe Shapes -->
-          <div class="geo-float" style="top: 38%; left: 6%; --dx: 7px; --dy: 15px; --rot: 14deg; --sc: 1.08; --delay: 0.5s; --dur: 4.0s;">
-            <svg width="50" height="70" viewBox="0 0 50 70"><ellipse cx="25" cy="12" rx="20" ry="8"/><line x1="5" y1="12" x2="5" y2="55"/><line x1="45" y1="12" x2="45" y2="55"/><ellipse cx="25" cy="55" rx="20" ry="8"/></svg>
-          </div>
-          <div class="geo-float" style="top: 47%; right: 6%; --dx: -3px; --dy: -15px; --rot: -4deg; --sc: 1.04; --delay: 2.5s; --dur: 3.1s;">
-            <svg width="55" height="65" viewBox="0 0 55 65"><path d="M27 5 L5 55 L50 55 Z"/><ellipse cx="27" cy="55" rx="22" ry="8" stroke-dasharray="3,3"/><ellipse cx="27" cy="55" rx="22" ry="8"/></svg>
-          </div>
+        <!-- Geometric Wireframe Shapes -->
+        <div class="geo-float"
+          style="top: 38%; left: 6%; --dx: 7px; --dy: 15px; --rot: 14deg; --sc: 1.08; --delay: 0.5s; --dur: 4.0s;">
+          <svg width="50" height="70" viewBox="0 0 50 70">
+            <ellipse cx="25" cy="12" rx="20" ry="8" />
+            <line x1="5" y1="12" x2="5" y2="55" />
+            <line x1="45" y1="12" x2="45" y2="55" />
+            <ellipse cx="25" cy="55" rx="20" ry="8" />
+          </svg>
+        </div>
+        <div class="geo-float"
+          style="top: 47%; right: 6%; --dx: -3px; --dy: -15px; --rot: -4deg; --sc: 1.04; --delay: 2.5s; --dur: 3.1s;">
+          <svg width="55" height="65" viewBox="0 0 55 65">
+            <path d="M27 5 L5 55 L50 55 Z" />
+            <ellipse cx="27" cy="55" rx="22" ry="8" stroke-dasharray="3,3" />
+            <ellipse cx="27" cy="55" rx="22" ry="8" />
+          </svg>
+        </div>
       </div>
 
-<section class="max-w-6xl mx-auto px-6 relative z-10" id="home-section">
-<div class="mb-8">
-<span class="inline-block px-2.5 py-1 bg-orange-100 text-primary text-[9px] font-extrabold uppercase tracking-widest rounded-full mb-4">popüler</span>
-<h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 max-w-3xl leading-[1.1]">
-                Verimlilik Optimizasyonu Video Seti
-                <div class="text-xl md:text-2xl text-primary mt-1 font-bold">Maksimum Performans</div>
-</h1>
-<p class="mt-4 text-base text-neutral-500 max-w-xl leading-relaxed">
-                Çalışma saatlerini değil, çalışma kaliteni artır. Özel teknikler ve bilişsel öğrenme metotlarıyla sınav sürecinde potansiyelini zirveye taşı.
-            </p>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-auto">
-<div class="lg:col-span-7 relative bg-neutral-100 rounded-xl overflow-hidden shadow-sm border-2 border-black h-64 lg:min-h-[400px]">
-<img alt="Verimlilik Optimizasyonu Video Seti" class="w-full h-full object-cover" src="../../Images/verimlilik.png"/>
-</div>
-<div class="lg:col-span-5 flex h-auto lg:min-h-[400px]">
-<div class="bg-white p-6 rounded-xl border-2 border-primary shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full">
-<div class="absolute -top-[2px] -right-[2px] rounded-tr-xl overflow-hidden">
-<div class="bg-primary px-4 py-1.5 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-xl">
-                            POPÜLER
-                        </div>
-</div>
-<div class="mb-4 pt-2">
-<div class="flex items-center gap-3 mt-0.5">
-<span class="text-3xl font-black text-neutral-900">₺249,90</span>
-</div>
-</div>
+      <section class="max-w-6xl mx-auto px-6 relative z-10" id="home-section">
+        <div class="mb-8">
+          <span
+            class="inline-block px-2.5 py-1 bg-orange-100 text-primary text-[9px] font-extrabold uppercase tracking-widest rounded-full mb-4">popüler</span>
+          <h1
+            class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 max-w-3xl leading-[1.15]">
+            Verimlilik Optimizasyonu
+            <div
+              class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-neutral-900 mt-2 flex flex-wrap items-center gap-3">
+              Video Seti
+              <span class="text-lg md:text-xl lg:text-2xl font-semibold text-neutral-500">(Toplam 3 ders, 98 dk.)</span>
+            </div>
+            <div class="text-xl md:text-2xl text-primary mt-1.5 font-bold">Çalışma Verimini Artır ve Rakiplerinin Önüne
+              Geç</div>
+          </h1>
+          <p class="mt-4 text-base text-neutral-500 max-w-xl leading-relaxed">
+            Çalışma saatlerini değil, çalışma verimini artır. Özel teknikler ve bilişsel öğrenme metotlarıyla sınav
+            sürecindeki potansiyelini zirveye taşı.
 
-<div id="purchase-action-container" data-course-id="course_1" data-check-ownership>
-<button class="add-to-cart-btn group/buy relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white py-4 rounded-xl font-extrabold text-lg flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.5)] hover:-translate-y-1 border border-orange-400/50 overflow-hidden" id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
-<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover/buy:opacity-40 blur transition-opacity duration-500"></span>
-<span class="material-symbols-outlined text-2xl relative z-10 opacity-90 group-hover/buy:scale-110 group-hover/buy:-rotate-3 transition-transform duration-300">shopping_cart</span>
-<span class="btn-text relative z-10 drop-shadow-sm tracking-wide">Shopier ile Satın Al</span>
-</button>
+          </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-auto">
+          <div
+            class="lg:col-span-7 relative bg-neutral-100 rounded-xl overflow-hidden shadow-sm border-2 border-black h-64 lg:h-full">
+            <img alt="Verimlilik Optimizasyonu Video Seti" class="w-full h-full object-cover"
+              src="../../Images/verimlilik.png" />
+          </div>
+          <div class="lg:col-span-5 flex h-auto lg:min-h-[400px]">
+            <div
+              class="bg-white p-6 rounded-xl border-2 border-primary shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full">
+              <div class="absolute -top-[2px] -right-[2px] rounded-tr-xl overflow-hidden">
+                <div
+                  class="bg-primary px-4 py-1.5 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-xl">
+                  POPÜLER
+                </div>
+              </div>
+              <div class="mb-5 pt-1.5 pb-3 border-b border-neutral-100/80">
+                <div class="flex items-center justify-between">
+                  <div class="flex flex-col gap-0.5">
+                    <span class="text-[10px] font-extrabold tracking-widest text-neutral-400 uppercase">TEK SEFERLİK
+                      ÖDEME</span>
+                    <div class="flex items-baseline gap-2">
+                      <span class="text-3xl font-black text-neutral-900 tracking-tight">₺249,90</span>
+                      <del class="text-sm font-semibold text-neutral-400">₺349,90</del>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-end gap-1.5">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 bg-green-500/10 text-green-600 text-[10px] font-black rounded-md border border-green-200">%28
+                      İNDİRİM</span>
+                    <span
+                      class="inline-flex items-center gap-1 text-[10px] font-extrabold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100">
+                      <span class="material-symbols-outlined text-[12px] animate-pulse">check_circle</span>
+                      Ömür Boyu Erişim
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-<!-- Ödeme Bilgilendirme -->
-<div class="mt-6 space-y-3">
-  <div class="flex items-center gap-4 text-orange-700 bg-orange-50/80 p-4 rounded-xl border-2 border-orange-100 shadow-sm transition-all hover:bg-orange-50">
-    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100/50 shrink-0">
-      <span class="material-symbols-outlined text-2xl">warning</span>
+              <div id="purchase-action-container" data-course-id="course_1" data-check-ownership>
+                <button
+                  class="add-to-cart-btn group/buy relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white py-4 rounded-xl font-extrabold text-lg flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.5)] hover:-translate-y-1 border border-orange-400/50 overflow-hidden"
+                  id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_1')">
+                  <span
+                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover/buy:opacity-40 blur transition-opacity duration-500"></span>
+                  <span
+                    class="material-symbols-outlined text-2xl relative z-10 opacity-90 group-hover/buy:scale-110 group-hover/buy:-rotate-3 transition-transform duration-300">shopping_cart</span>
+                  <span class="btn-text relative z-10 drop-shadow-sm tracking-wide">Shopier ile Satın Al</span>
+                </button>
+
+                <!-- Ödeme Bilgilendirme -->
+                <div class="mt-6 space-y-3">
+                  <div
+                    class="flex items-center gap-4 text-orange-700 bg-orange-50/80 p-4 rounded-xl border-2 border-orange-100 shadow-sm transition-all hover:bg-orange-50">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100/50 shrink-0">
+                      <span class="material-symbols-outlined text-2xl">warning</span>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-[14px] font-bold leading-tight mb-1">
+                        E-posta Uyumluluğu Önemlidir
+                      </p>
+                      <p class="text-[12px] font-medium text-orange-700/80 leading-snug">
+                        Ödeme yaparken girdiğiniz mailin, hesabınızın maili ile aynı olduğundan emin olun.
+                        <a href="../../panel/#profile"
+                          class="underline decoration-orange-300 hover:text-orange-900 transition-colors">Profil
+                          ayarlarından</a> kontrol edebilirsiniz.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-center gap-4 text-blue-700 bg-blue-50/80 p-4 rounded-xl border-2 border-blue-100 shadow-sm transition-all hover:bg-blue-50">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100/50 shrink-0">
+                      <span class="material-symbols-outlined text-2xl">verified_user</span>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-[14px] font-bold leading-tight mb-1">
+                        Anında Kurs Tanımlama
+                      </p>
+                      <p class="text-[12px] font-medium text-blue-700/80 leading-snug">
+                        Ödeme işleminiz Shopier üzerinden tamamlanacak ve kursa erişiminiz anında açılacaktır
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="flex-1">
-      <p class="text-[14px] font-bold leading-tight mb-1">
-        E-posta Uyumluluğu Önemlidir
-      </p>
-      <p class="text-[12px] font-medium text-orange-700/80 leading-snug">
-        Ödeme yaparken girdiğiniz mailin, hesabınızın maili ile aynı olduğundan emin olun.
-        <a href="../../panel/#profile" class="underline decoration-orange-300 hover:text-orange-900 transition-colors">Profil ayarlarından</a> kontrol edebilirsiniz.
-      </p>
-    </div>
-  </div>
-  <div class="flex items-center gap-4 text-blue-700 bg-blue-50/80 p-4 rounded-xl border-2 border-blue-100 shadow-sm transition-all hover:bg-blue-50">
-    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100/50 shrink-0">
-      <span class="material-symbols-outlined text-2xl">verified_user</span>
-    </div>
-    <div class="flex-1">
-      <p class="text-[14px] font-bold leading-tight mb-1">
-        Anında Kurs Tanımlama
-      </p>
-      <p class="text-[12px] font-medium text-blue-700/80 leading-snug">
-        Ödeme işleminiz Shopier üzerinden tamamlanacak ve kursa erişiminiz anında açılacaktır
-      </p>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</div></section>
+    </section>
 
-        <!-- Other Courses Section -->
-<section class="bg-neutral-50 py-12 border-b border-neutral-100">
-<div class="max-w-[1400px] mx-auto px-8">
-<h2 class="text-2xl font-extrabold mb-8 text-center text-neutral-900">Diğer Kurslarımıza Göz Atın:</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
-<!-- Card 2: Zaman Yönetimi -->
-<div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../zaman-yonetimi/'" data-product-id="course_2">
-<a href="../zaman-yonetimi/" class="block aspect-[16/9] relative overflow-hidden">
-<img alt="Zaman Yönetimi" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/zaman-yonetimi.png"/>
-</a>
-<div class="flex flex-col flex-1 p-5">
-<div class="flex gap-2 mb-2">
-<span class="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 bg-blue-600 bg-opacity-10 text-blue-600 rounded-md border border-blue-600 shadow-sm">STRATEJİ</span>
-</div>
-<a class="block group/title" href="../zaman-yonetimi/">
-<h3 class="font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors">Zaman Yönetimi <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span></h3>
-</a>
+    <!-- Other Courses Section -->
+    <section class="bg-neutral-50 py-12 border-b border-neutral-100">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-2xl font-extrabold mb-8 text-center text-neutral-900">Diğer Kurslarımıza Göz Atın:</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
+          <!-- Card 2: Zaman Yönetimi -->
+          <div
+            class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10"
+            onclick="window.location.href='../zaman-yonetimi/'" data-product-id="course_2">
+            <a href="../zaman-yonetimi/" class="block aspect-[16/9] relative overflow-hidden">
+              <img alt="Zaman Yönetimi"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                src="../../Images/zaman-yonetimi.png" />
+            </a>
+            <div class="flex flex-col flex-1 p-5">
+              <div class="flex gap-2 mb-2">
+                <span
+                  class="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 bg-blue-600 bg-opacity-10 text-blue-600 rounded-md border border-blue-600 shadow-sm">STRATEJİ</span>
+              </div>
+              <a class="block group/title" href="../zaman-yonetimi/">
+                <h3
+                  class="font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors">
+                  Zaman Yönetimi <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span></h3>
+              </a>
 
-<div class="mt-auto">
-<div class="flex items-center justify-between mb-3">
-<span class="text-xl font-extrabold text-gray-900">₺249,90</span>
-</div>
-<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../zaman-yonetimi/">
-<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
-<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
-<span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
-</a>
-</div>
-</div>
-</div>
-<!-- Card 3: Çalışma Rotasyonları -->
-<div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../calisma-rotasyonlari/'" data-product-id="course_3">
-<a href="../calisma-rotasyonlari/" class="block aspect-[16/9] relative overflow-hidden">
-<img alt="Çalışma Rotasyonları" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/calisma-rotasyon.png"/>
-</a>
-<div class="flex flex-col flex-1 p-5">
-<div class="flex gap-2 mb-2">
-<span class="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 bg-purple-600 bg-opacity-10 text-purple-600 rounded-md border border-purple-600 shadow-sm">ÖZEL METOT</span>
-</div>
-<a class="block group/title" href="../calisma-rotasyonlari/">
-<h3 class="font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors">Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span></h3>
-</a>
+              <div class="mt-auto">
+                <div
+                  class="flex items-center gap-2 text-[12px] font-extrabold text-blue-700 bg-gradient-to-r from-blue-50/80 via-blue-50/30 to-transparent border-l-2 border-l-blue-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-blue-100/80 transition-all duration-300">
+                  <span class="material-symbols-outlined text-[14px] text-blue-600 animate-pulse">schedule</span>
+                  <span>Zamanını Derece Öğrencisi Gibi Yönet ve Kontrolü Eline Al</span>
+                </div>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2 mb-1">
+                      <del class="text-sm text-gray-500">₺349,90</del>
+                      <span
+                        class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%28
+                        İNDİRİM</span>
+                    </div>
+                    <span class="text-xl font-extrabold text-orange-600 leading-none">₺249,90</span>
+                  </div>
+                </div>
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
+                  href="../zaman-yonetimi/">
+                  <span
+                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span
+                    class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3: Çalışma Rotasyonları -->
+          <div
+            class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgba(234,88,12,0.12)] border border-gray-100 hover:border-orange-300/50 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10"
+            onclick="window.location.href='../calisma-rotasyonlari/'" data-product-id="course_3">
+            <a href="../calisma-rotasyonlari/" class="block aspect-[16/9] relative overflow-hidden">
+              <img alt="Çalışma Rotasyonları"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                src="../../Images/calisma-rotasyon.png" />
+            </a>
+            <div class="flex flex-col flex-1 p-5">
+              <div class="flex gap-2 mb-2">
+                <span
+                  class="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 bg-purple-600 bg-opacity-10 text-purple-600 rounded-md border border-purple-600 shadow-sm">ÖZEL
+                  METOT</span>
+              </div>
+              <a class="block group/title" href="../calisma-rotasyonlari/">
+                <h3
+                  class="font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors">
+                  Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>
+                </h3>
+              </a>
 
-<div class="mt-auto">
-<div class="flex items-center justify-between mb-3">
-<span class="text-xl font-extrabold text-gray-900">₺249,90</span>
-</div>
-<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../calisma-rotasyonlari/">
-<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
-<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
-<span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
-</a>
-</div>
-</div>
-</div>
-<!-- Card 4: DereceLab Üçlü Paket -->
-<div class="group bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(234,88,12,0.1)] hover:shadow-[0_8px_30px_rgba(234,88,12,0.25)] border-2 border-orange-500 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10" onclick="window.location.href='../uclu-paket/'" data-product-id="course_4">
-<a href="../uclu-paket/" class="block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center">
-<img alt="DereceLab Üçlü Paket" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../../Images/avantajli.png"/>
-</a>
-<div class="flex flex-col flex-1 p-5">
-<div class="flex gap-2 mb-2">
-<span class="text-[11px] font-extrabold tracking-widest uppercase px-3 py-1 bg-green-500 bg-opacity-20 text-green-600 rounded-md border border-green-500 shadow-sm">EN AVANTAJLI</span>
-</div>
-<a class="block group/title" href="../uclu-paket/">
-<h3 class="font-bold text-gray-900 leading-tight mb-1 min-h-[24px] text-[18px] group-hover/title:text-orange-600 transition-colors">DereceLab Üçlü Paket</h3>
-</a>
-<h4 class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 w-fit border border-orange-200 shadow-sm">3 VİDEO SETİ BİR ARADA</h4>
+              <div class="mt-auto">
+                <div
+                  class="flex items-center gap-2 text-[12px] font-extrabold text-purple-700 bg-gradient-to-r from-purple-50/80 via-purple-50/30 to-transparent border-l-2 border-l-purple-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-purple-100/80 transition-all duration-300">
+                  <span class="material-symbols-outlined text-[14px] text-purple-600 animate-pulse">psychology</span>
+                  <span>Doğru Çalışma Rotasyonu ile Bilgileri Zihnine Kazı</span>
+                </div>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2 mb-1">
+                      <del class="text-sm text-gray-500">₺419,90</del>
+                      <span
+                        class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%21
+                        İNDİRİM</span>
+                    </div>
+                    <span class="text-xl font-extrabold text-orange-600 leading-none">₺329,90</span>
+                  </div>
+                </div>
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
+                  href="../calisma-rotasyonlari/">
+                  <span
+                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span
+                    class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Kursu Görüntüle</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4: DereceLab Üçlü Paket -->
+          <div
+            class="group bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(234,88,12,0.1)] hover:shadow-[0_8px_30px_rgba(234,88,12,0.25)] border-2 border-orange-500 flex flex-col transition-all duration-500 hover:-translate-y-1.5 cursor-pointer relative z-10"
+            onclick="window.location.href='../uclu-paket/'" data-product-id="course_4">
+            <a href="../uclu-paket/"
+              class="block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center">
+              <img alt="DereceLab Üçlü Paket"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                src="../../Images/avantajli.png" />
+            </a>
+            <div class="flex flex-col flex-1 p-5">
+              <div class="flex gap-2 mb-2">
+                <span
+                  class="text-[11px] font-extrabold tracking-widest uppercase px-3 py-1 bg-green-500 bg-opacity-20 text-green-600 rounded-md border border-green-500 shadow-sm">EN
+                  AVANTAJLI</span>
+              </div>
+              <a class="block group/title" href="../uclu-paket/">
+                <h3
+                  class="font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors">
+                  DereceLab Üçlü Paket <span class="block text-sm mt-1 font-semibold text-gray-500">3 Video Seti Bir
+                    Arada</span></h3>
+              </a>
 
-<div class="mt-auto">
-<div class="flex flex-col mb-3">
-<div class="flex items-center gap-2 mb-1">
-<del class="text-sm text-gray-500">₺749,70</del>
-<span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%27 İNDİRİM</span>
-</div>
-<span class="text-xl font-extrabold text-orange-600 leading-none">₺549,90</span>
-</div>
-<a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="../uclu-paket/">
-<span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
-<span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
-<span class="relative z-10 drop-shadow-sm tracking-wide">Paketi Görüntüle</span>
-</a>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- About Us Section -->
-<section class="relative overflow-hidden bg-white py-24 mb-16" id="about-us">
+              <!-- Sınav yolculuğu sloganı -->
+              <div
+                class="flex items-center gap-2 text-[12px] font-extrabold text-amber-700 bg-gradient-to-r from-amber-50/80 via-amber-50/30 to-transparent border-l-2 border-l-amber-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-amber-100/80 transition-all duration-300">
+                <span class="material-symbols-outlined text-[14px] text-amber-600 animate-pulse">star</span>
+                <span>Sınav yolculuğunda ihtiyacın olan tüm stratejiler tek bir pakette.</span>
+              </div>
 
-                  <!-- Floating Math & Geometric Elements (Sparse) -->
+              <div class="mt-auto">
+                <div class="flex flex-col mb-3">
+                  <div class="flex items-center gap-2 mb-1">
+                    <del class="text-sm text-gray-500">₺1119,70</del>
+                    <span
+                      class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">-%45
+                      İNDİRİM</span>
+                  </div>
+                  <span class="text-xl font-extrabold text-orange-600 leading-none">₺619,90</span>
+                </div>
+                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden"
+                  href="../uclu-paket/">
+                  <span
+                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                  <span
+                    class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+                  <span class="relative z-10 drop-shadow-sm tracking-wide">Paketi Görüntüle</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- About Us Section -->
+    <section class="relative overflow-hidden bg-white py-24 mb-16" id="about-us">
+
+      <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
-          <!-- Math Formulas -->
-          <span class="math-float" style="top: 15%; left: 8%; --dx: 3px; --dy: 9px; --rot: 1deg; --delay: 0.6s; --dur: 2.8s; font-size: 21px;">∮E·da=Q/ε₀</span>
-          <span class="math-float" style="top: 28%; right: 5%; --dx: -6px; --dy: -13px; --rot: 4deg; --delay: 2.0s; --dur: 3.0s; font-size: 16px;">d/dx(uv)=u'v+uv'</span>
-          <span class="math-float" style="top: 80%; left: 17%; --dx: 7px; --dy: -5px; --rot: -2deg; --delay: 2.2s; --dur: 4.1s; font-size: 19px;">∫f(x)dx</span>
-          <span class="math-float" style="top: 66%; right: 24%; --dx: 3px; --dy: -12px; --rot: 7deg; --delay: 1.5s; --dur: 4.4s; font-size: 22px;">α + β = γ</span>
-          <span class="math-float" style="top: 35%; left: 31%; --dx: 0px; --dy: -10px; --rot: -8deg; --delay: 0.3s; --dur: 4.6s; font-size: 18px;">E=mc²</span>
-          <span class="math-float" style="top: 87%; right: 8%; --dx: -7px; --dy: -1px; --rot: -2deg; --delay: 0.1s; --dur: 4.7s; font-size: 20px;">e^(iπ)+1=0</span>
+        <!-- Math Formulas -->
+        <span class="math-float"
+          style="top: 15%; left: 8%; --dx: 3px; --dy: 9px; --rot: 1deg; --delay: 0.6s; --dur: 2.8s; font-size: 21px;">∮E·da=Q/ε₀</span>
+        <span class="math-float"
+          style="top: 28%; right: 5%; --dx: -6px; --dy: -13px; --rot: 4deg; --delay: 2.0s; --dur: 3.0s; font-size: 16px;">d/dx(uv)=u'v+uv'</span>
+        <span class="math-float"
+          style="top: 80%; left: 17%; --dx: 7px; --dy: -5px; --rot: -2deg; --delay: 2.2s; --dur: 4.1s; font-size: 19px;">∫f(x)dx</span>
+        <span class="math-float"
+          style="top: 66%; right: 24%; --dx: 3px; --dy: -12px; --rot: 7deg; --delay: 1.5s; --dur: 4.4s; font-size: 22px;">α
+          + β = γ</span>
+        <span class="math-float"
+          style="top: 35%; left: 31%; --dx: 0px; --dy: -10px; --rot: -8deg; --delay: 0.3s; --dur: 4.6s; font-size: 18px;">E=mc²</span>
+        <span class="math-float"
+          style="top: 87%; right: 8%; --dx: -7px; --dy: -1px; --rot: -2deg; --delay: 0.1s; --dur: 4.7s; font-size: 20px;">e^(iπ)+1=0</span>
 
-          <!-- Geometric Wireframe Shapes -->
-          <div class="geo-float" style="top: 13%; right: 16%; --dx: 10px; --dy: -17px; --rot: 12deg; --sc: 1.07; --delay: 1.7s; --dur: 3.3s;">
-            <svg width="60" height="60" viewBox="0 0 70 70"><path d="M15 20 L50 10 L60 40 L25 50 Z M15 20 L15 48 L25 50 M50 10 L50 38 L60 40 M15 48 L50 38 M25 50 L60 40"/></svg>
-          </div>
-          <div class="geo-float" style="top: 79%; left: 19%; --dx: 10px; --dy: -1px; --rot: -3deg; --sc: 1.04; --delay: 2.9s; --dur: 3.2s;">
-            <svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,5 55,20 45,55 15,55 5,20" stroke-dasharray="3,3"/><circle cx="30" cy="30" r="15"/></svg>
-          </div>
-          <div class="geo-float" style="top: 49%; right: 10%; --dx: 7px; --dy: -11px; --rot: 7deg; --sc: 1.08; --delay: 1.4s; --dur: 3.5s;">
-            <svg width="60" height="70" viewBox="0 0 60 70"><path d="M30 5 L5 35 L30 65 L55 35 Z M5 35 L55 35" stroke-dasharray="3,3"/><path d="M30 5 L5 35 L30 65 L55 35 Z"/></svg>
-          </div>
+        <!-- Geometric Wireframe Shapes -->
+        <div class="geo-float"
+          style="top: 13%; right: 16%; --dx: 10px; --dy: -17px; --rot: 12deg; --sc: 1.07; --delay: 1.7s; --dur: 3.3s;">
+          <svg width="60" height="60" viewBox="0 0 70 70">
+            <path
+              d="M15 20 L50 10 L60 40 L25 50 Z M15 20 L15 48 L25 50 M50 10 L50 38 L60 40 M15 48 L50 38 M25 50 L60 40" />
+          </svg>
+        </div>
+        <div class="geo-float"
+          style="top: 79%; left: 19%; --dx: 10px; --dy: -1px; --rot: -3deg; --sc: 1.04; --delay: 2.9s; --dur: 3.2s;">
+          <svg width="60" height="60" viewBox="0 0 60 60">
+            <polygon points="30,5 55,20 45,55 15,55 5,20" stroke-dasharray="3,3" />
+            <circle cx="30" cy="30" r="15" />
+          </svg>
+        </div>
+        <div class="geo-float"
+          style="top: 49%; right: 10%; --dx: 7px; --dy: -11px; --rot: 7deg; --sc: 1.08; --delay: 1.4s; --dur: 3.5s;">
+          <svg width="60" height="70" viewBox="0 0 60 70">
+            <path d="M30 5 L5 35 L30 65 L55 35 Z M5 35 L55 35" stroke-dasharray="3,3" />
+            <path d="M30 5 L5 35 L30 65 L55 35 Z" />
+          </svg>
+        </div>
       </div>
 
       <div class="max-w-4xl relative z-10 mx-auto px-8">
-<div class="mb-8 text-center md:text-left">
-<h2 class="text-2xl font-bold text-gray-900">Biz Kimiz?</h2>
-<div class="w-10 h-1 bg-orange-600 mt-2 mx-auto md:mx-0"></div>
-</div>
-<div class="space-y-4 text-gray-700 leading-relaxed text-base font-normal">
-<p>DereceLab, sınav sürecindeki öğrencilerin gerçek potansiyelini ortaya çıkarmak için kurulmuş bir education platformudur. Biz, başarının sadece “daha çok çalışmakla” değil, doğru şekilde çalışmakla geldiğine inanıyoruz.</p>
-<p>Bu yüzden içeriklerimizi; verimlilik, odaklanma ve zaman yönetimi gibi konuları yüzeysel tavsiyelerle değil, doğrudan insan beyninin çalışma prensiplerine dayanan bir yaklaşımla ele alıyoruz.</p>
-<p>Bu sayede, öğrencilerin sınav sürecindeki kısıtlı zamanını en optimal seviyede kullanmasına olanak tanıyoruz.</p>
-</div>
-</div>
-</section>
-</main>
+        <div class="mb-8 text-center md:text-left">
+          <h2 class="text-2xl font-bold text-gray-900">Biz Kimiz?</h2>
+          <div class="w-10 h-1 bg-orange-600 mt-2 mx-auto md:mx-0"></div>
+        </div>
+        <div class="space-y-4 text-gray-700 leading-relaxed text-base font-normal">
+          <p>DereceLab, sınav sürecindeki öğrencilerin gerçek potansiyelini ortaya çıkarmak için kurulmuş bir education
+            platformudur. Biz, başarının sadece “daha çok çalışmakla” değil, doğru şekilde çalışmakla geldiğine
+            inanıyoruz.</p>
+          <p>Bu yüzden içeriklerimizi; verimlilik, odaklanma ve zaman yönetimi gibi konuları yüzeysel tavsiyelerle
+            değil, doğrudan insan beyninin çalışma prensiplerine dayanan bir yaklaşımla ele alıyoruz.</p>
+          <p>Bu sayede, öğrencilerin sınav sürecindeki kısıtlı zamanını en optimal seviyede kullanmasına olanak
+            tanıyoruz.</p>
+        </div>
+      </div>
+    </section>
+  </main>
   <!-- Footer -->
   <footer class="w-full px-8 border-t border-gray-100 bg-white py-12">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
@@ -414,15 +659,17 @@
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="../../bilgi/#iletisim"
           class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
-        <a href="../../bilgi/#sss"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+        <a href="../../bilgi/#sss" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık
+          Sorulan Sorular</a>
         <a href="../../bilgi/#on-bilgilendirme"
           class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
-        <a href="../../bilgi/#kvkk" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK Aydınlatma Metni</a>
+        <a href="../../bilgi/#kvkk"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK Aydınlatma Metni</a>
         <a href="../../bilgi/#kullanim-sartlari"
           class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
         <a href="../../bilgi/#satis-teslimat"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Satış ve Teslimat Bilgilendirmesi</a>
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Satış ve Teslimat
+          Bilgilendirmesi</a>
       </div>
 
       <!-- Right Section: Payment Logos -->
@@ -434,7 +681,60 @@
   </footer>
 
 
-<!-- Auth & Cart JS -->
-<script src="../../auth.js?v=1777565555"></script>
-<script src="../../cart.js?v=1777567479"></script>
-</body></html>
+  <!-- Auth & Cart JS -->
+  <script src="../../auth.js?v=1777565555"></script>
+  <script src="../../cart.js?v=1777567479"></script>
+  <!-- BEGIN: Owned Courses Highlight Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const highlightOwned = (ownedCourses) => {
+        const cards = document.querySelectorAll('[data-product-id]');
+        cards.forEach(card => {
+          const cid = card.getAttribute('data-product-id');
+          if (ownedCourses.includes(cid) || ownedCourses.includes('course_4')) {
+            card.classList.add('course-card-owned');
+            if (!card.querySelector('.owned-badge')) {
+              const badge = document.createElement('div');
+              badge.className = 'owned-badge animate-fade-in';
+              badge.innerHTML = `
+                            <span class="badge-text">Bu kursa zaten sahipsin</span>
+                            <div class="badge-icon">
+                                <span class="material-symbols-outlined">check</span>
+                            </div>
+                        `;
+              const imgWrapper = card.querySelector('.relative.overflow-hidden') || card.querySelector('a.aspect-\\[16\\/9\\]') || card.querySelector('a');
+              if (imgWrapper) imgWrapper.appendChild(badge);
+              else {
+                card.style.position = 'relative';
+                card.appendChild(badge);
+              }
+            }
+          }
+        });
+      };
+
+      // 1. Instant highlight from cache
+      const cached = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
+      if (cached.length > 0) highlightOwned(cached);
+
+      // 2. Refresh from Firebase
+      const checkAuth = setInterval(() => {
+        if (window.DereceLab && window.DereceLab.Auth) {
+          const auth = window.firebase.auth();
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              const profile = await window.DereceLab.Auth.getUserProfile(user.uid);
+              const freshOwned = profile?.purchasedCourses || [];
+              localStorage.setItem('derecelab_purchased', JSON.stringify(freshOwned));
+              highlightOwned(freshOwned);
+            }
+          });
+          clearInterval(checkAuth);
+        }
+      }, 100);
+    });
+  </script>
+  <!-- END: Owned Courses Highlight Logic -->
+</body>
+
+</html>

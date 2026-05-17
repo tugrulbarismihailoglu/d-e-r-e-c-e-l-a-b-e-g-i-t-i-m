@@ -165,7 +165,7 @@ Object.assign(DereceLab.Auth, {
       }
     } else {
       if (heroTitle) {
-        heroTitle.innerHTML = `<span class="block">Kurslarımız ile</span>\n<span class="block">derece yolunda</span>\n<span class="block text-orange-600">rakiplerinin önüne geç.</span>`;
+        heroTitle.innerHTML = `<span class="block">Kurslarımız ile derece yolunda</span>\n<span class="block text-orange-600">rakiplerinin önüne geç.</span>`;
         heroTitle.classList.remove('opacity-0');
       }
       if (heroButtons) {

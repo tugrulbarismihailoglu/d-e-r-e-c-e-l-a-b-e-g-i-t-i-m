@@ -419,33 +419,72 @@
                         else if (course.id === 'course_3') badgeClass += 'bg-purple-600 bg-opacity-10 text-purple-600 border-purple-600';
                         else badgeClass += 'bg-green-500 bg-opacity-20 text-green-600 border-green-500';
 
-                        let subtitleHtml = course.id === 'course_4'
-                            ? '<h4 class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 w-fit border border-orange-200 shadow-sm">3 VİDEO SETİ BİR ARADA</h4>'
-                            : '';
+                        let subtitleHtml = '';
+
+                        let sloganHtml = '';
+                        if (course.id === 'course_1') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-orange-700 bg-gradient-to-r from-orange-50/80 via-orange-50/30 to-transparent border-l-2 border-l-orange-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-orange-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-orange-600 animate-pulse">trending_up</span>
+                                <span>Çalışma Verimini Artır ve Rakiplerinin Önüne Geç</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_2') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-blue-700 bg-gradient-to-r from-blue-50/80 via-blue-50/30 to-transparent border-l-2 border-l-blue-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-blue-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-blue-600 animate-pulse">schedule</span>
+                                <span>Zamanını Derece Öğrencisi Gibi Yönet ve Kontrolü Eline Al</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_3') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-purple-700 bg-gradient-to-r from-purple-50/80 via-purple-50/30 to-transparent border-l-2 border-l-purple-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-purple-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-purple-600 animate-pulse">psychology</span>
+                                <span>Doğru Çalışma Rotasyonu ile Bilgileri Zihnine Kazı</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_4') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-amber-700 bg-gradient-to-r from-amber-50/80 via-amber-50/30 to-transparent border-l-2 border-l-amber-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-amber-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-amber-600 animate-pulse">star</span>
+                                <span>Sınav yolculuğunda ihtiyacın olan tüm stratejiler tek bir pakette.</span>
+                            </div>
+                            `;
+                        }
+
+                        let originalPrice = course.id === 'course_3' ? '₺419,90' : '₺349,90';
+                        let discountPercentage = course.id === 'course_3' ? '%21 İNDİRİM' : '%28 İNDİRİM';
 
                         let priceHtml = course.id === 'course_4'
                             ? `<div class="flex flex-col">
                             <div class="flex items-center gap-2 mb-1">
-                                <del class="text-sm text-gray-500">₺749,70</del>
-                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%27 İNDİRİM</span>
+                                <del class="text-sm text-gray-500">₺1119,70</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%45 İNDİRİM</span>
                             </div>
-                            <span class="text-xl font-extrabold text-orange-600 product-price">₺549,90</span>
-                           </div>`
-                            : `<span class="text-xl font-extrabold text-gray-900 product-price">₺${course.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>`;
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺619,90</span>
+                            </div>`
+                            : `<div class="flex flex-col">
+                            <div class="flex items-center gap-2 mb-1">
+                                <del class="text-sm text-gray-500">${originalPrice}</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">${discountPercentage}</span>
+                            </div>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺${course.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                           </div>`;
 
                         let imageWrapperClass = course.id === 'course_4'
                             ? 'block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center'
                             : 'block aspect-[16/9] relative overflow-hidden';
 
-                        let titleClass = course.id === 'course_4'
-                            ? 'font-bold text-gray-900 leading-tight mb-1 min-h-[24px] text-[18px] group-hover/title:text-orange-600 transition-colors'
-                            : 'font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors';
+                        let titleClass = 'font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors';
 
                         const btnText = course.id === 'course_4' ? 'Paketi Görüntüle' : 'Kursu Görüntüle';
+
+                        let floatingBadgeHtml = '';
 
                         card.innerHTML = `
                         <a href="${course.url}" class="${imageWrapperClass}">
                             <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${course.img}" alt="${course.name}">
+                            ${floatingBadgeHtml}
                         </a>
                         <div class="flex flex-col flex-1 p-5">
                             <div class="flex gap-2 mb-2">
@@ -459,6 +498,7 @@
                             ${subtitleHtml}
 
                             <div class="mt-auto">
+                                ${sloganHtml}
                                 <div class="flex items-center justify-between mb-1">
                                     ${priceHtml}
                                 </div>
