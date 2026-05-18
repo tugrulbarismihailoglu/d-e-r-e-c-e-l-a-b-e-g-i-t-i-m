@@ -5,6 +5,26 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Ana Sayfa — DereceLab</title>
+  <meta name="description" content="Derece Lab (DereceLab) ile YKS, KPSS, LGS sınavlarına en verimli şekilde hazırlanın. Ders çalışma isteksizliği, unutma sorunu ve yetiştirme stresini aşacak taktikleri keşfedin.">
+  <meta name="keywords" content="derece lab, derecelab, derece, yks, kpss, lgs, zaman yönetimi, verimli çalışma, ders çalışma metotları, ders çalışma programı, yks ders çalışma, kpss ders çalışma, lgs ders çalışma, derece çalışma programı, çalışma rotasyonları, verimlilik optimizasyonu, derece taktikleri, ders çalışma isteksizliği, ders çalışırken unutmayı engelleme, yks konuları yetiştirme, ders çalışma odağı, akıllı ders çalışma metotları">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://derecelab.com/">
+  <meta property="og:title" content="Derece Lab — YKS, KPSS ve LGS Sınavlarında Derece Yap">
+  <meta property="og:description" content="Derece Lab (DereceLab) ile sınavlara en verimli şekilde hazırlanın. Ders çalışma isteksizliği, odaklanma sorunları ve derece stratejileri.">
+  <meta property="og:site_name" content="Derece Lab">
+
+  <!-- Structured Data / JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "DereceLab",
+    "alternateName": ["Derece Lab", "derecelab.com"],
+    "url": "https://derecelab.com/"
+  }
+  </script>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap"
     rel="stylesheet">
@@ -629,7 +649,7 @@
         </div>
         <div class="space-y-6 text-gray-700 leading-relaxed text-lg font-normal">
           <p class="" style="">
-            Derece Lab, YKS, KPSS ve LGS gibi sınavlara hazırlanmakta olan öğrencilerin gerçek potansiyelini ortaya çıkarmak için kurulmuş bir eğitim platformudur. Biz, başarının sadece “daha çok çalışmakla” değil, doğru şekilde çalışmakla geldiğine inanıyoruz.
+            DereceLab, YKS, KPSS ve LGS gibi sınavlara hazırlanmakta olan öğrencilerin gerçek potansiyelini ortaya çıkarmak için kurulmuş bir eğitim platformudur. Biz, başarının sadece “daha çok çalışmakla” değil, doğru şekilde çalışmakla geldiğine inanıyoruz.
           </p>
           <p class="" style="">
             Bu yüzden içeriklerimizi; verimlilik, odaklanma ve zaman yönetimi gibi konuları yüzeysel tavsiyelerle değil,
@@ -869,6 +889,27 @@
     });
   </script>
   <!-- END: Owned Courses Highlight Logic -->
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-700 text-white shadow-lg hover:shadow-orange-600/30 transition-all duration-300 translate-y-16 opacity-0 pointer-events-none" aria-label="Yukarı Çık">
+    <span class="material-symbols-outlined text-2xl font-bold">arrow_upward</span>
+  </button>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTopBtn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.remove('translate-y-16', 'opacity-0', 'pointer-events-none');
+          backToTopBtn.classList.add('translate-y-0', 'opacity-100');
+        } else {
+          backToTopBtn.classList.remove('translate-y-0', 'opacity-100');
+          backToTopBtn.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
+        }
+      });
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 
 </html>
