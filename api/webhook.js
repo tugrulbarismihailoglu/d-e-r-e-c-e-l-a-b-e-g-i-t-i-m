@@ -72,30 +72,6 @@ function parseShopierBody(rawBody) {
     };
 }
 
-// ─── İdempotent Sipariş Kontrolü ─────────────────────────────────────────────
-/**
- * Bir sipariş ID'sinin daha önce işlenip işlenmediğini kontrol eder.
- * İşlendiyse true, değilse false döner.
- * @param {string} orderId
- */
-async function isOrderAlreadyProcessed(orderId) {
-    const orderRef = db.collection('processed_orders').doc(orderId);
-    const snap = await orderRef.get();
-    return snap.exists;
-}
-
-/**
- * Sipariş ID'sini "işlendi" olarak Firestore'a işaretler.
- * @param {string} orderId
- * @param {object} meta - Sipariş meta verisi (email, courseId, vb.)
- */
-async function markOrderAsProcessed(orderId, meta) {
-    await db.collection('processed_orders').doc(orderId).set({
-        ...meta,
-        processedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
-}
-
 // ─── Ana Handler ──────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -123,7 +99,6 @@ export default async function handler(req, res) {
 
         if (incomingHash !== expectedHash) {
             console.warn('[Shopier] ⚠️ Hash uyuşmadı! Yine de işleniyor...');
-            // Hash uyuşmasa bile siparişi işlemeye devam et (Shopier bazen farklı format gönderebilir)
         } else {
             console.log('[Shopier] ✅ Hash doğrulaması başarılı.');
         }
@@ -137,19 +112,10 @@ export default async function handler(req, res) {
         const productId = decodedData.productid?.toString();
         const courseId  = decodedData.custom || PRODUCT_MAPPING[productId] || 'course_1';
 
-        // Sipariş ID'si: decodedData içinde yoksa orderid field'ından al,
-        // yoksa email+productId+timestamp kombinasyonunu fallback olarak kullan
         const orderId = decodedData.orderid?.toString()
-                     || orderMatch?.[1]?.trim()
                      || `${email}_${productId}_${decodedData.time || Date.now()}`;
 
         console.log(`[Shopier] Sipariş ID: ${orderId} | Email: ${email} | Kurs: ${courseId}`);
-
-        // ── İDEMPOTENSİ KONTROLÜ ──────────────────────────────────────────────
-        if (await isOrderAlreadyProcessed(orderId)) {
-            console.log(`[Shopier] Sipariş zaten işlendi (${orderId}), tekrar yazılmıyor.`);
-            return res.status(200).send('success'); // Shopier 200 bekliyor
-        }
 
         if (!email) {
             console.warn('[Shopier] Email bulunamadı, sipariş işlenemiyor.');
@@ -165,35 +131,45 @@ export default async function handler(req, res) {
             const targetDoc = snapshot.docs.find(d => d.id.length > 25) || snapshot.docs[0];
             console.log(`[Shopier] Kullanıcı bulundu: ${targetDoc.id}`);
 
-            const existing = targetDoc.data().purchasedCourses || [];
-            if (!existing.includes(courseId)) {
-                await targetDoc.ref.update({
-                    purchasedCourses: [...existing, courseId],
-                    lastPurchase: admin.firestore.FieldValue.serverTimestamp()
-                });
-                console.log(`[Shopier] Kurs tanımlandı: ${courseId} → ${targetDoc.id}`);
-            } else {
-                console.log(`[Shopier] Kurs zaten tanımlı: ${courseId} → ${targetDoc.id}`);
+            const userData = targetDoc.data();
+            const existing = userData.purchasedCourses || [];
+            const processedOrders = userData.processedOrders || [];
+
+            // Sipariş zaten bu kullanıcı için işlenmişse çık
+            if (processedOrders.includes(orderId)) {
+                console.log(`[Shopier] Sipariş zaten işlendi (${orderId}), işlem tekrarlanmadı.`);
+                return res.status(200).send('success');
             }
+
+            const updateData = {
+                processedOrders: [...processedOrders, orderId]
+            };
+
+            if (!existing.includes(courseId)) {
+                updateData.purchasedCourses = [...existing, courseId];
+                updateData.lastPurchase = admin.firestore.FieldValue.serverTimestamp();
+                console.log(`[Shopier] Kurs tanımlanıyor: ${courseId} → ${targetDoc.id}`);
+            } else {
+                console.log(`[Shopier] Kurs zaten tanımlı, sadece sipariş ID ekleniyor.`);
+            }
+
+            await targetDoc.ref.update(updateData);
         } else {
             // Kullanıcı kayıtsız: e-posta ID'li geçici doküman oluştur
             console.log(`[Shopier] Kullanıcı bulunamadı, geçici dok oluşturuluyor: ${email}`);
             await db.collection('users').doc(email).set({
                 email,
                 purchasedCourses: [courseId],
+                processedOrders: [orderId],
                 createdAt: admin.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
         }
-
-        // ── SİPARİŞİ "İŞLENDİ" OLARAK İŞARETLE ─────────────────────────────
-        await markOrderAsProcessed(orderId, { email, courseId, productId });
-        console.log(`[Shopier] Sipariş işaretlendi: ${orderId}`);
 
         return res.status(200).send('success');
 
     } catch (error) {
         console.error('[Shopier] Kritik hata:', error.message, error.stack);
-        // Shopier yeniden deneme yapmaması için gene 200 dön
         return res.status(200).send('success');
     }
 }
+
