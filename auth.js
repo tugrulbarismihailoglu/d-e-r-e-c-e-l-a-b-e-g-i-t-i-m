@@ -44,6 +44,7 @@ Object.assign(DereceLab.Auth, {
         if (window.DereceLab && window.DereceLab.Cart) {
           window.DereceLab.Cart.setPurchased(purchasedIds);
         }
+      } else {
         // Giriş yapılmamışsa listeleri temizle
         localStorage.removeItem('derecelab_user');
         this._clearCache();
