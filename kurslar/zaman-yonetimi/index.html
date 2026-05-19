@@ -770,18 +770,16 @@
             };
 
             // 1. Instant highlight from cache
-            const cached = JSON.parse(localStorage.getItem('derecelab_purchased')) || [];
-            if (cached.length > 0) highlightOwned(cached);
-
-            // 2. Refresh from Firebase
             const checkAuth = setInterval(() => {
                 if (window.DereceLab && window.DereceLab.Auth) {
+                    const cached = window.DereceLab.Auth._readCache();
+                    if (cached && cached.length > 0) highlightOwned(cached);
+
+                    // 2. Refresh from Firebase
                     const auth = window.firebase.auth();
                     auth.onAuthStateChanged(async (user) => {
                         if (user) {
-                            const profile = await window.DereceLab.Auth.getUserProfile(user.uid);
-                            const freshOwned = profile?.purchasedCourses || [];
-                            localStorage.setItem('derecelab_purchased', JSON.stringify(freshOwned));
+                            const freshOwned = await window.DereceLab.Auth.getPurchasedCourses(user.uid);
                             highlightOwned(freshOwned);
                         }
                     });

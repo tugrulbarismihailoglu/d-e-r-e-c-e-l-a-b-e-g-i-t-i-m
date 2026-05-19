@@ -6,15 +6,19 @@
 window.DereceLab = window.DereceLab || {};
 
 window.DereceLab.Cart = {
-    purchasedCourses: JSON.parse(localStorage.getItem('derecelab_purchased')) || [],
+    get purchasedCourses() {
+        if (window.DereceLab?.Auth?._readCache) {
+            return window.DereceLab.Auth._readCache();
+        }
+        return [];
+    },
 
     init() {
         // No-op: Cart UI is removed
     },
 
     setPurchased(ids) {
-        this.purchasedCourses = ids;
-        localStorage.setItem('derecelab_purchased', JSON.stringify(ids));
+        // Auth modülü önbelleği yönettiği için burada localStorage yazımını kaldırdık
         this.updateButtons();
     },
 

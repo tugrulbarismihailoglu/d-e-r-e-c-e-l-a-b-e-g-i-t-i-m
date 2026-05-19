@@ -44,10 +44,9 @@ Object.assign(DereceLab.Auth, {
         if (window.DereceLab && window.DereceLab.Cart) {
           window.DereceLab.Cart.setPurchased(purchasedIds);
         }
-      } else {
         // Giriş yapılmamışsa listeleri temizle
         localStorage.removeItem('derecelab_user');
-        localStorage.removeItem('derecelab_purchased');
+        this._clearCache();
         if (window.DereceLab && window.DereceLab.Cart) {
           window.DereceLab.Cart.setPurchased([]);
         }
@@ -212,11 +211,30 @@ Object.assign(DereceLab.Auth, {
     });
   },
 
+  // ─── PAYLAŞILAN SORGURU VE BELGE ÖNBELLEĞİ ──────────────────────────────────
+  _userDocPromise: null,
+  _fetchUid: null,
+
+  async _getUserDocument(uid, force = false) {
+    if (force || this._fetchUid !== uid || !this._userDocPromise) {
+      this._fetchUid = uid;
+      console.log('[Firestore] Kullanıcı dokümanı çekiliyor (1 Read)...');
+      this._userDocPromise = db.collection('users').doc(uid).get().then(doc => {
+        return doc.exists ? doc.data() : {};
+      }).catch(err => {
+        this._userDocPromise = null;
+        this._fetchUid = null;
+        throw err;
+      });
+    }
+    return this._userDocPromise;
+  },
+
   // Kullanıcı profilini Firestore'dan getir
   async getUserProfile(uid) {
     try {
-      const doc = await db.collection('users').doc(uid).get();
-      return doc.exists ? doc.data() : null;
+      const data = await this._getUserDocument(uid);
+      return Object.keys(data).length > 0 ? data : null;
     } catch (error) {
       console.error('Profil getirme hatası:', error);
       return null;
@@ -227,6 +245,7 @@ Object.assign(DereceLab.Auth, {
   async updateUserProfile(uid, data) {
     try {
       await db.collection('users').doc(uid).update(data);
+      this._userDocPromise = null; // Bellek önbelleğini temizle
       return true;
     } catch (error) {
       console.error('Profil güncelleme hatası:', error);
@@ -235,24 +254,37 @@ Object.assign(DereceLab.Auth, {
   },
 
   // ─── ÖNBELLEKLEME YARDIMCILARI ─────────────────────────────────────────────
-  // Önbellek anahtarı ve geçerlilik süresi (dakika cinsinden)
-  _CACHE_KEY: 'derecelab_purchased',
-  _CACHE_TTL_MS: 15 * 60 * 1000, // 15 dakika
+  _CACHE_TTL_MS: 24 * 60 * 60 * 1000, // 24 saat
+
+  /** Kullanıcıya özel önbellek anahtarını döndürür */
+  _getCacheKey() {
+    let uid = this.currentUser?.uid;
+    if (!uid) {
+      try {
+        const cachedUser = localStorage.getItem('derecelab_user');
+        if (cachedUser) uid = JSON.parse(cachedUser).uid;
+      } catch(e) {}
+    }
+    return `derecelab_purchased_${uid || 'guest'}`;
+  },
 
   /** Önbellekte taze veri var mı? */
-  _isCacheFresh() {
+  _isCacheFresh(maxAgeMs = null) {
     try {
-      const raw = localStorage.getItem(this._CACHE_KEY);
+      const key = this._getCacheKey();
+      const raw = localStorage.getItem(key);
       if (!raw) return false;
       const { ts } = JSON.parse(raw);
-      return (Date.now() - ts) < this._CACHE_TTL_MS;
+      const limit = maxAgeMs !== null ? maxAgeMs : this._CACHE_TTL_MS;
+      return (Date.now() - ts) < limit;
     } catch { return false; }
   },
 
   /** Önbellekteki kurs listesini döndürür (boş array fallback). */
   _readCache() {
     try {
-      const raw = localStorage.getItem(this._CACHE_KEY);
+      const key = this._getCacheKey();
+      const raw = localStorage.getItem(key);
       if (!raw) return [];
       return JSON.parse(raw).data || [];
     } catch { return []; }
@@ -261,7 +293,8 @@ Object.assign(DereceLab.Auth, {
   /** Kurs listesini timestamp ile önbelleğe yazar. */
   _writeCache(courses) {
     try {
-      localStorage.setItem(this._CACHE_KEY, JSON.stringify({
+      const key = this._getCacheKey();
+      localStorage.setItem(key, JSON.stringify({
         ts: Date.now(),
         data: courses
       }));
@@ -272,29 +305,32 @@ Object.assign(DereceLab.Auth, {
 
   /** Önbelleği temizler (zorla Firebase'den çekim için). */
   _clearCache() {
-    localStorage.removeItem(this._CACHE_KEY);
+    const key = this._getCacheKey();
+    localStorage.removeItem(key);
+    this._userDocPromise = null; // Bellek önbelleğini de temizle
   },
 
   // ─── SATIN ALINAN KURSLARI GETİR (ÖNBELLEKLE) ───────────────────────────────
   /**
    * Kullanıcının satın aldığı kursları döndürür.
-   * - Önbellekte 15 dakikadan taze veri varsa → Firebase'e gitme.
+   * - Önbellekte belirtilen maxAgeMs veya 24 saatten taze veri varsa → Firebase'e gitme.
    * - Eskiyse veya yoksa → Firebase'den çek, önbelleği güncelle.
    * @param {string} uid
    * @param {boolean} [force=false] - true ise önbelleği atlayıp Firebase'den çeker.
+   * @param {number|null} [maxAgeMs=null] - Özel önbellek süresi (ms)
    */
-  async getPurchasedCourses(uid, force = false) {
+  async getPurchasedCourses(uid, force = false, maxAgeMs = null) {
     try {
       // 1. Önbellek kontrolü
-      if (!force && this._isCacheFresh()) {
+      if (!force && this._isCacheFresh(maxAgeMs)) {
         console.log('[Cache] Taze önbellekten okunuyor.');
         return this._readCache();
       }
 
-      // 2. Firebase'den çek
-      console.log('[Cache] Firebase\'den çekiliyor...');
-      const doc = await db.collection('users').doc(uid).get();
-      const courses = doc.exists ? (doc.data().purchasedCourses || []) : [];
+      // 2. Firebase'den çek (ortak fonksiyonu kullanarak tek sorguda birleştirir)
+      console.log('[Cache] Güncel kurs verisi isteniyor...');
+      const data = await this._getUserDocument(uid, force);
+      const courses = data.purchasedCourses || [];
 
       // 3. Önbelleğe yaz
       this._writeCache(courses);
@@ -328,11 +364,8 @@ Object.assign(DereceLab.Auth, {
   // Tamamlanan bölümleri getir
   async getCompletedParts(uid) {
     try {
-      const doc = await db.collection('users').doc(uid).get();
-      if (doc.exists) {
-        return doc.data().completedParts || [];
-      }
-      return [];
+      const data = await this._getUserDocument(uid, false);
+      return data.completedParts || [];
     } catch (error) {
       console.error('Tamamlanan bölüm getirme hatası:', error);
       return [];
@@ -342,11 +375,8 @@ Object.assign(DereceLab.Auth, {
   // Bir bölümün tamamlanma durumunu değiştir
   async togglePartCompletion(uid, partId, isCompleted) {
     try {
-      const doc = await db.collection('users').doc(uid).get();
-      let existing = [];
-      if (doc.exists) {
-        existing = doc.data().completedParts || [];
-      }
+      const data = await this._getUserDocument(uid, false);
+      let existing = data.completedParts || [];
 
       let newParts;
       if (isCompleted) {
@@ -358,6 +388,7 @@ Object.assign(DereceLab.Auth, {
       await db.collection('users').doc(uid).update({
         completedParts: newParts
       });
+      this._userDocPromise = null; // Bellek önbelleğini sıfırla ki sonraki okumada güncel gelsin
       return newParts;
     } catch (error) {
       console.error('Tamamlanma durumu güncelleme hatası:', error);
@@ -368,16 +399,14 @@ Object.assign(DereceLab.Auth, {
   // Kurs satın alma (simülasyon)
   async purchaseCourses(uid, courseIds) {
     try {
-      const doc = await db.collection('users').doc(uid).get();
-      let existing = [];
-      if (doc.exists) {
-        existing = doc.data().purchasedCourses || [];
-      }
+      const data = await this._getUserDocument(uid, false);
+      let existing = data.purchasedCourses || [];
       const merged = [...new Set([...existing, ...courseIds])];
       await db.collection('users').doc(uid).update({
         purchasedCourses: merged,
         lastPurchase: firebase.firestore.FieldValue.serverTimestamp()
       });
+      this._userDocPromise = null; // Bellek önbelleğini sıfırla
       return true;
     } catch (error) {
       console.error('Satın alma hatası:', error);
@@ -407,8 +436,10 @@ Object.assign(DereceLab.Auth, {
       return;
     }
 
-    const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}&custom=${encodeURIComponent(courseId)}`;
-    window.open(shopierUrl, '_blank');
+    // Ödeme sayfasına yönlenirken önbelleği temizle ki geri döndüğünde yeni kursu anında çekebilsin
+    this._clearCache();
+
+    window.open(shopierBase, '_blank');
   },
 
   // Kurs sahipliğini kontrol et ve UI’ı güncelle

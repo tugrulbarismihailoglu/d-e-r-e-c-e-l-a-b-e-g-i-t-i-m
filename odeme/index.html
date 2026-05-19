@@ -224,10 +224,10 @@
 
     <script>
         const SHOPIER_LINKS = {
-            'course_1': 'https://www.shopier.com/medyabit/38859685',
-            'course_2': 'https://www.shopier.com/medyabit/38859685',
-            'course_3': 'https://www.shopier.com/medyabit/38859685',
-            'course_4': 'https://www.shopier.com/medyabit/38859685',
+            'course_1': 'https://www.shopier.com/DereceLab/47135332',
+            'course_2': 'https://www.shopier.com/DereceLab/47159074',
+            'course_3': 'https://www.shopier.com/DereceLab/47159083',
+            'course_4': 'https://www.shopier.com/DereceLab/47159325',
         };
 
         function goToShopier() {
@@ -236,9 +236,14 @@
             const items = DereceLab.Cart.items;
             if (items.length === 0) return;
             const firstCourseId = items[0].id;
-            const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/medyabit/38859685';
-            const shopierUrl = `${shopierBase}?email=${encodeURIComponent(user.email)}&custom=${encodeURIComponent(firstCourseId)}`;
-            window.open(shopierUrl, '_blank');
+            const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/DereceLab/47135332';
+            
+            // Ödeme sayfasına yönlenirken önbelleği temizle ki geri döndüğünde yeni kursu anında çekebilsin
+            if (window.DereceLab && window.DereceLab.Auth) {
+                window.DereceLab.Auth._clearCache();
+            }
+            
+            window.open(shopierBase, '_blank');
         }
 
         document.addEventListener('DOMContentLoaded', () => {

@@ -312,8 +312,8 @@
                 document.getElementById('profile-name').value = user.displayName || '';
                 document.getElementById('profile-email').value = user.email || '';
 
-                // Firestore'dan satın alınanları VE tamamlananları çek
-                let purchasedIds = await DereceLab.Auth.getPurchasedCourses(user.uid);
+                // Firestore'dan satın alınanları VE tamamlananları çek (Dashboard'da 3 dakika önbellek kullanırız)
+                let purchasedIds = await DereceLab.Auth.getPurchasedCourses(user.uid, false, 3 * 60 * 1000);
                 let completedParts = await DereceLab.Auth.getCompletedParts(user.uid);
 
                 // Normalize IDs to handle old numeric IDs from previous iterations
