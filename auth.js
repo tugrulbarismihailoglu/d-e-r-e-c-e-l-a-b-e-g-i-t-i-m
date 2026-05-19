@@ -264,7 +264,7 @@ Object.assign(DereceLab.Auth, {
       try {
         const cachedUser = localStorage.getItem('derecelab_user');
         if (cachedUser) uid = JSON.parse(cachedUser).uid;
-      } catch(e) {}
+      } catch (e) { }
     }
     return `derecelab_purchased_${uid || 'guest'}`;
   },
