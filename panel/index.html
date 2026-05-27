@@ -456,16 +456,16 @@
                             `;
                         }
 
-                        let originalPrice = course.id === 'course_3' ? '₺419,90' : '₺349,90';
-                        let discountPercentage = course.id === 'course_3' ? '%21 İNDİRİM' : '%28 İNDİRİM';
+                        let originalPrice = course.id === 'course_3' ? '₺539,90' : '₺429,90';
+                        let discountPercentage = course.id === 'course_3' ? '%20 İNDİRİM' : (course.id === 'course_2' ? '%19 İNDİRİM' : '%26 İNDİRİM');
 
                         let priceHtml = course.id === 'course_4'
                             ? `<div class="flex flex-col">
                             <div class="flex items-center gap-2 mb-1">
-                                <del class="text-sm text-gray-500">₺1119,70</del>
-                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%45 İNDİRİM</span>
+                                <del class="text-sm text-gray-500">₺1397,90</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%41 İNDİRİM</span>
                             </div>
-                            <span class="text-xl font-extrabold text-orange-600 product-price">₺619,90</span>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺829,90</span>
                             </div>`
                             : `<div class="flex flex-col">
                             <div class="flex items-center gap-2 mb-1">

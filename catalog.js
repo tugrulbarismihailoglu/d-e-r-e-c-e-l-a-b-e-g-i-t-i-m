@@ -8,7 +8,7 @@ window.DereceLab = window.DereceLab || {};
 
 window.DereceLab.Catalog = {
     'course_1': {
-        id: 'course_1', name: 'Verimlilik Optimizasyonu Video Seti', price: 249.90, url: CATALOG_BASE_URL + '/kurslar/verimlilik-optimizasyonu/',
+        id: 'course_1', name: 'Verimlilik Optimizasyonu Video Seti', price: 319.90, url: CATALOG_BASE_URL + '/kurslar/verimlilik-optimizasyonu/',
         img: CATALOG_BASE_URL + '/Images/verimlilik.png',
         badge: 'POPÜLER',
         titleHtml: 'Verimlilik Optimizasyonu <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
@@ -22,7 +22,7 @@ window.DereceLab.Catalog = {
         ]
     },
     'course_2': {
-        id: 'course_2', name: 'Zaman Yönetimi Video Seti', price: 249.90, url: CATALOG_BASE_URL + '/kurslar/zaman-yonetimi/',
+        id: 'course_2', name: 'Zaman Yönetimi Video Seti', price: 349.90, url: CATALOG_BASE_URL + '/kurslar/zaman-yonetimi/',
         img: CATALOG_BASE_URL + '/Images/zaman-yonetimi.png',
         badge: 'YENİ',
         titleHtml: 'Zaman Yönetimi <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
@@ -34,7 +34,7 @@ window.DereceLab.Catalog = {
         ]
     },
     'course_3': {
-        id: 'course_3', name: 'Çalışma Rotasyonları Video Seti', price: 329.90, url: CATALOG_BASE_URL + '/kurslar/calisma-rotasyonlari/',
+        id: 'course_3', name: 'Çalışma Rotasyonları Video Seti', price: 429.90, url: CATALOG_BASE_URL + '/kurslar/calisma-rotasyonlari/',
         img: CATALOG_BASE_URL + '/Images/calisma-rotasyon.png',
         badge: 'KAPSAMLI',
         titleHtml: 'Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
@@ -46,7 +46,7 @@ window.DereceLab.Catalog = {
         ]
     },
     'course_4': {
-        id: 'course_4', name: 'DereceLab Üçlü Paket', price: 619.90, url: CATALOG_BASE_URL + '/kurslar/uclu-paket/',
+        id: 'course_4', name: 'DereceLab Üçlü Paket', price: 829.90, url: CATALOG_BASE_URL + '/kurslar/uclu-paket/',
         img: CATALOG_BASE_URL + '/Images/avantajli.png',
         badge: 'AVANTAJLI',
         titleHtml: 'DereceLab Üçlü Paket <span class="block text-sm mt-1 font-semibold text-gray-500">3 Video Seti Bir Arada</span>',
