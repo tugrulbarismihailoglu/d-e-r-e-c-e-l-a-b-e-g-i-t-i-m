@@ -267,7 +267,7 @@
   </header>
   <main class="pt-20 lg:pt-24">
     <!-- Hero Section & Package Overview -->
-    <div class="relative overflow-hidden mb-10">
+    <div class="relative overflow-hidden mb-6">
 
       <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0] hidden xl:block">
@@ -315,7 +315,7 @@
             class="text-lg md:text-xl lg:text-2xl font-semibold text-neutral-500 mt-2 flex flex-wrap items-center gap-3">
             <span>(Toplam 3 ders, 98 dk.)</span>
           </div>
-          <div class="text-xl md:text-2xl text-primary mt-1.5 font-bold">
+          <div class="text-xl md:text-2xl text-purple-600 mt-1.5 font-bold">
             Doğru Çalışma Rotasyonu ile Bilgileri Zihnine Kazı
           </div>
           <p class="mt-4 text-base text-neutral-500 max-w-xl leading-relaxed">
@@ -331,7 +331,7 @@
           </div>
           <div class="lg:col-span-5 flex h-auto lg:min-h-[400px]">
             <div
-              class="bg-white p-6 rounded-xl border shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full border-2 border-primary">
+              class="bg-white p-6 rounded-xl border shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden flex flex-col w-full h-full border-2 border-purple-100">
               <div class="absolute -top-[2px] -right-[2px] rounded-tr-xl overflow-hidden">
                 <div
                   class="bg-purple-600 px-4 py-1.5 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-xl">
@@ -363,10 +363,10 @@
 
               <div id="purchase-action-container" data-course-id="course_3" data-check-ownership>
                 <button
-                  class="add-to-cart-btn group/buy relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white py-4 rounded-xl font-extrabold text-lg flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.5)] hover:-translate-y-1 border border-orange-400/50 overflow-hidden"
+                  class="add-to-cart-btn group/buy relative w-full bg-gradient-to-r from-purple-500 via-purple-600 to-purple-500 bg-[length:200%_auto] hover:bg-right text-white py-4 rounded-xl font-extrabold text-lg flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:-translate-y-1 border border-purple-400/50 overflow-hidden"
                   id="buy-now-btn" onclick="DereceLab.Auth.buyNow('course_3')">
                   <span
-                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-20 group-hover/buy:opacity-40 blur transition-opacity duration-500"></span>
+                    class="absolute -inset-1 rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 opacity-20 group-hover/buy:opacity-40 blur transition-opacity duration-500"></span>
                   <span
                     class="material-symbols-outlined text-2xl relative z-10 opacity-90 group-hover/buy:scale-110 group-hover/buy:-rotate-3 transition-transform duration-300">shopping_cart</span>
                   <span class="btn-text relative z-10 drop-shadow-sm tracking-wide">Shopier ile Satın Al</span>
@@ -414,30 +414,193 @@
     </div>
     </section>
 
+    </div>
+    </section>
+
+    <!-- BEGIN: TestimonialsSection -->
+    <section class="bg-white text-gray-900 pt-6 pb-16 scroll-mt-24 relative overflow-hidden" id="testimonials">
+      <!-- Decorative Blur Elements -->
+      <div
+        class="absolute top-1/2 left-0 -translate-y-1/2 w-72 h-72 bg-purple-600/5 rounded-full blur-[100px] pointer-events-none">
+      </div>
+      <div class="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none">
+      </div>
+
+      <div class="max-w-[1400px] mx-auto px-8 relative z-10">
+        <!-- Header row -->
+        <div class="mb-8 flex flex-col items-center text-center gap-6">
+          <div class="flex flex-col items-center">
+            <h2 class="text-3xl font-extrabold text-gray-900">Öğrenci Görüşleri</h2>
+            <div class="w-12 h-1 bg-purple-600 mt-2"></div>
+          </div>
+        </div>
+
+        <!-- Slider container with side navigation -->
+        <div class="relative px-4 sm:px-14">
+          <!-- Left Button -->
+          <button id="prev-testimonial"
+            class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all duration-300">
+            <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+          </button>
+
+          <!-- Slider viewport -->
+          <div id="testimonial-viewport" class="overflow-hidden w-full py-4 -my-4">
+            <div id="testimonial-track" class="flex gap-6"></div>
+          </div>
+
+          <!-- Right Button -->
+          <button id="next-testimonial"
+            class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all duration-300">
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Dot indicators -->
+        <div class="flex gap-2 justify-center mt-8" id="testimonial-dots"></div>
+      </div>
+    </section>
+    <!-- END: TestimonialsSection -->
+
+    <!-- Testimonials JS -->
+    <script>
+        (function () {
+          var testimonials = [
+            { title: "Tekrarları Otomatikleştirdim", text: "Çalışma Rotasyonları kursu sayesinde YKS hazırlık sürecinde yaşadığım unutma sorununu tamamen çözdüm. Tekrarları ne zaman yapacağımı artık net biliyorum.", name: "Arda V.", sub: "YKS Sayısal", initial: "A" },
+            { title: "Unutma Problemim Çözüldü", text: "Eski çalıştığım konuları 2 hafta sonra unutuyordum. Bu kurstaki rotasyon mantığı ve aktif geri çağırma sistemiyle artık bilgilerim hafızamda kalıcı hale geldi.", name: "Büşra N.", sub: "YKS Eşit Ağırlık", initial: "B" },
+            { title: "Aktif Geri Çağırma Mucizesi", text: "Sadece pasif okuma yapıyormuşum. Kurstan sonra aktif geri çağırma yöntemlerini denemelerime entegre ettim ve AYT netlerim ciddi şekilde artmaya başladı.", name: "Kaan S.", sub: "YKS Sayısal", initial: "K" },
+            { title: "Bilgiler Aklımda Çakılı Kaldı", text: "Formülleri ve ezberlenmesi gereken sözel kısımları aklımda tutamıyordum. Rotasyonlu tekrar programıyla hafızamın sınırlarını zorluyorum şu an.", name: "Elif Nisa D.", sub: "YKS Sayısal", initial: "E" },
+            { title: "Sistemli Çalışmanın Meyvesi", text: "Konu eksiğim çoktu ve hangisine ne zaman çalışıp ne zaman tekrar edeceğimi bilmiyordum. Bu eğitim bana kusursuz bir yol haritası çizdi.", name: "Mert Can Y.", sub: "YKS Eşit Ağırlık", initial: "M" },
+            { title: "Eski Konular Artık Silinmiyor", text: "Tarih ve coğrafyadaki ezber konuları sürekli unutuyordum. Çalışma rotasyonlarıyla bu problemi çözdüm, deneme netlerim istikrarlı bir şekilde yüksek geliyor.", name: "Yağmur G.", sub: "YKS Sözel", initial: "Y" }
+          ];
+
+          var VISIBLE = 3;
+          var currentIndex = 0;
+          var maxIndex = testimonials.length - VISIBLE;
+
+          var track = document.getElementById('testimonial-track');
+          var prevBtn = document.getElementById('prev-testimonial');
+          var nextBtn = document.getElementById('next-testimonial');
+          var dotsContainer = document.getElementById('testimonial-dots');
+
+          var stars = '<span class="material-symbols-outlined text-yellow-400" style="font-size:20px; font-variation-settings: \'FILL\' 1">star</span>'.repeat(5);
+
+          function createCard(t) {
+            var badgeHtml = '<div class="flex flex-col items-end shrink-0 min-w-0">'
+              + '<span class="text-[9px] text-gray-400 font-medium mb-1 tracking-wider uppercase">Alınan Kurs</span>'
+              + '<a href="javascript:void(0)" onclick="window.scrollTo({ top: 0, behavior: \'smooth\' })" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-600 border border-purple-200 hover:bg-purple-600 hover:text-white transition-all duration-300">'
+              + '<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>'
+              + 'Çalışma Rotasyonları'
+              + '<span class="material-symbols-outlined text-[11px] ml-0.5">arrow_upward</span>'
+              + '</a>'
+              + '</div>';
+
+            return '<div class="testimonial-card flex-shrink-0 bg-white rounded-2xl p-6 border border-gray-100 border-t-[4px] border-t-purple-500 hover:border-purple-500 hover:shadow-[0_8px_30px_rgba(168,85,247,0.12)] flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-1.5 relative overflow-hidden">'
+              + '<span class="absolute right-4 top-2 text-gray-100 text-6xl font-serif select-none pointer-events-none">“</span>'
+              + '<div>'
+              + '<div class="flex gap-1 mb-4">' + stars + '</div>'
+              + '<h4 class="text-lg font-bold text-gray-900 mb-2 relative z-10">' + t.title + '</h4>'
+              + '<p class="text-gray-500 text-sm leading-relaxed mb-6">' + t.text + '</p>'
+              + '</div>'
+              + '<div class="flex items-center justify-between gap-3 border-t border-gray-100 pt-4 mt-auto">'
+              + '<div class="flex items-center gap-3 min-w-0">'
+              + '<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-purple-600 flex items-center justify-center font-bold text-white text-sm shadow-md shadow-purple-500/20 shrink-0">' + t.initial + '</div>'
+              + '<div class="min-w-0"><div class="font-bold text-gray-900 text-sm truncate">' + t.name + '</div><div class="text-xs text-gray-400 font-medium truncate">' + t.sub + '</div></div>'
+              + '</div>'
+              + badgeHtml
+              + '</div></div>';
+          }
+
+          function getCardWidth() {
+            var vw = document.getElementById('testimonial-viewport').clientWidth;
+            var gap = 24;
+            return (vw - gap * (VISIBLE - 1)) / VISIBLE;
+          }
+
+          function updateCardWidths() {
+            var vw = document.getElementById('testimonial-viewport').clientWidth;
+            if (vw < 640) {
+              VISIBLE = 1;
+            } else if (vw < 1024) {
+              VISIBLE = 2;
+            } else {
+              VISIBLE = 3;
+            }
+            maxIndex = testimonials.length - VISIBLE;
+
+            var w = getCardWidth();
+            var cards = track.querySelectorAll('.testimonial-card');
+            cards.forEach(function (c) { c.style.width = w + 'px'; c.style.minWidth = w + 'px'; });
+          }
+
+          function updateSlider(animate) {
+            var cardWidth = getCardWidth();
+            var gap = 24;
+            var offset = currentIndex * (cardWidth + gap);
+            track.style.transition = animate === false ? 'none' : 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+            track.style.transform = 'translateX(-' + offset + 'px)';
+            prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+            prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.3' : '1';
+            nextBtn.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+            var dots = dotsContainer.querySelectorAll('.t-dot');
+            dots.forEach(function (d, i) {
+              if (i === currentIndex) { d.style.width = '20px'; d.style.backgroundColor = '#a855f7'; }
+              else { d.style.width = '8px'; d.style.backgroundColor = '#e5e7eb'; }
+            });
+          }
+
+          function renderDots() {
+            dotsContainer.innerHTML = '';
+            for (var i = 0; i <= maxIndex; i++) {
+              var dot = document.createElement('button');
+              dot.className = 't-dot h-2 rounded-full transition-all duration-300';
+              dot.style.width = i === 0 ? '20px' : '8px';
+              dot.style.backgroundColor = i === 0 ? '#a855f7' : '#e5e7eb';
+              (function (idx) { dot.addEventListener('click', function () { currentIndex = idx; updateSlider(); }); })(i);
+              dotsContainer.appendChild(dot);
+            }
+          }
+
+          track.innerHTML = testimonials.map(createCard).join('');
+          updateCardWidths();
+          renderDots();
+          updateSlider(false);
+
+          prevBtn.addEventListener('click', function () { if (currentIndex > 0) { currentIndex--; updateSlider(); } });
+          nextBtn.addEventListener('click', function () { if (currentIndex < maxIndex) { currentIndex++; updateSlider(); } });
+
+          var resizeTimer;
+          window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () { updateCardWidths(); renderDots(); updateSlider(false); }, 100);
+          });
+        })();
+    </script>
+
     <!-- START: WhoIsThisCourseForSection -->
     <section class="max-w-6xl mx-auto px-6 mb-16 relative z-10">
       <div
-        class="bg-gradient-to-br from-orange-50 via-white to-orange-50/60 rounded-3xl border border-orange-100 shadow-[0_20px_40px_rgba(234,88,12,0.04)] p-8 md:p-10 relative overflow-hidden">
+        class="bg-gradient-to-br from-purple-50 via-white to-purple-50/60 rounded-3xl border border-purple-100 shadow-[0_20px_40px_rgba(168,85,247,0.04)] p-8 md:p-10 relative overflow-hidden">
         <!-- Decorative background radial gradient -->
-        <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-orange-500/10 blur-3xl pointer-events-none">
+        <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-purple-500/10 blur-3xl pointer-events-none">
         </div>
 
-        <div class="mb-10 text-center md:text-left relative z-10">
+        <div class="mb-10 flex flex-col items-center text-center relative z-10">
           <h2 class="text-2xl md:text-3xl font-extrabold text-neutral-900 tracking-tight">Bu Kurs Sana Ne Katacak?</h2>
-          <div class="w-12 h-1 bg-orange-600 mt-3 mx-auto md:mx-0"></div>
+          <div class="w-12 h-1 bg-purple-600 mt-3"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10 max-w-4xl mx-auto">
           <!-- Target Card 1 -->
           <div
-            class="group bg-white p-8 rounded-2xl border border-orange-100/70 hover:border-orange-500 hover:shadow-[0_16px_35px_rgba(234,88,12,0.08)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+            class="group bg-white p-8 rounded-2xl border border-purple-100/70 hover:border-purple-500 hover:shadow-[0_16px_35px_rgba(168,85,247,0.08)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
             <!-- Top glowing edge hover effect -->
             <div
-              class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-purple-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             </div>
 
             <div
-              class="flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-500 text-white mb-6 shadow-md shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+              class="flex items-center justify-center w-14 h-14 rounded-2xl bg-purple-500 text-white mb-6 shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
               <span class="material-symbols-outlined text-3xl">rotate_right</span>
             </div>
             <h3 class="font-extrabold text-neutral-900 text-xl mb-3 flex items-center gap-2">Rotasyon Stratejisi</h3>
@@ -449,14 +612,14 @@
 
           <!-- Target Card 2 -->
           <div
-            class="group bg-white p-8 rounded-2xl border border-orange-100/70 hover:border-orange-500 hover:shadow-[0_16px_35px_rgba(234,88,12,0.08)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+            class="group bg-white p-8 rounded-2xl border border-purple-100/70 hover:border-purple-500 hover:shadow-[0_16px_35px_rgba(168,85,247,0.08)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
             <!-- Top glowing edge hover effect -->
             <div
-              class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-purple-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             </div>
 
             <div
-              class="flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-500 text-white mb-6 shadow-md shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+              class="flex items-center justify-center w-14 h-14 rounded-2xl bg-purple-500 text-white mb-6 shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
               <span class="material-symbols-outlined text-3xl">rocket_launch</span>
             </div>
             <h3 class="font-bold text-neutral-900 text-xl mb-3 flex items-center gap-2">Konuları Aklına Kazı</h3>
@@ -627,7 +790,7 @@
       </div>
     </section>
     <!-- About Us Section -->
-    <section class="relative overflow-hidden bg-white py-24 mb-16" id="about-us">
+    <section class="relative overflow-hidden bg-white pt-16 pb-4 mb-6" id="about-us">
 
       <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
@@ -672,9 +835,9 @@
       </div>
 
       <div class="max-w-4xl relative z-10 mx-auto px-8">
-        <div class="mb-10 text-center md:text-left">
-          <h2 class="text-3xl font-bold text-gray-900" style="">Biz Kimiz?</h2>
-          <div class="w-12 h-1 bg-orange-600 mt-2 mx-auto md:mx-0"></div>
+        <div class="mb-10 flex flex-col items-center text-center">
+          <h2 class="text-3xl font-bold text-gray-900">Biz Kimiz?</h2>
+          <div class="w-12 h-1 bg-orange-600 mt-2"></div>
         </div>
         <div class="space-y-6 text-gray-700 leading-relaxed text-lg font-normal">
           <p class="" style="">
@@ -694,6 +857,48 @@
         </div>
       </div>
     </section>
+
+    <section class="bg-white pt-6 pb-8">
+      <div class="max-w-4xl relative z-10 mx-auto px-8">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-200 p-8">
+          <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+            <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-indigo-600 text-[22px]">quiz</span>
+            </div>
+            <h2 class="text-2xl font-extrabold text-gray-900">Sık Sorulan Sorular</h2>
+          </div>
+          <div class="space-y-4">
+            <details class="border border-gray-100 rounded-2xl bg-gray-50 p-4">
+              <summary class="flex items-center justify-between gap-3 text-gray-900 font-semibold cursor-pointer list-none" style="list-style: none;">
+                <span>Satın aldığım kursa nasıl erişirim?</span>
+                <span class="material-symbols-outlined text-gray-500">expand_more</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-gray-600">
+                Sürecin en hızlı şekilde tamamlanması için <strong>öncelikle DereceLab'a kayıt olun</strong>, ardından satın alma işlemini Shopier üzerinden gerçekleştirirken kayıt olduğunuz e-posta adresini oraya yazın. Ödemeniz onaylandığında kursunuz "Kurslarım" kısmında otomatik olarak aktif olacaktır.
+              </div>
+            </details>
+            <details class="border border-gray-100 rounded-2xl bg-gray-50 p-4">
+              <summary class="flex items-center justify-between gap-3 text-gray-900 font-semibold cursor-pointer list-none" style="list-style: none;">
+                <span>Kurslara mobil cihazlardan erişebilir miyim?</span>
+                <span class="material-symbols-outlined text-gray-500">expand_more</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-gray-600">
+                Evet, DereceLab tamamen mobil uyumlu bir platformdur. Akıllı telefon, tablet veya bilgisayar üzerinden dilediğiniz her yerden dersleri izleyebilirsiniz.
+              </div>
+            </details>
+            <details class="border border-gray-100 rounded-2xl bg-gray-50 p-4">
+              <summary class="flex items-center justify-between gap-3 text-gray-900 font-semibold cursor-pointer list-none" style="list-style: none;">
+                <span>Şifremi unuttum, ne yapmalıyım?</span>
+                <span class="material-symbols-outlined text-gray-500">expand_more</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-gray-600">
+                Giriş ekranındaki "Şifremi Unuttum" butonunu kullanarak e-posta adresinize yeni şifre oluşturma bağlantısı isteyebilirsiniz.
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
   <!-- Footer -->
   <!-- Footer -->
@@ -705,7 +910,6 @@
       <div class="flex flex-col items-center gap-2 text-center">
 
         <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
-
           onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
 
           <div class="flex items-center justify-center gap-0.5">
