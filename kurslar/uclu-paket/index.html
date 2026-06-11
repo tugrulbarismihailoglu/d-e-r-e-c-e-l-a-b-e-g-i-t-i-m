@@ -627,7 +627,7 @@
         var stars = '<span class="material-symbols-outlined text-yellow-400" style="font-size:20px; font-variation-settings: \'FILL\' 1">star</span>'.repeat(5);
 
         function createCard(t) {
-          var badgeHtml = '<div class="flex flex-col items-end shrink-0 min-w-0">'
+          var badgeHtml = '<div class="flex flex-col items-center shrink-0 min-w-0">'
             + '<span class="text-[9px] text-gray-400 font-medium mb-1 tracking-wider uppercase">Alınan Kurs</span>'
             + '<a href="javascript:void(0)" onclick="window.scrollTo({ top: 0, behavior: \'smooth\' })" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-600 hover:text-white transition-all duration-300">'
             + '<span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>'
@@ -643,10 +643,10 @@
             + '<h4 class="text-lg font-bold text-gray-900 mb-2 relative z-10">' + t.title + '</h4>'
             + '<p class="text-gray-500 text-sm leading-relaxed mb-6">' + t.text + '</p>'
             + '</div>'
-            + '<div class="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4 mt-auto">'
-            + '<div class="flex items-center gap-3 min-w-0">'
+            + '<div class="flex flex-col items-center gap-3 border-t border-gray-100 pt-4 mt-auto">'
+            + '<div class="flex flex-col items-center gap-2 text-center">'
             + '<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shadow-indigo-500/20 shrink-0">' + t.initial + '</div>'
-            + '<div class="min-w-0"><div class="font-bold text-gray-900 text-sm">' + t.name + '</div><div class="text-xs text-gray-400 font-medium">' + t.sub + '</div></div>'
+            + '<div><div class="font-bold text-gray-900 text-sm">' + t.name + '</div><div class="text-xs text-gray-400 font-medium">' + t.sub + '</div></div>'
             + '</div>'
             + badgeHtml
             + '</div></div>';
