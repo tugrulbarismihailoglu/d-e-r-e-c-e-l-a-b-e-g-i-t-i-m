@@ -73,7 +73,16 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 
-<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100">
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100 relative z-0">
+    <!-- Warm Amber Glow Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index: -1;">
+        <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    </div>
 
     <!-- Header -->
     <header

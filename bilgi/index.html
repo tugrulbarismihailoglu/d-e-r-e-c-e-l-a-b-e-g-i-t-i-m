@@ -189,7 +189,16 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col relative z-0">
+    <!-- Warm Amber Glow Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index: -1;">
+        <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    </div>
 
     <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 shadow-sm">
