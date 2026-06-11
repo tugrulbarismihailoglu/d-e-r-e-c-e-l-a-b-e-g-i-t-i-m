@@ -221,6 +221,30 @@
       font-size: 14px !important;
       font-weight: 900 !important;
     }
+    /* Hero Section Sunbeams Effect */
+    .hero-sunbeams {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .sunbeam {
+      position: absolute;
+      background: linear-gradient(to bottom right, rgba(255, 133, 18, 0.15), transparent);
+      width: 200%;
+      height: 40px;
+      top: -50%;
+      left: -50%;
+      transform: rotate(-35deg);
+      filter: blur(40px);
+      opacity: 0.6;
+      will-change: transform, opacity;
+    }
   </style>
 
   <!-- Firebase SDK -->
@@ -265,9 +289,38 @@
       </div>
     </div>
   </header>
-  <main class="pt-20 lg:pt-24">
+  <main class="pt-20 lg:pt-24 relative overflow-hidden z-10">
+    <!-- Warm Amber Glow Effects (Clipped within main to protect footer) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      <!-- Top Section (0% - 20%) -->
+      <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+      <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+      <div class="absolute top-[18%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[18%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+
+      <!-- Mid-Top Section (20% - 50%) -->
+      <div class="absolute top-[34%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[34%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+
+      <!-- Mid-Bottom Section (50% - 80%) -->
+      <div class="absolute top-[66%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[66%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[82%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+      <div class="absolute top-[82%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    </div>
     <!-- Hero Section & Package Overview -->
     <div class="relative overflow-hidden mb-6">
+      <!-- Decorative background sunbeams (sağdan soldan vuran turuncu süzmeler) -->
+      <div class="hero-sunbeams" id="sunbeams-container">
+        <!-- From Right to Left -->
+        <div class="sunbeam" style="top: -10%; right: -20%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.65;"></div>
+        <div class="sunbeam" style="top: 30%; right: -40%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.65;"></div>
+        <!-- From Left to Right -->
+        <div class="sunbeam" style="top: 10%; left: -30%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.65;"></div>
+        <div class="sunbeam" style="top: 50%; left: -40%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.65;"></div>
+      </div>
 
       <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0] hidden xl:block">
@@ -1040,13 +1093,26 @@
     document.addEventListener('DOMContentLoaded', () => {
       const backToTopBtn = document.getElementById('back-to-top');
       window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
+        const scrolled = window.scrollY;
+
+        if (scrolled > 300) {
           backToTopBtn.classList.remove('translate-y-16', 'opacity-0', 'pointer-events-none');
           backToTopBtn.classList.add('translate-y-0', 'opacity-100');
         } else {
           backToTopBtn.classList.remove('translate-y-0', 'opacity-100');
           backToTopBtn.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
         }
+
+        // Hero sunbeams logic
+        const beams = document.querySelectorAll('.sunbeam');
+        beams.forEach((beam, index) => {
+          const speed = (index + 1) * 0.1;
+          const yOffset = scrolled * speed;
+          const isLeft = beam.style.left !== '';
+          const rot = isLeft ? '35deg' : '-35deg';
+          beam.style.transform = `rotate(${rot}) translate(0px, ${yOffset}px)`;
+          beam.style.opacity = Math.max(0, 0.65 - (scrolled / 1000));
+        });
       });
       backToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
