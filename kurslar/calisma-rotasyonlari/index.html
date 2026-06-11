@@ -317,6 +317,9 @@
         <div class="sunbeam" style="top: 50%; left: -40%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.85;"></div>
       </div>
 
+      <!-- Soft white backdrop glow behind title to keep it clear and white -->
+      <div class="absolute top-[5%] left-[-10%] w-[600px] h-[350px] bg-white rounded-full blur-[100px] opacity-[0.75] pointer-events-none z-0"></div>
+
       <!-- Floating Math & Geometric Elements (Sparse) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0] hidden xl:block">
         <!-- Math Formulas -->
@@ -1070,17 +1073,6 @@
           backToTopBtn.classList.remove('translate-y-0', 'opacity-100');
           backToTopBtn.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
         }
-
-        // Hero sunbeams logic
-        const beams = document.querySelectorAll('.sunbeam');
-        beams.forEach((beam, index) => {
-          const speed = (index + 1) * 0.1;
-          const yOffset = scrolled * speed;
-          const isLeft = beam.style.left !== '';
-          const rot = isLeft ? '35deg' : '-35deg';
-          beam.style.transform = `rotate(${rot}) translate(0px, ${yOffset}px)`;
-          beam.style.opacity = Math.max(0, 0.85 - (scrolled / 1000));
-        });
       });
       backToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
