@@ -235,14 +235,14 @@
 
         .sunbeam {
             position: absolute;
-            background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.15), transparent);
+            background: linear-gradient(to bottom right, rgba(37, 99, 235, 0.35), transparent);
             width: 200%;
             height: 40px;
             top: -50%;
             left: -50%;
             transform: rotate(-35deg);
             filter: blur(40px);
-            opacity: 0.6;
+            opacity: 0.85;
             will-change: transform, opacity;
         }
     </style>
@@ -314,11 +314,11 @@
             <!-- Decorative background sunbeams (sağdan soldan vuran mavi süzmeler) -->
             <div class="hero-sunbeams" id="sunbeams-container">
                 <!-- From Right to Left -->
-                <div class="sunbeam" style="top: -10%; right: -20%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.65;"></div>
-                <div class="sunbeam" style="top: 30%; right: -40%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.65;"></div>
+                <div class="sunbeam" style="top: -10%; right: -20%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.85;"></div>
+                <div class="sunbeam" style="top: 30%; right: -40%; transform: rotate(-35deg) translate(0px, 0px); opacity: 0.85;"></div>
                 <!-- From Left to Right -->
-                <div class="sunbeam" style="top: 10%; left: -30%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.65;"></div>
-                <div class="sunbeam" style="top: 50%; left: -40%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.65;"></div>
+                <div class="sunbeam" style="top: 10%; left: -30%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.85;"></div>
+                <div class="sunbeam" style="top: 50%; left: -40%; transform: rotate(35deg) translate(0px, 0px); opacity: 0.85;"></div>
             </div>
 
             <!-- Floating Math & Geometric Elements (Sparse) -->
@@ -1073,7 +1073,7 @@
                     const isLeft = beam.style.left !== '';
                     const rot = isLeft ? '35deg' : '-35deg';
                     beam.style.transform = `rotate(${rot}) translate(0px, ${yOffset}px)`;
-                    beam.style.opacity = Math.max(0, 0.65 - (scrolled / 1000));
+                    beam.style.opacity = Math.max(0, 0.85 - (scrolled / 1000));
                 });
             });
             backToTopBtn.addEventListener('click', () => {
