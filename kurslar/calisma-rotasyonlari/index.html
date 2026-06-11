@@ -257,6 +257,21 @@
 </head>
 
 <body class="bg-[#FAF5FC] relative min-h-screen overflow-x-hidden text-neutral-900">
+
+  <!-- ===== FIXED PURPLE AMBIENT GLOW (body level, no clipping) ===== -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden" style="z-index: -1;">
+    <!-- Sol ve Sağ — Üst bölge (header dahil viewport başı) -->
+    <div class="absolute top-[-10%] left-[-15%] w-[700px] h-[700px] bg-purple-500 rounded-full blur-[150px] opacity-[0.07]"></div>
+    <div class="absolute top-[-10%] right-[-15%] w-[700px] h-[700px] bg-purple-500 rounded-full blur-[150px] opacity-[0.07]"></div>
+    <!-- Sol ve Sağ — Orta bölge -->
+    <div class="absolute top-[40%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    <div class="absolute top-[40%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    <!-- Sol ve Sağ — Alt bölge -->
+    <div class="absolute bottom-[-10%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    <div class="absolute bottom-[-10%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+  </div>
+  <!-- ===== /FIXED PURPLE AMBIENT GLOW ===== -->
+
   <!-- Shopping Cart Drawer -->
   <!-- END: ShoppingCartDrawer -->
   <!-- Header -->
@@ -289,32 +304,7 @@
       </div>
     </div>
   </header>
-  <main class="pt-20 lg:pt-24 relative overflow-hidden z-10" style="background: linear-gradient(to bottom, rgba(147,51,234,0.06) 0px, rgba(147,51,234,0.04) 80px, transparent 200px);">
-    <!-- Warm Purple Glow Effects (Clipped within main to protect footer) -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-      <!-- Very Top (header altı boşluk kapatmak için) -->
-      <div class="absolute top-[-5%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.06]"></div>
-      <div class="absolute top-[-5%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.06]"></div>
-      <div class="absolute top-[-5%] left-[25%] w-[600px] h-[400px] bg-purple-400 rounded-full blur-[120px] opacity-[0.05]"></div>
-
-      <!-- Top Section (0% - 20%) -->
-      <div class="absolute top-[10%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[10%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[22%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[22%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-
-      <!-- Mid-Top Section (20% - 50%) -->
-      <div class="absolute top-[34%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[34%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-
-      <!-- Mid-Bottom Section (50% - 80%) -->
-      <div class="absolute top-[66%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[66%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[82%] left-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-      <div class="absolute top-[82%] right-[-15%] w-[650px] h-[650px] bg-purple-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-    </div>
+  <main class="pt-20 lg:pt-24 relative z-10">
     <!-- Hero Section & Package Overview -->
     <div class="relative overflow-hidden mb-6">
       <!-- Decorative background sunbeams (sağdan soldan vuran mor süzmeler) -->
