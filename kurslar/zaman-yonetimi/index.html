@@ -549,12 +549,9 @@
         <script>
                 (function () {
                     var testimonials = [
-                        { title: "Denemelerde Sürem Artıyor", text: "Zaman Yönetimi teknikleriyle denemelerdeki yetiştirememe problemimi tamamen aştım. Artık turlama taktiğini çok daha verimli uygulayabiliyorum.", name: "Alperen D.", sub: "YKS Sayısal", initial: "A", rating: 5 },
-                        { title: "Planlı Olmanın Gücü", text: "Günlük plan yapıyordum ama zamanı verimli kullanamıyordum. Bu modüllerdeki saat bloklama sistemi sayesinde artık her günüm tam istediğim gibi verimli geçiyor.", name: "Selin K.", sub: "YKS Eşit Ağırlık", initial: "S", rating: 4 },
-                        { title: "Turlama Taktiği Harika", text: "Zaman Yönetimi derslerindeki taktiklerle sınav süresini 15 dakika artırmayı başardım. Zor sorulara takılıp kalma huyum tamamen bitti.", name: "Emirhan T.", sub: "YKS Sayısal", initial: "E", rating: 4.5 },
-                        { title: "Yetişmeyen Soru Kalmadı", text: "Denemelerin son 10 sorusuna geldiğimde hep sürem bitiyordu. Sınav anı yönetimi dersleri sayesinde tüm derslere hak ettiği süreyi verebiliyorum artık.", name: "Zeynep Ece A.", sub: "YKS Sözel", initial: "Z", rating: 5 },
-                        { title: "Günün Her Saati Planlı", text: "Çalışma saatlerimi düzene sokmakta zorlanıyordum. Kurstaki zaman yönetimi şablonları YKS temposunu çok daha kolay yönetmemi sağladı.", name: "Furkan Ş.", sub: "YKS Sayısal", initial: "F", rating: 4.5 },
-                        { title: "Zamanı Kontrol Ediyorum", text: "Sadece ders çalışırken değil, gün içindeki molalarımı ve dinlenme sürelerimi bile çok daha verimli yönetmeye başladım. Stresim ciddi oranda azaldı.", name: "Melike B.", sub: "YKS Dil", initial: "M", rating: 5 }
+                        { title: "Zamanımı Yönetebiliyorum", text: 'Önceden günde en fazla 2-3 saat çalışan birisiyken şimdi rahatça 7-8 saat çalışabiliyorum ve odağımı kaybetmeden devam edebiliyorum, cidden bu setin çok faydasını gördüm teşekkür ederim🙏🏻', name: 'Merve A.', sub: 'YKS Eşit Ağırlık', initial: 'M', course: 'zaman', rating: 5 },
+                        { title: "Denemeleri Yetiştirmeye Başladım", text: "Selamlar TYT Matematik'de yavaş olduğum için tüm soruları yetiştiremiyordum fakat zaman yönetimi taktikleriniz sayesinde artık TYT Matematiği 40-45 dakikada halledebiliyorum teşekkürler. Denemelerde yetiştiremeyenlere öneririm✨", name: "Selin K.", sub: "YKS Eşit Ağırlık", initial: "S", rating: 4 },
+                        { title: "Konuları Rahat Yetiştirdim", text: 'Selamlar YKS\'ye son 5 ay kala konuların yetişip yetişmeyeceği ile ilgili kaygılarım vardı. Taktikleriniz sayesinde 10+ saatleri zorladığım günler oldu ve konuları yetiştirdim elinize sağlık güzel bir çalışma olmuş.', name: 'Mert H.', sub: 'YKS Sayısal', initial: 'M', course: 'zaman', rating: 5 }
                     ];
 
                     var VISIBLE = 3;
@@ -1128,87 +1125,88 @@
             });
         });
     </script>
-  <!-- Purchase Notification Toast -->
-  <div id="purchase-notification"
-    class="fixed bottom-6 left-6 z-[100] transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500 max-w-sm w-[calc(100%-3rem)] sm:w-[360px] bg-white border-2 border-orange-500 backdrop-blur-md rounded-2xl p-4 shadow-2xl flex gap-3 text-gray-900">
-    <div id="purchase-icon-wrapper"
-      class="w-10 h-10 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center shrink-0">
-      <span id="purchase-icon" class="material-symbols-outlined text-orange-600">shopping_bag</span>
+    <!-- Purchase Notification Toast -->
+    <div id="purchase-notification"
+        class="fixed bottom-6 left-6 z-[100] transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500 max-w-sm w-[calc(100%-3rem)] sm:w-[360px] bg-white border-2 border-orange-500 backdrop-blur-md rounded-2xl p-4 shadow-2xl flex gap-3 text-gray-900">
+        <div id="purchase-icon-wrapper"
+            class="w-10 h-10 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center shrink-0">
+            <span id="purchase-icon" class="material-symbols-outlined text-orange-600">shopping_bag</span>
+        </div>
+        <div class="flex-1 min-w-0 pr-4">
+            <div class="flex items-center gap-1.5 mb-0.5">
+                <span id="purchase-tag" class="font-extrabold text-[12px] text-orange-600 tracking-wider uppercase">🔥
+                    Başarıya İlk Adım</span>
+            </div>
+            <p class="text-sm text-gray-700 leading-normal" id="purchase-text"></p>
+            <div class="flex items-center gap-1.5 mt-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0"></span>
+                <span class="text-[11px] text-gray-400 font-medium" id="purchase-time"></span>
+            </div>
+        </div>
+        <button id="close-purchase-notification"
+            class="absolute top-3 right-3 text-gray-455 hover:text-gray-755 transition-colors" aria-label="Kapat">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
     </div>
-    <div class="flex-1 min-w-0 pr-4">
-      <div class="flex items-center gap-1.5 mb-0.5">
-        <span id="purchase-tag" class="font-extrabold text-[12px] text-orange-600 tracking-wider uppercase">🔥 Başarıya İlk Adım</span>
-      </div>
-      <p class="text-sm text-gray-700 leading-normal" id="purchase-text"></p>
-      <div class="flex items-center gap-1.5 mt-1">
-        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0"></span>
-        <span class="text-[11px] text-gray-400 font-medium" id="purchase-time"></span>
-      </div>
-    </div>
-    <button id="close-purchase-notification"
-      class="absolute top-3 right-3 text-gray-455 hover:text-gray-755 transition-colors" aria-label="Kapat">
-      <span class="material-symbols-outlined text-[18px]">close</span>
-    </button>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const toast = document.getElementById('purchase-notification');
-      const closeBtn = document.getElementById('close-purchase-notification');
-      const textEl = document.getElementById('purchase-text');
-      const timeEl = document.getElementById('purchase-time');
-      if (!toast || !closeBtn || !textEl || !timeEl) return;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toast = document.getElementById('purchase-notification');
+            const closeBtn = document.getElementById('close-purchase-notification');
+            const textEl = document.getElementById('purchase-text');
+            const timeEl = document.getElementById('purchase-time');
+            if (!toast || !closeBtn || !textEl || !timeEl) return;
 
-      const names = ["Utku V.", "Mehmet H.", "Serhat S.", "Orçun Ö.", "Hamza K.", "Elif A.", "Medine M.", "Osman T.", "Cemre D.", "Meliha E.", "Ece H.", "Songül Ş.", "Yiğit S.", "Ergün E.", "Akif D.", "Sude Ö.", "Fatma A.", "Doruk Y.", "Esma K.", "Arda B.", "Berk C.", "Can D.", "Deniz E.", "Emre F.", "Furkan G.", "Gökhan H.", "Hakan I.", "Kaan L.", "Mert M.", "Oğuz O.", "Ömer Ö.", "Serkan S.", "Tolga T.", "Umut U.", "Volkan V.", "Yasin Y.", "Ayşe A.", "Beyza B.", "Ceren C.", "Demet D.", "Ebru E.", "Gizem G.", "Hande H.", "Irmak I.", "Kübra K.", "Merve M.", "Özlem Ö.", "Pınar P.", "Seda S.", "Tuğba T.", "Yağmur Y.", "Zehra Z.", "Alper A.", "Bora B.", "Cihan C.", "Doğan D.", "Erhan E.", "Ferhat F.", "Harun H.", "Kerem K.", "Onur O.", "Sinan S.", "Tamer T.", "Ulaş U.", "Yavuz Y.", "Aylin A.", "Büşra B.", "Cansu C.", "Damla D.", "Eda E.", "Funda F.", "Gözde G.", "Hazal H.", "İrem I.", "Mine M.", "Nazlı N.", "Öykü Ö.", "Simge S.", "Tuğçe T.", "Zeynep Z.", "Batuhan A.", "Canberk B.", "Eray D.", "Gökberk E.", "Kutay G.", "Miran H.", "Noyan I.", "Ogün K.", "Sencer M.", "Tugay N.", "Yağız O.", "Alara Ö.", "Ceylan T.", "Elçin U.", "Feray V.", "Günay Y.", "Hilal Z."];
-      const courses = ["Verimlilik Optimizasyonu Video Seti", "Zaman Yönetimi Video Seti", "Çalışma Rotasyonları Video Seti", "DereceLab Üçlü Paket"];
-      const times = ["Az önce", "1 dakika önce", "3 dakika önce", "5 dakika önce", "7 dakika önce", "9 dakika önce", "12 dakika önce", "14 dakika önce", "18 dakika önce", "23 dakika önce", "27 dakika önce", "34 dakika önce", "41 dakika önce", "46 dakika önce", "52 dakika önce"];
-      const courseThemes = {
-        "Verimlilik Optimizasyonu Video Seti": { borderClass: "border-orange-500", iconBg: "bg-orange-50", iconBorder: "border-orange-200", iconText: "text-orange-600", tagText: "text-orange-600", courseText: "text-orange-600", url: "../verimlilik-optimizasyonu/" },
-        "Zaman Yönetimi Video Seti": { borderClass: "border-blue-500", iconBg: "bg-blue-50", iconBorder: "border-blue-200", iconText: "text-blue-600", tagText: "text-blue-600", courseText: "text-blue-600", url: "../zaman-yonetimi/" },
-        "Çalışma Rotasyonları Video Seti": { borderClass: "border-purple-500", iconBg: "bg-purple-50", iconBorder: "border-purple-200", iconText: "text-purple-600", tagText: "text-purple-600", courseText: "text-purple-600", url: "../calisma-rotasyonlari/" },
-        "DereceLab Üçlü Paket": { borderClass: "border-indigo-500", iconBg: "bg-indigo-50", iconBorder: "border-indigo-200", iconText: "text-indigo-600", tagText: "text-indigo-600", courseText: "text-indigo-600", url: "../uclu-paket/" }
-      };
+            const names = ["Utku V.", "Mehmet H.", "Serhat S.", "Orçun Ö.", "Hamza K.", "Elif A.", "Medine M.", "Osman T.", "Cemre D.", "Meliha E.", "Ece H.", "Songül Ş.", "Yiğit S.", "Ergün E.", "Akif D.", "Sude Ö.", "Fatma A.", "Doruk Y.", "Esma K.", "Arda B.", "Berk C.", "Can D.", "Deniz E.", "Emre F.", "Furkan G.", "Gökhan H.", "Hakan I.", "Kaan L.", "Mert M.", "Oğuz O.", "Ömer Ö.", "Serkan S.", "Tolga T.", "Umut U.", "Volkan V.", "Yasin Y.", "Ayşe A.", "Beyza B.", "Ceren C.", "Demet D.", "Ebru E.", "Gizem G.", "Hande H.", "Irmak I.", "Kübra K.", "Merve M.", "Özlem Ö.", "Pınar P.", "Seda S.", "Tuğba T.", "Yağmur Y.", "Zehra Z.", "Alper A.", "Bora B.", "Cihan C.", "Doğan D.", "Erhan E.", "Ferhat F.", "Harun H.", "Kerem K.", "Onur O.", "Sinan S.", "Tamer T.", "Ulaş U.", "Yavuz Y.", "Aylin A.", "Büşra B.", "Cansu C.", "Damla D.", "Eda E.", "Funda F.", "Gözde G.", "Hazal H.", "İrem I.", "Mine M.", "Nazlı N.", "Öykü Ö.", "Simge S.", "Tuğçe T.", "Zeynep Z.", "Batuhan A.", "Canberk B.", "Eray D.", "Gökberk E.", "Kutay G.", "Miran H.", "Noyan I.", "Ogün K.", "Sencer M.", "Tugay N.", "Yağız O.", "Alara Ö.", "Ceylan T.", "Elçin U.", "Feray V.", "Günay Y.", "Hilal Z."];
+            const courses = ["Verimlilik Optimizasyonu Video Seti", "Zaman Yönetimi Video Seti", "Çalışma Rotasyonları Video Seti", "DereceLab Üçlü Paket"];
+            const times = ["Az önce", "1 dakika önce", "3 dakika önce", "5 dakika önce", "7 dakika önce", "9 dakika önce", "12 dakika önce", "14 dakika önce", "18 dakika önce", "23 dakika önce", "27 dakika önce", "34 dakika önce", "41 dakika önce", "46 dakika önce", "52 dakika önce"];
+            const courseThemes = {
+                "Verimlilik Optimizasyonu Video Seti": { borderClass: "border-orange-500", iconBg: "bg-orange-50", iconBorder: "border-orange-200", iconText: "text-orange-600", tagText: "text-orange-600", courseText: "text-orange-600", url: "../verimlilik-optimizasyonu/" },
+                "Zaman Yönetimi Video Seti": { borderClass: "border-blue-500", iconBg: "bg-blue-50", iconBorder: "border-blue-200", iconText: "text-blue-600", tagText: "text-blue-600", courseText: "text-blue-600", url: "../zaman-yonetimi/" },
+                "Çalışma Rotasyonları Video Seti": { borderClass: "border-purple-500", iconBg: "bg-purple-50", iconBorder: "border-purple-200", iconText: "text-purple-600", tagText: "text-purple-600", courseText: "text-purple-600", url: "../calisma-rotasyonlari/" },
+                "DereceLab Üçlü Paket": { borderClass: "border-indigo-500", iconBg: "bg-indigo-50", iconBorder: "border-indigo-200", iconText: "text-indigo-600", tagText: "text-indigo-600", courseText: "text-indigo-600", url: "../uclu-paket/" }
+            };
 
-      let toastTimeout;
+            let toastTimeout;
 
-      const showNotification = () => {
-        const randomName = names[Math.floor(Math.random() * names.length)];
-        const randomCourse = courses[Math.floor(Math.random() * courses.length)];
-        const randomTime = times[Math.floor(Math.random() * times.length)];
-        const theme = courseThemes[randomCourse] || courseThemes["DereceLab Üçlü Paket"];
-        toast.className = toast.className.replace(/border-(orange|blue|purple|indigo)-500/g, theme.borderClass);
-        const iconWrapper = document.getElementById('purchase-icon-wrapper');
-        const icon = document.getElementById('purchase-icon');
-        const tag = document.getElementById('purchase-tag');
-        if (iconWrapper && icon && tag) {
-          iconWrapper.className = `w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${theme.iconBg} ${theme.iconBorder}`;
-          icon.className = `material-symbols-outlined ${theme.iconText}`;
-          tag.className = `font-extrabold text-[12px] tracking-wider uppercase ${theme.tagText}`;
-        }
-        textEl.innerHTML = `<span class="font-bold text-gray-900">${randomName}</span>, <a href="${theme.url}" class="${theme.courseText} font-bold hover:underline">${randomCourse}</a> satın aldı!`;
-        timeEl.textContent = randomTime;
-        toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-        toast.classList.add('translate-y-0', 'opacity-100');
-        toastTimeout = setTimeout(hideNotification, 10000);
-      };
+            const showNotification = () => {
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                const randomCourse = courses[Math.floor(Math.random() * courses.length)];
+                const randomTime = times[Math.floor(Math.random() * times.length)];
+                const theme = courseThemes[randomCourse] || courseThemes["DereceLab Üçlü Paket"];
+                toast.className = toast.className.replace(/border-(orange|blue|purple|indigo)-500/g, theme.borderClass);
+                const iconWrapper = document.getElementById('purchase-icon-wrapper');
+                const icon = document.getElementById('purchase-icon');
+                const tag = document.getElementById('purchase-tag');
+                if (iconWrapper && icon && tag) {
+                    iconWrapper.className = `w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${theme.iconBg} ${theme.iconBorder}`;
+                    icon.className = `material-symbols-outlined ${theme.iconText}`;
+                    tag.className = `font-extrabold text-[12px] tracking-wider uppercase ${theme.tagText}`;
+                }
+                textEl.innerHTML = `<span class="font-bold text-gray-900">${randomName}</span>, <a href="${theme.url}" class="${theme.courseText} font-bold hover:underline">${randomCourse}</a> satın aldı!`;
+                timeEl.textContent = randomTime;
+                toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                toastTimeout = setTimeout(hideNotification, 10000);
+            };
 
-      const hideNotification = () => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-      };
+            const hideNotification = () => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            };
 
-      closeBtn.addEventListener('click', () => {
-        clearTimeout(toastTimeout);
-        hideNotification();
-      });
+            closeBtn.addEventListener('click', () => {
+                clearTimeout(toastTimeout);
+                hideNotification();
+            });
 
-      // İlk bildirim: 1.5 dakika (90sn) sonra
-      // Sonraki bildirimler: 3 dakikada bir
-      setTimeout(() => {
-        showNotification();
-        setInterval(showNotification, 180000);
-      }, 60000);
-    });
-  </script>
+            // İlk bildirim: 1.5 dakika (90sn) sonra
+            // Sonraki bildirimler: 3 dakikada bir
+            setTimeout(() => {
+                showNotification();
+                setInterval(showNotification, 180000);
+            }, 60000);
+        });
+    </script>
 </body>
 
 </html>
