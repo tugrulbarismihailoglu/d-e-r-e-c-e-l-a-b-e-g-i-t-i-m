@@ -1,8 +1,0 @@
-{
-  "name": "derecelab-backend",
-  "version": "1.0.0",
-  "main": "api/webhook.js",
-  "dependencies": {
-    "firebase-admin": "^12.0.0"
-  }
-}

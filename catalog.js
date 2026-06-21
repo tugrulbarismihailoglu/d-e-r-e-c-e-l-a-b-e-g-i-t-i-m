@@ -15,7 +15,7 @@ window.DereceLab.Catalog = {
         features: ['Stratejik Planlama Teknikleri', 'Odaklanma Egzersizleri', 'Zihinsel Dayanıklılık Pratikleri'],
         parts: [
             {
-                id: 'c1_p1', title: '1. Bölüm: Stratejik Planlamanın Temelleri', videoUrl: 'https://www.youtube.com/embed/LXb3EKWsInQ'
+                id: 'c1_p1', title: '1. Bölüm: Stratejik Planlamanın Temelleri', videoUrl: 'https://player.mediadelivery.net/play/688322/869331ad-a74d-4ade-9b3f-4a2416056e1b'
             },
             { id: 'c1_p2', title: '2. Bölüm: Derin Odaklanma Egzersizleri', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
             { id: 'c1_p3', title: '3. Bölüm: Zihinsel Dayanıklılık ve Pratikler', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
