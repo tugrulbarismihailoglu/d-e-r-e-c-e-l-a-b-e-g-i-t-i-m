@@ -11,7 +11,7 @@ const footerTemplate = (depth) => {
         <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
           onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
           <div class="flex items-center justify-center gap-0.5">
-            <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="${prefix}Images/logo-siyah.png">
+            <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="${prefix}Images/logo-siyah.webp">
             <span>DereceLab</span>
           </div>
         </div>
@@ -37,8 +37,8 @@ const footerTemplate = (depth) => {
       </div>
       <!-- Right Section: Payment Logos -->
       <div class="flex flex-col items-center gap-1">
-        <img src="${prefix}Images/visamasttroy.png" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
-        <img src="${prefix}Images/shopier.png" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
+        <img src="${prefix}Images/visamasttroy.webp" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
+        <img src="${prefix}Images/shopier.webp" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
       </div>
     </div>
   </footer>`;
