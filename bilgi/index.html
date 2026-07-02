@@ -110,6 +110,19 @@
             font-size: 12px !important;
         }
 
+        .fine-print h3 {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            margin-top: 6px !important;
+            margin-bottom: 2px !important;
+        }
+
+        .fine-print ul li {
+            font-size: 12px !important;
+            line-height: 1.6 !important;
+            margin-bottom: 1px !important;
+        }
+
         .prose-content ul {
             list-style: none;
             padding: 0;
@@ -192,12 +205,24 @@
 <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col relative z-0">
     <!-- Warm Amber Glow Effects -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index: -1;">
-        <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
-        <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
-        <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-        <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-        <div class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
-        <div class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div
+            class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]">
+        </div>
+        <div
+            class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]">
+        </div>
+        <div
+            class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]">
+        </div>
+        <div
+            class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]">
+        </div>
+        <div
+            class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]">
+        </div>
+        <div
+            class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]">
+        </div>
     </div>
 
     <!-- Header -->
@@ -268,11 +293,6 @@
                         class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
                         <span class="material-symbols-outlined text-[20px]">assignment_return</span>
                         Kullanım Şartları
-                    </button>
-                    <button onclick="switchTab('satis-teslimat')" id="tab-satis-teslimat"
-                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 text-left">
-                        <span class="material-symbols-outlined text-[20px]">description</span>
-                        Satış ve Teslimat Bilgilendirmesi
                     </button>
                 </nav>
             </div>
@@ -372,40 +392,31 @@
                         <p>İşbu form, DereceLab platformunda tanıtılan ve bağımsız aracı kurum (Shopier) üzerinden
                             erişim hakkı temin edilen dijital eğitim hizmetlerinin (video dersler, dokümanlar, dijital
                             materyaller) kullanım ve erişim sürecine ilişkin bilgilendirmeyi kapsar.</p>
-                        <p><strong>İşleyiş:</strong> derecelab.com bir "Vitrin" ve "Kurslarım" sayfasıdır. Platform
-                            üzerinden doğrudan bir satış veya tahsilat gerçekleşmez. derecelab.com, Hizmet Sağlayıcı'ya
-                            ait Shopier mağazasındaki içeriklerin tanıtımını yapar.</p>
+                        <p><strong>İşleyiş:</strong> derecelab.com, Shopier platformunda satılan kurslar için bir vitrin
+                            görevi görmektedir. Platform
+                            üzerinden doğrudan bir satış veya tahsilat gerçekleşmez. derecelab.com,
+                            Shopier mağazasındaki içeriklerin tanıtımını yapar. Shopier mağazasından kurs satın alan
+                            kullanıcılar, ödeme işleminin ardından derecelab.com üzerinden kurslara erişim sağlar.</p>
                         <p><strong>Erişim:</strong> Hizmete erişim hakkı, Shopier üzerinden yapılan satın alım onayının
                             ardından, kullanıcının DereceLab üzerindeki hesabına dijital yetkilendirme tanımlanmasıyla
                             gerçekleşir.</p>
 
-                        <h2>2. HİZMET BEDELİ VE VERGİLENDİRME</h2>
-                        <p><strong>Ücretlendirme:</strong> Sunulan hizmetin erişim bedeli, Shopier ödeme sayfasında ilan
-                            edildiği gibidir.</p>
-                        <h2>3. İFA VE ERİŞİM KOŞULLARI</h2>
-                        <p><strong>Hizmet Sunumu:</strong> Sunulan hizmet "Dijital İçerik" niteliğinde olup, fiziksel
-                            bir product gönderimi (kargo) söz konusu değildir.</p>
-                        <p><strong>Aktivasyon:</strong> Kullanıcının Shopier ödemesinde kullandığı e-posta adresi ile
-                            DereceLab kayıt e-posta adresinin eşleşmesi durumunda erişim yetkisi aktif edilir.
-                            Kullanıcı, internet erişimi olan uyumlu cihazlar üzerinden panele 7/24 erişebilir.</p>
+                        <h2>2. GEÇERLİLİK</h2>
+                        <p>Hizmetin içeriği, erişim şartları ve bedeli, Shopier sayfasında belirtildiği gibidir.
+                            Shopier üzerinden kurs alımı yapan kişilere derecelab.com üzerinden ücretsiz sağlanır.
+                            Satın alımı Shopier üzerinden gerçekleştiren kullanıcılarımız kurslara sitemizden sınırsız
+                            erişim sağlayabilirler.</p>
 
-                        <h2>4. CAYMA HAKKI VE İSTİSNALARI</h2>
-                        <p>6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 15/ğ
-                            maddesi uyarınca; "Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında
-                            teslim edilen gayrimaddi mallara ilişkin sözleşmeler" cayma hakkının istisnası
-                            kapsamındadır.</p>
-                        <p>Kullanıcı, DereceLab paneli üzerinden ilgili hizmete (video izleme veya doküman görüntüleme)
-                            erişim sağladığı andan itibaren hizmet ifa edilmiş sayılır.</p>
-                        <p>Hizmetun dijital niteliği ve anında ifa edilmesi sebebiyle, bu aşamadan sonra cayma hakkı
-                            kullanılamaz ve bedel iadesi yapılamaz.</p>
-
-                        <h2>5. GEÇERLİLİK</h2>
-                        <p>Hizmetin içeriği, erişim şartları ve bedeli, Hizmet Sağlayıcı tarafından güncellenene kadar
-                            geçerlidir.</p>
-
-                        <h2>6. DESTEK VE UYUŞMAZLIK</h2>
+                        <h2>3. DESTEK VE UYUŞMAZLIK</h2>
                         <p>Kullanıcı, hizmete ilişkin her türlü teknik destek talebini
                             <strong>iletisim@derecelab.com</strong> adresine iletebilir.
+                        </p>
+                        <h2>4. SATILAN KURSLAR</h2>
+                        <p> Shopier sayfamızda satılan kurs linkleri: <br>
+                            https://www.shopier.com/DereceLab/47135332 <br>
+                            https://www.shopier.com/DereceLab/47159074 <br>
+                            https://www.shopier.com/DereceLab/47159083 <br>
+                            https://www.shopier.com/DereceLab/47159325
                         </p>
                         </p>
                     </div>
@@ -538,52 +549,6 @@
                 </div>
             </div>
 
-            <!-- Satış ve Teslimat Bilgilendirmesi -->
-            <div id="view-satis-teslimat" class="content-section">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
-                        <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
-                            <span class="material-symbols-outlined text-purple-600 text-[22px]">description</span>
-                        </div>
-                        <h1 class="text-2xl font-extrabold text-gray-900">Satış ve Teslimat Bilgilendirmesi</h1>
-                    </div>
-                    <div class="prose-content fine-print" id="content-satis-teslimat">
-                        <h2>1. PLATFORMUN İŞLEYİŞİ VE MODELİ</h2>
-                        <p>DereceLab (derecelab.com), dijital eğitim içeriklerinin ve video derslerin izlenebildiği bir
-                            eğitim yönetim platformudur. Bu web sitesi üzerinde doğrudan bir ödeme tahsilatı
-                            yapılmamaktadır. DereceLab, sunulan içeriklerin tanıtıldığı bir "Vitrin" ve kursları başka
-                            bir platformdan satın alan kullanıcıların eğitimlere eriştiği "Kurslarım" sayfası görevini
-                            görür. Satın
-                            alma işlemleri, güvenli ödeme altyapısı sağlayan aracı kurum Shopier üzerinden
-                            gerçekleştirilir ve bu kurumun DereceLab ile bir bağlantısı yoktur, aracı kurum olarak görev
-                            almaktadır. Derecelab.com'dan bağımsız çalışmakta olan Shopier kurumu üzerinden kurs satın
-                            alan müşteriler, satın aldıkları bu kurslara sitemizden kolaylıkla erişebilirler.</p>
-
-                        <h2>2. ÖDEME VE ERİŞİM SÜRECİ</h2>
-                        <p><strong>Ödeme:</strong> Kullanıcı, satın almak istediği içeriği inceler ve almak istediği
-                            içeriğin Shopier satış sayfasına yönlendirilir. Ödeme işlemi Shopier platformu üzerinden
-                            tamamlanır.</p>
-                        <p><strong>Erişim:</strong> Ödemesi onaylanan kullanıcıya, DereceLab paneli üzerinden ilgili
-                            içeriğe erişim yetkisi tanımlanır. Kullanıcının Shopier'de kullandığı e-posta adresi ile
-                            DereceLab'a kayıt olduğu e-posta adresinin aynı olması, aktivasyonun hızla tamamlanması için
-                            önerilir. Shopier ile DereceLab'in resmi bir bağlantısı yoktur. Hizmet sağlayıcı, kurslarını
-                            Shopier üzerinde satmaktadır ve DereceLab(derecelab.com) üzerinden sattığı ürüne erişim
-                            sunmaktadır.</p>
-                        <p><strong>Teslimat:</strong> Sunulan hizmet dijital içerik (video, PDF, doküman) olduğu için
-                            herhangi bir fiziksel kargo gönderimi yapılmamaktadır. Kullanıcı, başka bir platformdan
-                            satılmakta olan dijital içeriğe, DereceLab üzerinden kolayca erişebilir.</p>
-
-                        <h2>3. İPTAL, İADE VE CAYMA HAKKI</h2>
-                        <p>Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesinin (ğ) bendi uyarınca; "Elektronik ortamda
-                            anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin
-                            sözleşmelerde" cayma hakkı kullanılamaz. Eğitim içeriklerine erişim sağlandığı andan
-                            itibaren hizmet "ifa edilmiş" sayılır. Bu nedenle, satın alınan dijital eğitim paketlerinde
-                            iptal ve iade yapılması mümkün değildir.</p>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -629,9 +594,6 @@
                 <a href="#kullanim-sartlari" onclick="switchTab('kullanim-sartlari')"
                     class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım
                     Şartları</a>
-                <a href="#satis-teslimat" onclick="switchTab('satis-teslimat')"
-                    class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Satış ve Teslimat
-                    Bilgilendirmesi</a>
             </div>
 
             <!-- Right Section: Payment Logos -->
@@ -643,7 +605,7 @@
     </footer>
 
     <script>
-        const TABS = ['iletisim', 'sss', 'on-bilgilendirme', 'kvkk', 'kullanim-sartlari', 'satis-teslimat'];
+        const TABS = ['iletisim', 'sss', 'on-bilgilendirme', 'kvkk', 'kullanim-sartlari'];
 
         function switchTab(tab) {
             // Hide all sections
