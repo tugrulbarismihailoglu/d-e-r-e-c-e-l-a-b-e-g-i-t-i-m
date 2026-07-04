@@ -15,10 +15,13 @@ window.DereceLab.Catalog = {
         features: ['Stratejik Planlama Teknikleri', 'Odaklanma Egzersizleri', 'Zihinsel Dayanıklılık Pratikleri'],
         parts: [
             {
-                id: 'c1_p1', title: '1. Bölüm: Stratejik Planlamanın Temelleri', videoUrl: 'https://player.mediadelivery.net/play/688322/869331ad-a74d-4ade-9b3f-4a2416056e1b'
+                id: 'c1_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/ffaf8608-33e3-49d7-8a9e-d37d0bfb2e32?autoplay=false&loop=false&muted=true&preload=true&responsive=true'
             },
-            { id: 'c1_p2', title: '2. Bölüm: Derin Odaklanma Egzersizleri', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-            { id: 'c1_p3', title: '3. Bölüm: Zihinsel Dayanıklılık ve Pratikler', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+            { id: 'c1_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/1189514e-84a3-4232-b4f2-0f565b796651?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/081fb6b3-bbbc-4c86-a1df-ba449a049999?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p4', title: '4. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/03f6315c-8e87-44b9-998a-f9248f1350b7?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p5', title: '5. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/0c5e132e-6029-4b9c-935d-2740af2ca1aa?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p6', title: '6. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/e63c3f9a-3f15-4332-8ccb-c2e0ed34990b?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_2': {
