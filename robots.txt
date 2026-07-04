@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /panel/
+Disallow: /player/
+Disallow: /odeme/
+
+Sitemap: https://derecelab.com/sitemap.xml

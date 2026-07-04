@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Kayıt Ol — DereceLab</title>
+    <meta name="description" content="DereceLab (DereceLab) platformuna ücretsiz kayıt olun, derece öğrencilerinin çalışma, zaman yönetimi ve ders çalışma rotasyon metotlarını keşfetmeye başlayın.">
+    <meta name="keywords" content="derece lab kayıt ol, derecelab kayıt, derece lab, derecelab, derece lab üye ol">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;icon_names=account_circle,admin_panel_settings,arrow_back,arrow_forward,arrow_outward,arrow_upward,assignment_return,bolt,check,check_circle,close,dashboard,error,expand_more,help_outline,info,keyboard_arrow_down,keyboard_backspace,lock,lock_reset,login,logout,mail,manage_accounts,menu,menu_book,person,person_add,play_arrow,play_circle,psychology,quiz,rocket_launch,rotate_right,save,schedule,school,search,shield,shopping_bag,shopping_basket,shopping_cart,star,star_half,timer,trending_up,verified,verified_user,warning&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#ea580c",
+                        "on-background": "#111827",
+                        "background": "#ffffff",
+                        "surface": "#ffffff",
+                        "on-surface": "#111827",
+                        "surface-container-high": "#f3f4f6",
+                        "outline-variant": "#d1d5db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../firebase-config.js"></script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .academic-pattern {
+            background-image: radial-gradient(circle at 2px 2px, #f3f4f6 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0.75rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+        }
+
+        #cart-drawer {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            75% {
+                transform: translateX(6px);
+            }
+        }
+
+        .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Floating Math & Code Elements */
+        .math-float {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-weight: 800;
+            color: rgba(234, 88, 12, 0.40);
+            animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
+            animation-delay: var(--delay, 0s);
+            will-change: transform;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .geo-float {
+            position: absolute;
+            animation: gentleDrift var(--dur, 0.5s) ease-in-out infinite alternate;
+            animation-delay: var(--delay, 0s);
+            will-change: transform;
+        }
+
+        .geo-float svg {
+            stroke: rgba(234, 88, 12, 0.30);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        @keyframes gentleDrift {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+
+            100% {
+                transform: translate(var(--dx, 25px), var(--dy, -30px)) rotate(var(--rot, 5deg)) scale(var(--sc, 1.05));
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/Images/favicon.webp">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+</head>
+
+<body
+    class="bg-background text-on-surface font-body selection:bg-orange-100 selection:text-orange-900 min-h-screen flex flex-col">
+    <!-- BEGIN: ShoppingCartDrawer -->
+    <div class="fixed inset-0 bg-black/50 z-[60] opacity-0 pointer-events-none transition-opacity duration-300"
+        id="cart-overlay"></div>
+    <div class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white z-[70] translate-x-full shadow-2xl flex flex-col"
+        id="cart-drawer">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-orange-600">shopping_cart</span>
+                <h2 class="text-lg font-bold text-gray-900">Sepetim</h2>
+            </div>
+            <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" id="close-cart">
+                <span class="material-symbols-outlined text-gray-500">close</span>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+            <div class="flex flex-col items-center justify-center h-full text-center py-12" id="cart-empty-state">
+                <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-3xl text-gray-300">shopping_basket</span>
+                </div>
+                <p class="text-gray-500 font-medium">Sepetiniz şu an boş.</p>
+                <a class="mt-4 text-orange-600 font-bold text-sm hover:underline" href="../kurslar/uclu-paket/">Tüm
+                    Kursları Görüntüle</a>
+            </div>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between relative">
+            <div class="z-10">
+                <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
+                    href="../">
+                    <img alt="DereceLab Logo" class="w-auto mr-1 h-8" src="../Images/logo-beyaz.webp">
+                    <span class="hidden sm:inline">DereceLab</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 justify-center"
+                id="main-nav">
+                <a class="nav-link" href="../">Ana Sayfa</a>
+                <a class="nav-link" href="../#courses">Kurslar</a>
+                <a class="nav-link" href="../#about-us">Hakkımızda</a>
+                <div class="absolute bottom-0 h-0.5 bg-white rounded-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none opacity-0"
+                    id="nav-indicator"></div>
+            </nav>
+            <div class="flex items-center gap-2 sm:gap-4 z-10">
+                <button
+                    class="flex items-center justify-center p-2 rounded-lg text-white hover:bg-orange-700 transition-colors relative group"
+                    id="open-cart">
+                    <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                    <span
+                        class="absolute top-0 right-0 w-4 h-4 bg-white text-orange-600 text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm"
+                        id="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Main Registration Canvas -->
+    <main class="flex-grow flex items-center justify-center relative overflow-hidden pt-24 pb-16 bg-[#f3f4f6]">
+        <!-- Warm Amber Glow Effects -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+            <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+            <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+            <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+            <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+            <div class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+            <div class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        </div>
+        <div class="absolute inset-0 academic-pattern opacity-40 pointer-events-none z-[0]"></div>
+        <!-- Floating Math & Geometric Elements (Sparse) -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-[0] hidden lg:block">
+            <!-- Math Formulas -->
+            <span class="math-float"
+                style="top: 14%; left: 15%; --dx: -9px; --dy: -5px; --rot: 4deg; --delay: 2.2s; --dur: 3.0s; font-size: 22px;">∫f(x)dx</span>
+            <span class="math-float"
+                style="top: 62%; left: 11%; --dx: -4px; --dy: -15px; --rot: 7deg; --delay: 1.0s; --dur: 4.9s; font-size: 18px;">λ
+                = h/p</span>
+            <span class="math-float"
+                style="top: 18%; right: 10%; --dx: 8px; --dy: 5px; --rot: -6deg; --delay: 0.7s; --dur: 2.5s; font-size: 22px;">Δx·Δp
+                ≥ ℏ/2</span>
+            <span class="math-float"
+                style="top: 74%; right: 5%; --dx: 1px; --dy: 13px; --rot: -3deg; --delay: 1.3s; --dur: 4.2s; font-size: 21px;">τ=r×F</span>
+
+            <!-- Geometric Wireframe Shapes -->
+            <div class="geo-float"
+                style="top: 43%; left: 12%; --dx: -16px; --dy: 7px; --rot: 6deg; --sc: 1.1; --delay: 2.0s; --dur: 5.7s;">
+                <svg width="60" height="60" viewBox="0 0 70 70">
+                    <path
+                        d="M15 20 L50 10 L60 40 L25 50 Z M15 20 L15 48 L25 50 M50 10 L50 38 L60 40 M15 48 L50 38 M25 50 L60 40" />
+                </svg>
+            </div>
+            <div class="geo-float"
+                style="top: 48%; right: 17%; --dx: 6px; --dy: -3px; --rot: 14deg; --sc: 1.08; --delay: 2.4s; --dur: 5.6s;">
+                <svg width="60" height="65" viewBox="0 0 60 65">
+                    <path d="M20 5 L40 5 L52 20 L40 35 L20 35 L8 20 Z" />
+                    <path d="M20 30 L20 55 M40 30 L40 55 M8 20 L8 45 M52 20 L52 45" stroke-dasharray="2,2" />
+                    <path d="M20 55 L40 55 L52 45 L40 30 M8 45 L20 55" />
+                </svg>
+            </div>
+        </div>
+        <div class="w-full max-w-md px-6 z-10">
+            <div class="bg-white p-8 md:p-12 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.03)] border border-gray-100">
+                <div class="mb-10 text-center">
+                    <h1 class="font-headline font-extrabold text-3xl tracking-tight text-gray-900 mb-3">Kayıt Ol</h1>
+                </div>
+
+                <!-- Error/Success Messages -->
+                <div id="auth-message" class="hidden mb-6 p-4 rounded-xl text-sm font-medium flex items-center gap-2">
+                </div>
+
+                <form class="space-y-5" id="register-form">
+                    <div class="space-y-1.5">
+                        <label
+                            class="block font-label text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-1"
+                            for="full_name">KULLANICI ADI</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">person</span>
+                            <input
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 focus:bg-white transition-all outline-none font-body text-sm"
+                                id="full_name" placeholder="Kullanıcı Adı" type="text" required>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label
+                            class="block font-label text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-1"
+                            for="email">E-POSTA ADRESİ</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">mail</span>
+                            <input
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 focus:bg-white transition-all outline-none font-body text-sm"
+                                id="email" placeholder="ornek@derecelab.com" type="email" required>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label
+                            class="block font-label text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-1"
+                            for="password">ŞİFRE</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">lock</span>
+                            <input
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 focus:bg-white transition-all outline-none font-body text-sm"
+                                id="password" placeholder="••••••••" type="password" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label
+                            class="block font-label text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-1"
+                            for="password_confirm">ŞİFRE TEKRAR</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">lock_reset</span>
+                            <input
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 focus:bg-white transition-all outline-none font-body text-sm"
+                                id="password_confirm" placeholder="••••••••" type="password" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 px-1 py-1">
+                        <div class="flex items-center h-5">
+                            <input id="terms-checkbox" type="checkbox"
+                                class="w-4 h-4 text-orange-600 bg-gray-50 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer">
+                        </div>
+                        <label for="terms-checkbox"
+                            class="text-xs text-gray-500 leading-snug cursor-pointer select-none">
+                            <button type="button" onclick="openLegalModal('kullanim-sartlari')"
+                                class="text-orange-600 font-bold hover:underline">Kullanım Şartları</button> ve
+                            <button type="button" onclick="openLegalModal('kvkk')"
+                                class="text-orange-600 font-bold hover:underline">KVKK Aydınlatma Metni</button>'ni
+                            okudum,
+                            kabul ediyorum.
+                        </label>
+                    </div>
+                    <button
+                        class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-headline font-bold py-4 rounded-xl shadow-lg shadow-orange-100 hover:from-orange-600 hover:to-orange-700 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 mt-2 flex items-center justify-center gap-2"
+                        type="submit" id="submit-btn">
+                        <span id="btn-text">Kayıt Ol</span>
+                        <div id="btn-spinner" class="spinner hidden"></div>
+                    </button>
+                </form>
+
+                <!-- Legal Modal -->
+                <div id="legal-modal"
+                    class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+                    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLegalModal()"></div>
+                    <div class="relative bg-white w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300"
+                        id="legal-modal-content">
+                        <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                            <h3 class="text-lg font-extrabold text-gray-900" id="legal-modal-title">Hukuki Metin</h3>
+                            <button onclick="closeLegalModal()"
+                                class="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                                <span class="material-symbols-outlined text-gray-500">close</span>
+                            </button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-8 prose prose-orange max-w-none text-sm text-gray-600 leading-relaxed custom-scrollbar"
+                            id="legal-modal-body">
+                            <!-- Content will be injected here -->
+                        </div>
+                        <div class="p-4 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+                            <button onclick="closeLegalModal()"
+                                class="px-6 py-2 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors">Kapat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .custom-scrollbar::-webkit-scrollbar {
+                        width: 6px;
+                    }
+
+                    .custom-scrollbar::-webkit-scrollbar-track {
+                        background: #f1f1f1;
+                        border-radius: 10px;
+                    }
+
+                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: #ea580c;
+                        border-radius: 10px;
+                    }
+
+                    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                        background: #c2410c;
+                    }
+                </style>
+
+                <div id="legal-content-store" class="hidden">
+                    <div id="text-kvkk">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">KVKK Aydınlatma Metni</h2>
+                        <div class="space-y-4">
+                            <p><strong>DERECELAB KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</strong></p>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">1. VERİ SORUMLUSU</h3>
+                                <p>6698 sayılı Kişisel Verileri Korunması Kanunu (“KVKK”) uyarınca, kişisel verileriniz;
+                                    veri sorumlusu sıfatıyla DereceLab (“Platform” veya “Hizmet Sağlayıcı”) tarafından
+                                    işlenebilecektir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">2. KİŞİSEL VERİLERİN HANGİ AMAÇLA İŞLENECEĞİ
+                                </h3>
+                                <p>Toplanan kişisel verileriniz (İsim, e-posta adresi, IP bilgisi vb.), aşağıdaki
+                                    amaçlarla işlenmektedir:</p>
+                                <ul class="list-disc pl-5 mt-2 space-y-1">
+                                    <li>Platform üzerinde kullanıcı kaydının oluşturulması ve üyelik yönetimi,</li>
+                                    <li>Satın alınan dijital içeriklere erişim yetkisinin tanımlanması,</li>
+                                    <li>Teknik destek süreçlerinin yürütülmesi,</li>
+                                    <li>Yasal yükümlülüklerin (vergi mevzuatı vb.) yerine getirilmesi.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">3. KİŞİSEL VERİLERİN AKTARIMI</h3>
+                                <p>Kişisel verileriniz, üçüncü kişilere pazarlama amacıyla aktarılmaz. Verileriniz
+                                    yalnızca yasal bir zorunluluk olduğunda ilgili kamu kurumlarıyla veya ödeme
+                                    sürecinin tamamlanması adına aracı ödeme kuruluşu (Shopier) ve teknik altyapı
+                                    sağlayıcıları ile sınırlı olarak paylaşılabilir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">4. VERİ TOPLAMA YÖNTEMİ VE HUKUKİ SEBEBİ</h3>
+                                <p>Verileriniz, platforma üye olduğunuzda veya hizmet satın aldığınızda tamamen dijital
+                                    ortamda toplanmaktadır. Bu faaliyet, bir sözleşmenin kurulması veya ifası ile veri
+                                    sorumlusunun hukuki yükümlülüklerini yerine getirebilmesi hukuki sebeplerine
+                                    dayanmaktadır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">5. VERİ SAHİBİNİN HAKLARI (KVKK Madde 11)</h3>
+                                <p>Kanun uyarınca her kullanıcı, veri sorumlusuna başvurarak kendisiyle ilgili;
+                                    verilerinin işlenip işlenmediğini öğrenme, düzeltilmesini isteme veya silinmesini
+                                    talep etme haklarına sahiptir.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="text-kullanim-sartlari">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Kullanım Şartları</h2>
+                        <div class="space-y-4">
+                            <p><strong>DERECELAB KULLANIM ŞARTLARI VE ÜYELİK SÖZLEŞMESİ</strong></p>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">1. TARAFLAR VE KABUL</h3>
+                                <p>İşbu Kullanım Şartları, derecelab.com ("Platform") üzerinden sunulan dijital
+                                    içeriklere erişim sağlayan kullanıcılar ("Kullanıcı") ile platformun işletmecisi
+                                    olan Hizmet Sağlayıcı arasındadır. Platforma üye olan veya içerik satın alan her
+                                    kullanıcı, bu şartları okumuş ve kabul etmiş sayılır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">2. HİZMETİN KAPSAMI</h3>
+                                <p>DereceLab, kullanıcılara video eğitimler, dijital dökümanlar ve sınav hazırlık
+                                    materyalleri sunan bir dijital platformdur. Sunulan hizmetler "olduğu gibi"
+                                    sunulmakta olup, Hizmet Sağlayıcı içerikleri dilediği zaman güncelleme, değiştirme
+                                    veya yayından kaldırma hakkını saklı tutar.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">3. ÜYELİK VE HESAP GÜVENLİĞİ</h3>
+                                <p>Kullanıcı, kayıt esnasında verdiği bilgilerin doğruluğundan sorumludur.</p>
+                                <ul class="list-disc pl-5 mt-2 space-y-1">
+                                    <li><strong>Hesap Paylaşımı Yasaktır:</strong> Üyelik hesabı kişiye özeldir. Bir
+                                        hesabın birden fazla kişi tarafından kullanılması, şifre paylaşımı veya hesap
+                                        satışı tespiti halinde; üyelik, iade yapılmaksızın kalıcı olarak kapatılır.</li>
+                                    <li>Hesabın güvenliğinden ve şifre gizliliğinden tamamen kullanıcı sorumludur.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">4. FİKRİ MÜLKİYET VE TELİF HAKLARI</h3>
+                                <p>Platformda yer alan tüm videolar, görseller, metinler ve yazılımlar Hizmet
+                                    Sağlayıcı'ya aittir ve telif hakları yasalarıyla korunmaktadır. İçeriklerin izinsiz
+                                    olarak indirilmesi, ekran kaydı alınması, kopyalanması, çoğaltılması veya herhangi
+                                    bir platformda paylaşılması kesinlikle yasaktır.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">5. ÖDEME VE ERİŞİM YETKİSİ</h3>
+                                <p>Satın alma işlemleri, güvenli ödeme altyapısı sunan Shopier üzerinden
+                                    tamamlanmaktadır. DereceLab platformu bir e-ticaret sitesi olmayıp, doğrudan satış
+                                    işlemi gerçekleştirmemektedir; yalnızca Shopier üzerinden başarılı bir şekilde ödeme
+                                    yapmış olan kullanıcılara "Erişim Hakkı" tanımlayan bir öğrenme yönetim sistemidir.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">6. CAYMA HAKKI VE İADE KOŞULLARI</h3>
+                                <p>Satın alınan içerik dijital bir hizmet olduğu ve anında erişime açıldığı için
+                                    Mesafeli Sözleşmeler Yönetmeliği’nin 15/ğ maddesi uyarınca satın alma sonrası iade
+                                    yapılması mümkün değildir.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">7. SORUMLULUK SINIRLANDIRILMASI</h3>
+                                <p>DereceLab bir eğitim destek platformudur. Sunulan içeriklerin sınav başarısı veya
+                                    kesin bir sonuç garanti etmesi hukuken beklenemez.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-1">8. DEĞİŞİKLİKLER VE YETKİLİ MAHKEME</h3>
+                                <p>Hizmet Sağlayıcı, bu şartları dilediği zaman güncelleme hakkını saklı tutar. İşbu
+                                    sözleşmeden doğan uyuşmazlıklarda Hizmet Sağlayıcı’nın yerleşim yeri mahkemeleri
+                                    yetkilidir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-gray-100 text-center">
+                    <p class="text-sm text-gray-500 font-body">Zaten hesabın var mı? <a
+                            class="font-bold text-orange-600 hover:text-orange-700 transition-colors"
+                            href="../giris/">Giriş Yap</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+      <!-- Footer -->
+    <!-- Footer -->
+  <footer class="w-full px-8 border-t border-gray-100 bg-white py-12">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+      <!-- Left Section: Logo & Social -->
+
+      <div class="flex flex-col items-center gap-2 text-center">
+
+        <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
+
+          onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+
+          <div class="flex items-center justify-center gap-0.5">
+
+            <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="../Images/logo-siyah.webp">
+
+            <span>DereceLab</span>
+
+          </div>
+
+        </div>
+
+        <span class="text-xs text-gray-500 font-medium mt-1">iletisim@derecelab.com</span>
+
+      </div>
+      <!-- Center Section: Legal Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <a href="../bilgi/#iletisim"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
+        <a href="../bilgi/#sss"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+        <a href="../bilgi/#on-bilgilendirme"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
+        <a href="../bilgi/#kvkk" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK
+          Aydınlatma Metni</a>
+        <a href="../bilgi/#kullanim-sartlari"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
+      </div>
+      <!-- Right Section: Payment Logos -->
+      <div class="flex flex-col items-center gap-1">
+        <img src="../Images/visamasttroy.webp" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
+        <img src="../Images/shopier.webp" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
+      </div>
+    </div>
+  </footer>
+
+    <!-- Auth JS -->
+    <script src="../auth.js?v=1777565555"></script>
+    <script src="../cart.js?v=1777567479"></script>
+
+    <script>
+        // Header Navigation Animation
+        const navIndicator = document.getElementById('nav-indicator');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const navContainer = document.getElementById('main-nav');
+
+        const updateIndicator = (element) => {
+            if (!element) {
+                navIndicator.style.opacity = '0';
+                return;
+            }
+            const rect = element.getBoundingClientRect();
+            const parentRect = navContainer.getBoundingClientRect();
+            const padding = 12;
+
+            navIndicator.style.width = `${rect.width - (padding * 2)}px`;
+            navIndicator.style.left = `${rect.left - parentRect.left + padding}px`;
+            navIndicator.style.opacity = '1';
+        };
+
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => updateIndicator(link));
+            link.addEventListener('mouseleave', () => {
+                const activeLink = document.querySelector('.nav-link.active');
+                updateIndicator(activeLink);
+            });
+        });
+
+        // Cart Drawer Logic
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const openCartBtn = document.getElementById('open-cart');
+        const closeCartBtn = document.getElementById('close-cart');
+
+        const toggleCart = (open) => {
+            if (open) {
+                cartDrawer.classList.remove('translate-x-full');
+                cartOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                cartDrawer.classList.add('translate-x-full');
+                cartOverlay.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }
+        };
+
+        openCartBtn.addEventListener('click', () => toggleCart(true));
+        closeCartBtn.addEventListener('click', () => toggleCart(false));
+        cartOverlay.addEventListener('click', () => toggleCart(false));
+
+        window.addEventListener('load', () => {
+            const activeLink = document.querySelector('.nav-link.active');
+            if (activeLink) updateIndicator(activeLink);
+        });
+
+        // =====================================================
+        // Firebase Registration Logic
+        // =====================================================
+        const registerForm = document.getElementById('register-form');
+        const termsCheckbox = document.getElementById('terms-checkbox');
+        const authMessage = document.getElementById('auth-message');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+
+        // Firebase hata mesajlarını Türkçeye çevir
+        function getErrorMessage(code) {
+            const messages = {
+                'auth/email-already-in-use': 'Bu e-posta adresi zaten kullanımda.',
+                'auth/invalid-email': 'Geçersiz e-posta adresi.',
+                'auth/weak-password': 'Şifre en az 6 karakter olmalıdır.',
+                'auth/operation-not-allowed': 'Kayıt işlemi şu anda devre dışı.',
+                'auth/network-request-failed': 'Ağ bağlantısı hatası. İnternet bağlantınızı kontrol edin.',
+                'auth/too-many-requests': 'Çok fazla deneme yaptınız. Lütfen biraz bekleyin.',
+            };
+            return messages[code] || 'Bir hata oluştu. Lütfen tekrar deneyin.';
+        }
+
+        function showMessage(text, isError = true) {
+            authMessage.classList.remove('hidden', 'bg-red-50', 'text-red-600', 'border-red-200', 'bg-green-50', 'text-green-600', 'border-green-200');
+            if (isError) {
+                authMessage.classList.add('bg-red-50', 'text-red-600', 'border', 'border-red-200');
+                authMessage.innerHTML = `<span class="material-symbols-outlined text-lg">error</span>${text}`;
+                authMessage.classList.add('error-shake');
+                setTimeout(() => authMessage.classList.remove('error-shake'), 400);
+            } else {
+                authMessage.classList.add('bg-green-50', 'text-green-600', 'border', 'border-green-200');
+                authMessage.innerHTML = `<span class="material-symbols-outlined text-lg">check_circle</span>${text}`;
+            }
+        }
+
+        function setLoading(loading) {
+            submitBtn.disabled = loading;
+            if (loading) {
+                btnText.textContent = 'Kayıt yapılıyor...';
+                btnSpinner.classList.remove('hidden');
+                submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            } else {
+                btnText.textContent = 'Kayıt Ol';
+                btnSpinner.classList.add('hidden');
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+            }
+        }
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById('full_name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirm').value;
+
+            // Validasyonlar
+            if (!fullName) {
+                showMessage('Lütfen kullanıcı adınızı girin.');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                showMessage('Lütfen Kullanım Şartları ve KVKK Aydınlatma Metni\'ni onaylayın.');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                showMessage('Şifreler eşleşmiyor.');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('Şifre en az 6 karakter olmalıdır.');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                // Firebase Auth — Kullanıcı oluştur
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // DisplayName ayarla
+                await user.updateProfile({ displayName: fullName });
+
+                // Firestore'da kullanıcı profili oluştur
+                await db.collection('users').doc(user.uid).set({
+                    displayName: fullName,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    purchasedCourses: [],
+                    cart: []
+                });
+
+                showMessage('Hesabınız başarıyla oluşturuldu! Yönlendiriliyorsunuz...', false);
+
+                // Yönlendirme mantığı
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect');
+
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        window.location.href = '../panel/';
+                    }
+                }, 1500);
+
+            } catch (error) {
+                console.error('Kayıt hatası:', error);
+                showMessage(getErrorMessage(error.code));
+                setLoading(false);
+            }
+        });
+
+        // Preserve redirect in link
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            if (redirect) {
+                const loginLink = document.querySelector('a[href="../giris/"]');
+                if (loginLink) loginLink.href += '?redirect=' + encodeURIComponent(redirect);
+            }
+        });
+
+        // Legal Modal Logic
+        const legalModal = document.getElementById('legal-modal');
+        const legalModalContent = document.getElementById('legal-modal-content');
+        const legalModalTitle = document.getElementById('legal-modal-title');
+        const legalModalBody = document.getElementById('legal-modal-body');
+
+        window.openLegalModal = function (type) {
+            const content = document.getElementById(`text-${type}`);
+            if (!content) return;
+
+            legalModalTitle.textContent = type === 'kvkk' ? 'KVKK Aydınlatma Metni' : 'Kullanım Şartları';
+            legalModalBody.innerHTML = content.innerHTML;
+
+            legalModal.classList.remove('opacity-0', 'pointer-events-none');
+            legalModalContent.classList.remove('scale-95');
+            legalModalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.closeLegalModal = function () {
+            legalModal.classList.add('opacity-0', 'pointer-events-none');
+            legalModalContent.classList.remove('scale-100');
+            legalModalContent.classList.add('scale-95');
+            document.body.style.overflow = '';
+        }
+
+        // Close on ESC key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !legalModal.classList.contains('opacity-0')) {
+                closeLegalModal();
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>

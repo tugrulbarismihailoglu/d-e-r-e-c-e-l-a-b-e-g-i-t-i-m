@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kurslarım — DereceLab</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;icon_names=account_circle,admin_panel_settings,arrow_back,arrow_forward,arrow_outward,arrow_upward,assignment_return,bolt,check,check_circle,close,dashboard,error,expand_more,help_outline,info,keyboard_arrow_down,keyboard_backspace,lock,lock_reset,login,logout,mail,manage_accounts,menu,menu_book,person,person_add,play_arrow,play_circle,psychology,quiz,rocket_launch,rotate_right,save,schedule,school,search,shield,shopping_bag,shopping_basket,shopping_cart,star,star_half,timer,trending_up,verified,verified_user,warning&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#ea580c",
+                        "on-background": "#111827",
+                        "background": "#f3f4f6",
+                        "surface": "#ffffff",
+                        "on-surface": "#111827",
+                        "outline": "#e5e7eb",
+                        "secondary": "#000000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../firebase-config.js"></script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .nav-item.active {
+            background-color: #fff7ed;
+            color: #ea580c;
+            border-right: 3px solid #ea580c;
+        }
+
+        .nav-item {
+            border-right: 3px solid transparent;
+        }
+
+        .course-card {
+            transition: all 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="../catalog.js"></script>
+    <link rel="icon" type="image/png" href="/Images/favicon.webp">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+</head>
+
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-orange-100 relative z-0">
+    <!-- Warm Amber Glow Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index: -1;">
+        <div class="absolute top-[2%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[2%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.04]"></div>
+        <div class="absolute top-[50%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[50%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] left-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+        <div class="absolute top-[80%] right-[-15%] w-[650px] h-[650px] bg-orange-500 rounded-full blur-[140px] opacity-[0.05]"></div>
+    </div>
+
+    <!-- Header -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-orange-600 border-b border-orange-700 shadow-sm transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-6 z-10">
+                <a class="text-xl font-extrabold tracking-tight text-white hover:opacity-80 transition-opacity flex items-center gap-0.5"
+                    href="../">
+                    <img alt="DereceLab Logo" class="w-auto h-8" src="../Images/logo-beyaz.webp">
+                </a>
+                <span class="text-orange-400">|</span>
+                <h2 class="text-[11px] sm:text-sm font-semibold text-white">Kullanıcı Paneli</h2>
+            </div>
+            <div class="flex items-center gap-4 z-10">
+                <a href="../"
+                    class="text-[11px] sm:text-sm font-semibold text-white/80 hover:text-white transition-colors">Ana
+                    Sayfaya Dön</a>
+                <button onclick="DereceLab.Auth.signOut()"
+                    class="text-sm font-semibold text-white/80 hover:text-white transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[18px]">logout</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth & Cart JS -->
+    <script src="../auth.js?v=1777565555"></script>
+    <script src="../cart.js?v=1777567479"></script>
+
+    <!-- Main Dashboard Layout -->
+    <main class="flex-grow pt-24 pb-16 px-6 max-w-[1600px] mx-auto w-full flex flex-col md:flex-row gap-8">
+
+        <!-- Sidebar -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden sticky top-24">
+                <div class="p-6 border-b border-gray-100 flex flex-col">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate w-full" id="sidebar-name">Yükleniyor...
+                    </h3>
+                    <p class="text-sm text-gray-500 truncate w-full" id="sidebar-email">Lütfen bekleyin...</p>
+                </div>
+                <nav class="p-2 flex flex-col gap-1">
+                    <button onclick="switchTab('courses')" id="tab-courses"
+                        class="nav-item active flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors text-left">
+                        <span class="material-symbols-outlined text-[20px]">play_circle</span>
+                        Kurslarım
+                    </button>
+                    <button onclick="switchTab('profile')" id="tab-profile"
+                        class="nav-item flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors text-left">
+                        <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+                        Profil Ayarları
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="flex-1 min-w-0">
+
+            <!-- Courses View -->
+            <div id="view-courses" class="space-y-10">
+                <!-- My Courses Section -->
+                <section>
+                    <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+                        <h1 class="text-2xl font-extrabold text-gray-900 font-headline">Kurslarım</h1>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="courses-loading" class="flex flex-col items-center justify-center py-12">
+                        <div
+                            class="w-8 h-8 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mb-4">
+                        </div>
+                        <p class="text-gray-500 font-medium">Kurslarınız yükleniyor...</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="courses-empty"
+                        class="hidden flex flex-col items-center justify-center py-12 bg-white rounded-2xl border border-gray-200 border-dashed">
+                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-3xl text-gray-300">school</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Henüz bir kurs satın almadınız</h3>
+                        <a href="../#courses"
+                            class="text-orange-600 text-sm font-bold hover:text-orange-700 transition-colors">Kurslara
+                            Göz At</a>
+                    </div>
+
+                    <!-- My Courses Grid -->
+                    <div id="courses-grid"
+                        class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                        <!-- JS will populate this -->
+                    </div>
+                </section>
+
+                <!-- Explore Other Courses Section -->
+                <section id="explore-section" class="hidden pt-6">
+                    <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+                        <h2 class="text-xl font-extrabold text-gray-900 font-headline">Diğer Kurslarımıza Göz Atın:</h2>
+                    </div>
+                    <div id="explore-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                        <!-- JS will populate this -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Profile View -->
+            <div id="view-profile" class="hidden space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                    <h1 class="text-2xl font-extrabold text-gray-900 font-headline">Profil Ayarları</h1>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4">Kişisel Bilgiler</h2>
+                    <form id="profile-form" class="space-y-4">
+                        <div id="profile-message" class="hidden p-3 rounded-lg text-sm font-medium"></div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Kullanıcı
+                                Adı</label>
+                            <input type="text" id="profile-name"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-4 text-gray-900 focus:ring-2 focus:ring-orange-600/10 focus:border-orange-600 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">E-posta
+                                Adresi (Değiştirilemez)</label>
+                            <input type="email" id="profile-email" disabled
+                                class="w-full bg-gray-100 border border-gray-200 rounded-xl py-2.5 px-4 text-gray-500 cursor-not-allowed">
+                        </div>
+                        <button type="submit" id="profile-submit"
+                            class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-2.5 px-6 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all mt-2 active:scale-95 shadow-md hover:shadow-orange-100">Değişiklikleri
+                            Kaydet</button>
+                    </form>
+                </div>
+
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl border-l-4 border-l-red-500">
+                    <h2 class="text-lg font-bold text-gray-900 mb-1">Şifre Sıfırlama</h2>
+                    <p class="text-sm text-gray-500 mb-4">Şifrenizi değiştirmek için kayıtlı e-posta adresinize bir
+                        sıfırlama bağlantısı gönderebilirsiniz.</p>
+                    <button onclick="sendPasswordReset()" id="reset-pwd-btn"
+                        class="bg-white text-red-600 border border-red-200 font-bold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors text-sm">Şifre
+                        Sıfırlama E-postası Gönder</button>
+                    <div id="reset-msg" class="text-sm mt-2 font-medium hidden"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+      <!-- Footer -->
+    <!-- Footer -->
+  <footer class="w-full px-8 border-t border-gray-100 bg-white py-12">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+      <!-- Left Section: Logo & Social -->
+
+      <div class="flex flex-col items-center gap-2 text-center">
+
+        <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
+
+          onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+
+          <div class="flex items-center justify-center gap-0.5">
+
+            <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="../Images/logo-siyah.webp">
+
+            <span>DereceLab</span>
+
+          </div>
+
+        </div>
+
+        <span class="text-xs text-gray-500 font-medium mt-1">iletisim@derecelab.com</span>
+
+      </div>
+      <!-- Center Section: Legal Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <a href="../bilgi/#iletisim"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
+        <a href="../bilgi/#sss"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+        <a href="../bilgi/#on-bilgilendirme"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
+        <a href="../bilgi/#kvkk" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK
+          Aydınlatma Metni</a>
+        <a href="../bilgi/#kullanim-sartlari"
+          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
+      </div>
+      <!-- Right Section: Payment Logos -->
+      <div class="flex flex-col items-center gap-1">
+        <img src="../Images/visamasttroy.webp" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
+        <img src="../Images/shopier.webp" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
+      </div>
+    </div>
+  </footer>
+
+
+    <!-- END: ShoppingCartDrawer -->
+
+    <!-- Auth JS & Cart JS (for catalog) -->
+    <script src="../auth.js?v=1777565555"></script>
+    <script src="../cart.js?v=1777567479"></script>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tab) {
+            document.getElementById('view-courses').classList.add('hidden');
+            document.getElementById('view-profile').classList.add('hidden');
+            document.getElementById('tab-courses').classList.remove('active', 'bg-orange-50', 'text-orange-600');
+            document.getElementById('tab-profile').classList.remove('active', 'bg-orange-50', 'text-orange-600');
+
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // Update UI based on User
+        async function updateDashboard(user) {
+            if (!user) return;
+
+            try {
+                document.getElementById('sidebar-name').textContent = user.displayName || user.email.split('@')[0];
+                document.getElementById('sidebar-email').textContent = user.email || '';
+                document.getElementById('profile-name').value = user.displayName || '';
+                document.getElementById('profile-email').value = user.email || '';
+
+                // Firestore'dan satın alınanları VE tamamlananları çek (Dashboard'da 3 dakika önbellek kullanırız)
+                let purchasedIds = await DereceLab.Auth.getPurchasedCourses(user.uid, false, 3 * 60 * 1000);
+                let completedParts = await DereceLab.Auth.getCompletedParts(user.uid);
+
+                // Normalize IDs to handle old numeric IDs from previous iterations
+                purchasedIds = purchasedIds.map(id => {
+                    if (id === '1') return 'course_1';
+                    if (id === '2') return 'course_2';
+                    if (id === '3') return 'course_3';
+                    if (id === '4') return 'course_4';
+                    return id;
+                });
+
+                let ownedIds = [...purchasedIds];
+
+                // Üçlü pakete sahipse alt kursları otomatik ekle
+                if (ownedIds.includes('course_4')) {
+                    ownedIds = [...new Set([...ownedIds, 'course_1', 'course_2', 'course_3'])];
+                }
+
+                document.getElementById('courses-loading').classList.add('hidden');
+
+                const myCoursesGrid = document.getElementById('courses-grid');
+                const exploreGrid = document.getElementById('explore-grid');
+                const exploreSection = document.getElementById('explore-section');
+
+                if (ownedIds.length === 0) {
+                    document.getElementById('courses-empty').classList.remove('hidden');
+                } else {
+                    myCoursesGrid.classList.remove('hidden');
+                    myCoursesGrid.innerHTML = '';
+
+                    ownedIds.forEach(id => {
+                        const course = DereceLab.Catalog[id];
+                        if (!course || id === 'course_4') return;
+
+                        let totalParts = course.parts ? course.parts.length : 0;
+                        let completedCount = course.parts ? course.parts.filter(p => completedParts.includes(p.id)).length : 0;
+                        let percentage = totalParts > 0 ? Math.round((completedCount / totalParts) * 100) : 0;
+
+                        const card = document.createElement('div');
+                        card.className = 'course-card bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col shadow-sm transition-all duration-300 hover:shadow-md cursor-pointer relative z-10';
+                        card.onclick = () => window.location.href = `../player/?course=${course.id}`;
+                        card.innerHTML = `
+                        <a href="../player/?course=${course.id}" class="aspect-video relative overflow-hidden bg-gray-100 block group">
+                            <img src="${course.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${course.name}">
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                <div class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center text-orange-600 shadow-lg transform group-hover:scale-110 transition-all">
+                                    <span class="material-symbols-outlined text-3xl pl-[3px]">play_arrow</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <a href="../player/?course=${course.id}" class="block group/title">
+                                <h3 class="font-bold text-gray-900 text-lg mb-3 group-hover/title:text-orange-600 transition-colors">${course.name}</h3>
+                            </a>
+                            
+                            <!-- Progress Bar -->
+                            <div class="mt-1 mb-4">
+                                <div class="flex justify-between text-[11px] mb-1.5 font-bold">
+                                    <span class="text-orange-600">%${percentage} tamamlandı!</span>
+                                    <span class="text-gray-400">${completedCount}/${totalParts} Bölüm</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-orange-400 to-orange-600 h-1.5 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase tracking-wider text-green-600 bg-green-50 px-2 py-1 rounded">Ömür Boyu Erişim</span>
+                                <a href="../player/?course=${course.id}" class="text-sm font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
+                                    İzle <span class="material-symbols-outlined text-[16px]">play_circle</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                        myCoursesGrid.appendChild(card);
+                    });
+                }
+
+                // Bu Kurslara Da Göz Atın Bölümünü Doldur
+                exploreGrid.innerHTML = '';
+                let unownedCount = 0;
+                Object.keys(DereceLab.Catalog).forEach(id => {
+                    let showCard = false;
+                    if (!ownedIds.includes(id)) {
+                        showCard = true;
+                    } else if (id === 'course_4' && ownedIds.includes('course_4')) {
+                        showCard = false;
+                    } else if (id === 'course_4' && ownedIds.includes('course_1') && ownedIds.includes('course_2') && ownedIds.includes('course_3')) {
+                        showCard = false;
+                    }
+
+                    if (showCard) {
+                        unownedCount++;
+                        const course = DereceLab.Catalog[id];
+
+
+                        const card = document.createElement('div');
+                        card.className = (course.id === 'course_4'
+                            ? 'group bg-white rounded-xl overflow-hidden card-shadow border-2 border-orange-500 flex flex-col transition-all duration-300 hover:-translate-y-1'
+                            : 'group bg-white rounded-xl overflow-hidden card-shadow border border-gray-100 flex flex-col transition-all duration-300 hover:-translate-y-1') + ' cursor-pointer relative z-10';
+                        card.onclick = () => window.location.href = course.url;
+                        card.setAttribute('data-product-id', course.id);
+
+                        let badgeClass = 'text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-md border shadow-sm ';
+                        if (course.id === 'course_1') badgeClass += 'bg-orange-500 bg-opacity-10 text-orange-600 border-orange-500';
+                        else if (course.id === 'course_2') badgeClass += 'bg-blue-600 bg-opacity-10 text-blue-600 border-blue-600';
+                        else if (course.id === 'course_3') badgeClass += 'bg-purple-600 bg-opacity-10 text-purple-600 border-purple-600';
+                        else badgeClass += 'bg-green-500 bg-opacity-20 text-green-600 border-green-500';
+
+                        let subtitleHtml = '';
+
+                        let sloganHtml = '';
+                        if (course.id === 'course_1') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-orange-700 bg-gradient-to-r from-orange-50/80 via-orange-50/30 to-transparent border-l-2 border-l-orange-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-orange-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-orange-600 animate-pulse">trending_up</span>
+                                <span>Çalışma Verimini Artır ve Rakiplerinin Önüne Geç</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_2') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-blue-700 bg-gradient-to-r from-blue-50/80 via-blue-50/30 to-transparent border-l-2 border-l-blue-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-blue-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-blue-600 animate-pulse">schedule</span>
+                                <span>Zamanını Derece Öğrencisi Gibi Yönet ve Kontrolü Eline Al</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_3') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-purple-700 bg-gradient-to-r from-purple-50/80 via-purple-50/30 to-transparent border-l-2 border-l-purple-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-purple-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-purple-600 animate-pulse">psychology</span>
+                                <span>Doğru Çalışma Rotasyonu ile Bilgileri Zihnine Kazı</span>
+                            </div>
+                            `;
+                        } else if (course.id === 'course_4') {
+                            sloganHtml = `
+                            <div class="flex items-center gap-2 text-[12px] font-extrabold text-amber-700 bg-gradient-to-r from-amber-50/80 via-amber-50/30 to-transparent border-l-2 border-l-amber-500 rounded-r-lg px-2.5 py-1.5 mb-3 hover:from-amber-100/80 transition-all duration-300">
+                                <span class="material-symbols-outlined text-[14px] text-amber-600 animate-pulse">star</span>
+                                <span>Sınav yolculuğunda ihtiyacın olan tüm stratejiler tek bir pakette.</span>
+                            </div>
+                            `;
+                        }
+
+                        let originalPrice = course.id === 'course_3' ? '₺539,90' : '₺429,90';
+                        let discountPercentage = course.id === 'course_3' ? '%20 İNDİRİM' : (course.id === 'course_2' ? '%19 İNDİRİM' : '%26 İNDİRİM');
+
+                        let priceHtml = course.id === 'course_4'
+                            ? `<div class="flex flex-col">
+                            <div class="flex items-center gap-2 mb-1">
+                                <del class="text-sm text-gray-500">₺1399,70</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">%41 İNDİRİM</span>
+                            </div>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺829,90</span>
+                            </div>`
+                            : `<div class="flex flex-col">
+                            <div class="flex items-center gap-2 mb-1">
+                                <del class="text-sm text-gray-500">${originalPrice}</del>
+                                <span class="text-[12px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-tighter">${discountPercentage}</span>
+                            </div>
+                            <span class="text-xl font-extrabold text-orange-600 product-price">₺${course.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                           </div>`;
+
+                        let imageWrapperClass = course.id === 'course_4'
+                            ? 'block aspect-[16/9] relative overflow-hidden bg-gray-50 flex items-center justify-center'
+                            : 'block aspect-[16/9] relative overflow-hidden';
+
+                        let titleClass = 'font-bold text-gray-900 leading-tight mb-2 min-h-[40px] text-xl group-hover/title:text-orange-600 transition-colors';
+
+                        const btnText = course.id === 'course_4' ? 'Paketi Görüntüle' : 'Kursu Görüntüle';
+
+                        let floatingBadgeHtml = '';
+
+                        card.innerHTML = `
+                        <a href="${course.url}" class="${imageWrapperClass}">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${course.img}" alt="${course.name}">
+                            ${floatingBadgeHtml}
+                        </a>
+                        <div class="flex flex-col flex-1 p-5">
+                            <div class="flex gap-2 mb-2">
+                                <span class="${badgeClass}">${course.badge}</span>
+                            </div>
+                            <a class="block group/title" href="${course.url}">
+                                <h3 class="${titleClass}">
+                                    ${course.titleHtml}
+                                </h3>
+                            </a>
+                            ${subtitleHtml}
+
+                            <div class="mt-auto">
+                                ${sloganHtml}
+                                <div class="flex items-center justify-between mb-1">
+                                    ${priceHtml}
+                                </div>
+                                <a class="group/btn relative w-full py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-[length:200%_auto] hover:bg-right text-white rounded-xl text-[13px] font-extrabold flex items-center justify-center gap-2 transition-all duration-500 shadow-[0_0_15px_rgba(234,88,12,0.2)] hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:-translate-y-0.5 border border-orange-400/50 overflow-hidden" href="${course.url}">
+                                    <span class="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-40 blur transition-opacity duration-500"></span>
+                                    <span class="material-symbols-outlined text-[18px] relative z-10 opacity-90 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-transform duration-300">search</span>
+                                    <span class="relative z-10 drop-shadow-sm tracking-wide">${btnText}</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                        exploreGrid.appendChild(card);
+                    }
+                });
+
+                if (unownedCount > 0) {
+                    exploreSection.classList.remove('hidden');
+                }
+
+            } catch (e) {
+                console.error("Dashboard initialization error:", e);
+                document.getElementById('courses-loading').innerHTML = '<p class="text-red-500 font-bold">Veriler yüklenirken bir hata oluştu.</p>';
+            }
+        }
+
+        // Profil Güncelleme Formu
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('profile-submit');
+            const msg = document.getElementById('profile-message');
+            const newName = document.getElementById('profile-name').value.trim();
+
+            btn.textContent = 'Kaydediliyor...';
+            btn.disabled = true;
+
+            try {
+                const user = auth.currentUser;
+                await user.updateProfile({ displayName: newName });
+                try {
+                    await db.collection('users').doc(user.uid).set({ displayName: newName }, { merge: true });
+                } catch (fsErr) {
+                    console.warn('Firestore update failed (permissions?), but auth updated:', fsErr);
+                }
+
+                msg.className = 'p-3 rounded-lg text-sm font-medium bg-green-50 text-green-600 border border-green-200 mb-4 block';
+                msg.textContent = 'Profiliniz başarıyla güncellendi.';
+
+                document.getElementById('sidebar-name').textContent = newName;
+
+            } catch (error) {
+                msg.className = 'p-3 rounded-lg text-sm font-medium bg-red-50 text-red-600 border border-red-200 mb-4 block';
+                msg.textContent = 'Hata oluştu. Lütfen tekrar deneyin.';
+            } finally {
+                btn.textContent = 'Değişiklikleri Kaydet';
+                btn.disabled = false;
+            }
+        });
+
+        // Şifre Sıfırlama
+        async function sendPasswordReset() {
+            const btn = document.getElementById('reset-pwd-btn');
+            const msg = document.getElementById('reset-msg');
+            btn.disabled = true;
+            btn.textContent = 'Gönderiliyor...';
+
+            try {
+                const user = auth.currentUser;
+                await auth.sendPasswordResetEmail(user.email);
+                msg.className = 'text-sm mt-2 font-medium text-green-600 block';
+                msg.innerHTML = 'Şifre sıfırlama e-postası gönderildi. Lütfen e-posta kutunuzu kontrol edin.<br><strong class="block mt-1.5 font-black text-green-700 underline underline-offset-2">Lütfen spam klasörünüzü kontrol etmeyi unutmayın.</strong>';
+            } catch (error) {
+                msg.className = 'text-sm mt-2 font-medium text-red-600 block';
+                msg.textContent = 'Bir hata oluştu: ' + error.message;
+                console.error("Reset pwd error:", error);
+            } finally {
+                btn.textContent = 'Şifre Sıfırlama E-postası Gönder';
+                btn.disabled = false;
+            }
+        }
+
+        // Init: Auth durumunu kontrol edip dashboard'u başlat
+        async function initDashboard() {
+            auth.onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = '../giris/';
+                    return;
+                }
+                await updateDashboard(user);
+            });
+        }
+
+        // Start
+        document.addEventListener('DOMContentLoaded', () => {
+            // URL hash ile sekme yönlendirmesi (örn: panel/#profile)
+            const hash = window.location.hash;
+            if (hash === '#profile') {
+                switchTab('profile');
+            }
+            setTimeout(() => {
+                initDashboard();
+            }, 300);
+        });
+    </script>
+
+</body>
+
+</html>
