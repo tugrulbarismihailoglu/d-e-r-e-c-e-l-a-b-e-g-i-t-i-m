@@ -74,10 +74,11 @@ async function processShopier(formData, res) {
         .digest('hex');
 
     if (incomingHash !== expectedHash) {
-        console.warn('[Shopier] ⚠️ Hash uyuşmadı! (Belki test isteği)');
-    } else {
-        console.log('[Shopier] ✅ Hash doğrulama başarılı.');
+        console.warn('[Shopier] ⚠️ Hash uyuşmadı! İstek reddedildi.');
+        return res.status(200).send('success'); // Sahte isteği reddet, işlemi durdur
     }
+
+    console.log('[Shopier] ✅ Hash doğrulama başarılı.');
 
     let data;
     try {
