@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const footerTemplate = (depth) => {
-    const prefix = '../'.repeat(depth);
-    return `
+  const prefix = '../'.repeat(depth);
+  return `
   <!-- Footer -->
   <footer class="w-full px-8 border-t border-gray-100 bg-white py-12 mt-12">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
@@ -15,7 +15,7 @@ const footerTemplate = (depth) => {
             <span>DereceLab</span>
           </div>
         </div>
-        <span class="text-xs text-gray-500 font-medium mt-1">iletisim@derecelab.com</span>
+        <span class="text-xs text-gray-500 font-medium mt-1">derecelabcom@gmail.com</span>
       </div>
 
 
@@ -45,32 +45,32 @@ const footerTemplate = (depth) => {
 };
 
 const files = [
-    { path: 'giris/index.html', depth: 1 },
-    { path: 'kayit/index.html', depth: 1 },
-    { path: 'odeme/index.html', depth: 1 },
-    { path: 'kurslar/verimlilik-optimizasyonu/index.html', depth: 2 },
-    { path: 'kurslar/calisma-rotasyonlari/index.html', depth: 2 },
-    { path: 'kurslar/zaman-yonetimi/index.html', depth: 2 },
-    { path: 'kurslar/uclu-paket/index.html', depth: 2 }
+  { path: 'giris/index.html', depth: 1 },
+  { path: 'kayit/index.html', depth: 1 },
+  { path: 'odeme/index.html', depth: 1 },
+  { path: 'kurslar/verimlilik-optimizasyonu/index.html', depth: 2 },
+  { path: 'kurslar/calisma-rotasyonlari/index.html', depth: 2 },
+  { path: 'kurslar/zaman-yonetimi/index.html', depth: 2 },
+  { path: 'kurslar/uclu-paket/index.html', depth: 2 }
 ];
 
 const basePath = '/Users/tugrulbaris/Desktop/DereceLab';
 
 files.forEach(f => {
-    const fullPath = path.join(basePath, f.path);
-    if (!fs.existsSync(fullPath)) {
-        console.log(`Skipping missing file: ${f.path}`);
-        return;
-    }
-    let content = fs.readFileSync(fullPath, 'utf8');
-    
-    // Replace <footer>...</footer> block
-    const footerRegex = /<footer[\s\S]*?<\/footer>/;
-    if (footerRegex.test(content)) {
-        content = content.replace(footerRegex, footerTemplate(f.depth));
-        fs.writeFileSync(fullPath, content);
-        console.log(`Updated footer in: ${f.path}`);
-    } else {
-        console.log(`No footer found in: ${f.path}`);
-    }
+  const fullPath = path.join(basePath, f.path);
+  if (!fs.existsSync(fullPath)) {
+    console.log(`Skipping missing file: ${f.path}`);
+    return;
+  }
+  let content = fs.readFileSync(fullPath, 'utf8');
+
+  // Replace <footer>...</footer> block
+  const footerRegex = /<footer[\s\S]*?<\/footer>/;
+  if (footerRegex.test(content)) {
+    content = content.replace(footerRegex, footerTemplate(f.depth));
+    fs.writeFileSync(fullPath, content);
+    console.log(`Updated footer in: ${f.path}`);
+  } else {
+    console.log(`No footer found in: ${f.path}`);
+  }
 });

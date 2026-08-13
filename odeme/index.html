@@ -79,7 +79,8 @@
             class="bg-white rounded-[2rem] shadow-2xl shadow-orange-900/10 border border-gray-100 overflow-hidden flex flex-col md:flex-row mb-12">
 
             <!-- Left: User Info (Smaller %40) -->
-            <div class="w-full md:w-[40%] p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col justify-start">
+            <div
+                class="w-full md:w-[40%] p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col justify-start">
                 <div class="mb-8">
                     <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Ödeme Detayları</h1>
                 </div>
@@ -92,11 +93,14 @@
                             <span class="material-symbols-outlined text-xl">account_circle</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı E-posta</span>
-                            <span class="text-base font-bold text-gray-900 break-all" id="user-email-display">Yükleniyor...</span>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kayıtlı
+                                E-posta</span>
+                            <span class="text-base font-bold text-gray-900 break-all"
+                                id="user-email-display">Yükleniyor...</span>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center gap-3 text-orange-600 bg-orange-50 p-4 rounded-xl border border-orange-100">
+                    <div
+                        class="mt-4 flex items-center gap-3 text-orange-600 bg-orange-50 p-4 rounded-xl border border-orange-100">
                         <span class="material-symbols-outlined text-xl shrink-0">warning</span>
                         <p class="text-sm font-black leading-tight">
                             Ödemeyi yaparken girdiğiniz mailin hesabınızın maili ile uyuştuğundan emin olun.
@@ -135,7 +139,8 @@
                 <div class="border-t border-gray-200 pt-8 mt-auto">
                     <div class="flex justify-between items-center mb-8">
                         <span class="font-black text-gray-900 text-lg">Toplam</span>
-                        <span class="font-black text-orange-600 text-2xl sm:text-3xl tracking-tight" id="total">₺0,00</span>
+                        <span class="font-black text-orange-600 text-2xl sm:text-3xl tracking-tight"
+                            id="total">₺0,00</span>
                     </div>
 
                     <button id="submit-btn" onclick="goToShopier()"
@@ -151,7 +156,8 @@
                         <img src="../Images/pngwing.com.png" class="h-10 w-auto" alt="Güvenli Ödeme">
                         <div class="w-px h-8 bg-gray-200 hidden sm:block"></div>
                         <div class="flex flex-col items-start leading-tight select-none">
-                            <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ ÖDE</span>
+                            <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">GÜVENLİ
+                                ÖDE</span>
                             <span class="text-xs font-black text-gray-500 tracking-tighter">3D SECURE</span>
                         </div>
                     </div>
@@ -160,52 +166,26 @@
         </div>
     </main>
 
-  <!-- Footer -->
     <!-- Footer -->
     <!-- Footer -->
-  <footer class="w-full px-8 border-t border-gray-100 bg-white py-12">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-      <!-- Left Section: Logo & Social -->
-
-      <div class="flex flex-col items-center gap-2 text-center">
-
-        <div class="font-black text-2xl text-neutral-900 tracking-tighter cursor-pointer"
-
+    <footer class="w-full border-t border-gray-100 bg-white py-6">
+      <div class="max-w-7xl mx-auto px-8 flex flex-col items-center gap-4">
+        <div class="flex items-center gap-1.5 cursor-pointer"
           onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-
-          <div class="flex items-center justify-center gap-0.5">
-
-            <img alt="DereceLab Logo" class="w-10 h-10 object-contain mr-1" src="../Images/logo-siyah.webp">
-
-            <span>DereceLab</span>
-
-          </div>
-
+          <img alt="DereceLab Logo" class="w-8 h-8 object-contain" src="../Images/logo-siyah.webp">
+          <span class="font-black text-xl text-neutral-900 tracking-tighter">DereceLab</span>
         </div>
+        <span class="text-xs text-gray-400 font-medium">derecelabcom@gmail.com</span>
+        <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
+          <a href="../bilgi/#iletisim" class="text-xs text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
+          <a href="../bilgi/#sss" class="text-xs text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
+          <a href="../bilgi/#on-bilgilendirme" class="text-xs text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
+          <a href="../bilgi/#kvkk" class="text-xs text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK Aydınlatma Metni</a>
+          <a href="../bilgi/#kullanim-sartlari" class="text-xs text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
+        </div>
+      </div>
+    </footer>
 
-        <span class="text-xs text-gray-500 font-medium mt-1">iletisim@derecelab.com</span>
-
-      </div>
-      <!-- Center Section: Legal Links -->
-      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-        <a href="../bilgi/#iletisim"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanıcı Yardım Merkezi</a>
-        <a href="../bilgi/#sss"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Sık Sorulan Sorular</a>
-        <a href="../bilgi/#on-bilgilendirme"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Ön Bilgilendirme Formu</a>
-        <a href="../bilgi/#kvkk" class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">KVKK
-          Aydınlatma Metni</a>
-        <a href="../bilgi/#kullanim-sartlari"
-          class="text-sm text-gray-500 hover:text-orange-600 font-medium transition-colors">Kullanım Şartları</a>
-      </div>
-      <!-- Right Section: Payment Logos -->
-      <div class="flex flex-col items-center gap-1">
-        <img src="../Images/visamasttroy.webp" alt="Ödeme Yöntemleri" class="h-10 w-auto object-contain">
-        <img src="../Images/shopier.webp" alt="Shopier" class="h-6 w-auto object-contain opacity-90">
-      </div>
-    </div>
-  </footer>
 
     <!-- Auth & Cart JS -->
     <script src="../auth.js?v=1777565555"></script>
@@ -226,12 +206,12 @@
             if (items.length === 0) return;
             const firstCourseId = items[0].id;
             const shopierBase = SHOPIER_LINKS[firstCourseId] || 'https://www.shopier.com/DereceLab/47135332';
-            
+
             // Ödeme sayfasına yönlenirken önbelleği temizle ki geri döndüğünde yeni kursu anında çekebilsin
             if (window.DereceLab && window.DereceLab.Auth) {
                 window.DereceLab.Auth._clearCache();
             }
-            
+
             window.open(shopierBase, '_blank');
         }
 
@@ -260,7 +240,7 @@
             let total = 0;
             items.forEach(item => {
                 total += item.price;
-                
+
                 container.innerHTML += `
                 <div class="bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm hover:shadow-md transition-all">
                     <div class="flex-1 min-w-0">

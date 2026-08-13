@@ -31,7 +31,7 @@ pattern = re.compile(
     r'<span>DereceLab</span>\s*'
     r'</div>\s*'
     r'</div>\s*'
-    r'<span\s+class="text-xs\s+text-gray-500\s+font-medium\s+mt-2">iletisim@derecelab\.com</span>\s*'
+    r'<span\s+class="text-xs\s+text-gray-500\s+font-medium\s+mt-2">derecelabcom@gmail\.com</span>\s*'
     r'</div>',
     re.IGNORECASE
 )
@@ -60,7 +60,7 @@ for file_rel_path in files:
             f"{indent}      <span>DereceLab</span>\n"
             f"{indent}    </div>\n"
             f"{indent}  </div>\n"
-            f"{indent}  <span class=\"text-xs text-gray-500 font-medium mt-1\">iletisim@derecelab.com</span>\n"
+            f"{indent}  <span class=\"text-xs text-gray-500 font-medium mt-1\">derecelabcom@gmail.com</span>\n"
             f"{indent}</div>"
         )
         
