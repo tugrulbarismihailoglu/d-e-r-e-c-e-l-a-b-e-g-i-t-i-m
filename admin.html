@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Paneli — DereceLab</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;icon_names=account_circle,admin_panel_settings,arrow_back,arrow_forward,arrow_outward,arrow_upward,assignment_return,bolt,check,check_circle,close,dashboard,error,expand_more,help_outline,info,keyboard_arrow_down,keyboard_backspace,lock,lock_reset,login,logout,mail,manage_accounts,menu,menu_book,person,person_add,play_arrow,play_circle,psychology,quiz,rocket_launch,rotate_right,save,schedule,school,search,shield,shopping_bag,shopping_basket,shopping_cart,star,star_half,timer,trending_up,verified,verified_user,warning&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;icon_names=account_circle,admin_panel_settings,arrow_back,arrow_forward,arrow_outward,arrow_upward,assignment_return,bolt,check,check_circle,close,dashboard,error,expand_more,help_outline,info,keyboard_arrow_down,keyboard_backspace,lock,lock_reset,login,logout,mail,manage_accounts,menu,menu_book,person,person_add,play_arrow,play_circle,psychology,quiz,rocket_launch,rotate_right,save,schedule,school,search,shield,shopping_bag,shopping_basket,shopping_cart,star,star_half,timer,trending_up,verified,verified_user,warning&amp;display=swap"
+        rel="stylesheet">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="./firebase-config.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
         .spinner {
             border: 3px solid rgba(234, 88, 12, 0.2);
             border-top: 3px solid #ea580c;
@@ -25,11 +41,17 @@
             height: 20px;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
     <link rel="icon" type="image/png" href="/Images/favicon.webp">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
+
 <body class="bg-gray-100 min-h-screen">
 
     <!-- Erişim Engeli (Giriş yapılmamışsa veya admin değilse gösterilir) -->
@@ -37,7 +59,9 @@
         <span class="material-symbols-outlined text-6xl text-red-400 mb-4">lock</span>
         <h2 class="text-2xl font-bold text-gray-800 mb-2">Erişim Reddedildi</h2>
         <p class="text-gray-500 text-sm mb-6">Bu sayfaya erişim yetkiniz yok.</p>
-        <a href="./" class="px-6 py-2 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition-colors">Ana Sayfaya Dön</a>
+        <a href="./"
+            class="px-6 py-2 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition-colors">Ana
+            Sayfaya Dön</a>
     </div>
 
     <!-- Yükleniyor -->
@@ -60,8 +84,9 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <a href="dashboard.html" class="text-xs text-gray-400 hover:text-white transition-colors">← Panele Dön</a>
-                <button onclick="auth.signOut().then(() => location.href='./')" 
+                <a href="dashboard.html" class="text-xs text-gray-400 hover:text-white transition-colors">← Panele
+                    Dön</a>
+                <button onclick="auth.signOut().then(() => location.href='./')"
                     class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs font-bold transition-colors">
                     Çıkış
                 </button>
@@ -77,7 +102,8 @@
 
                 <div class="flex gap-3">
                     <div class="flex-1 relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
                         <input id="email-input" type="email" placeholder="ornek@gmail.com"
                             class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                             onkeydown="if(event.key==='Enter') searchUser()">
@@ -85,12 +111,15 @@
                     <button onclick="searchUser()" id="search-btn"
                         class="px-5 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors text-sm flex items-center gap-2">
                         <span id="search-btn-text">Ara</span>
-                        <div id="search-spinner" class="spinner hidden" style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;"></div>
+                        <div id="search-spinner" class="spinner hidden"
+                            style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;">
+                        </div>
                     </button>
                 </div>
 
                 <!-- Hata mesajı -->
-                <div id="search-error" class="hidden mt-3 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600 flex items-center gap-2">
+                <div id="search-error"
+                    class="hidden mt-3 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600 flex items-center gap-2">
                     <span class="material-symbols-outlined text-base">error</span>
                     <span id="search-error-text"></span>
                 </div>
@@ -123,9 +152,12 @@
                         class="w-full py-3.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-base">save</span>
                         <span id="save-btn-text">Değişiklikleri Kaydet</span>
-                        <div id="save-spinner" class="spinner hidden" style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;"></div>
+                        <div id="save-spinner" class="spinner hidden"
+                            style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;">
+                        </div>
                     </button>
-                    <p id="save-message" class="hidden text-center text-sm font-bold text-green-600 mt-3 flex items-center justify-center gap-1">
+                    <p id="save-message"
+                        class="hidden text-center text-sm font-bold text-green-600 mt-3 flex items-center justify-center gap-1">
                         <span class="material-symbols-outlined text-base">check_circle</span>
                         Kaydedildi! Kullanıcının kursları güncellendi.
                     </p>
@@ -148,7 +180,7 @@
         ];
 
         // Sadece bu e-postanın admin paneline erişimi var
-        const ADMIN_EMAIL = 'brsmusicz@gmail.com';
+        const ADMIN_EMAIL = 'tugrulbarism@gmail.com';
 
         let currentUserData = null; // Bulunan kullanıcının Firestore verisi
         let currentUserDocId = null; // Bulunan kullanıcının UID'si
@@ -233,7 +265,7 @@
             ALL_COURSES.forEach(course => {
                 const hasAccess = purchasedCourses.includes(course.id);
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-4 rounded-xl border ' + 
+                div.className = 'flex items-center justify-between p-4 rounded-xl border ' +
                     (hasAccess ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200');
 
                 div.innerHTML = `
@@ -265,7 +297,7 @@
             const container = checkbox.closest('div.flex');
             const icon = container.querySelector('.material-symbols-outlined');
             const wrapper = checkbox.closest('[class*="rounded-xl"]');
-            
+
             if (checkbox.checked) {
                 wrapper.className = 'flex items-center justify-between p-4 rounded-xl border bg-green-50 border-green-200';
                 icon.className = 'material-symbols-outlined text-xl text-green-500';
@@ -313,4 +345,5 @@
         }
     </script>
 </body>
+
 </html>
