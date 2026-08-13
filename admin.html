@@ -6,344 +6,534 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Paneli — DereceLab</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;icon_names=account_circle,admin_panel_settings,arrow_back,arrow_forward,arrow_outward,arrow_upward,assignment_return,bolt,check,check_circle,close,dashboard,error,expand_more,help_outline,info,keyboard_arrow_down,keyboard_backspace,lock,lock_reset,login,logout,mail,manage_accounts,menu,menu_book,person,person_add,play_arrow,play_circle,psychology,quiz,rocket_launch,rotate_right,save,schedule,school,search,shield,shopping_bag,shopping_basket,shopping_cart,star,star_half,timer,trending_up,verified,verified_user,warning&amp;display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&icon_names=account_circle,admin_panel_settings,arrow_back,check,check_circle,close,dashboard,error,lock,logout,mail,manage_accounts,person,person_add,play_circle,save,school,search,shield,shopping_bag,star,verified_user,warning,add,remove,refresh,filter_list,more_vert,edit,delete,visibility,groups,trending_up,payments&display=swap" rel="stylesheet">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="./firebase-config.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-        h1,
-        h2,
-        h3 {
-            font-family: 'Manrope', sans-serif;
-        }
+        .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-glow::before { content: ''; position: absolute; top: -20%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(234,88,12,0.12) 0%, transparent 70%); border-radius: 50%; }
+        .bg-glow::after { content: ''; position: absolute; bottom: -20%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(234,88,12,0.08) 0%, transparent 70%); border-radius: 50%; }
 
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
+        #app { position: relative; z-index: 1; display: none; flex-direction: column; min-height: 100vh; }
 
-        .spinner {
-            border: 3px solid rgba(234, 88, 12, 0.2);
-            border-top: 3px solid #ea580c;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 0.8s linear infinite;
-        }
+        header { background: rgba(15,15,20,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(234,88,12,0.2); padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .header-brand { display: flex; align-items: center; gap: 12px; }
+        .header-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #ea580c, #f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(234,88,12,0.4); }
+        .header-icon .material-symbols-outlined { color: white; font-size: 20px; }
+        .header-title { font-size: 16px; font-weight: 800; color: #f8fafc; }
+        .header-sub { font-size: 11px; color: #64748b; font-weight: 500; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .btn-ghost { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; font-family: 'Inter', sans-serif; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; border-color: rgba(255,255,255,0.15); }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        main { flex: 1; max-width: 1400px; margin: 0 auto; width: 100%; padding: 32px 24px; }
+        .page-header { margin-bottom: 32px; }
+        .page-title { font-size: 28px; font-weight: 900; color: #f8fafc; margin-bottom: 4px; }
+        .page-sub { font-size: 14px; color: #64748b; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; transition: all 0.3s; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent, linear-gradient(90deg, #ea580c, #f97316)); opacity: 0; transition: opacity 0.3s; }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .stat-icon .material-symbols-outlined { font-size: 24px; }
+        .stat-value { font-size: 28px; font-weight: 900; color: #f8fafc; line-height: 1; }
+        .stat-label { font-size: 12px; color: #64748b; font-weight: 500; margin-top: 4px; }
+
+        .table-container { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+        .table-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 16px; flex-wrap: wrap; }
+        .table-title { font-size: 16px; font-weight: 800; color: #f8fafc; }
+        .table-count { font-size: 12px; color: #64748b; font-weight: 500; margin-top: 2px; }
+
+        .search-wrapper { position: relative; flex: 1; min-width: 240px; max-width: 360px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 18px; }
+        .search-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 16px 10px 40px; font-size: 13px; color: #e2e8f0; outline: none; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .search-input::placeholder { color: #475569; }
+        .search-input:focus { border-color: rgba(234,88,12,0.5); background: rgba(234,88,12,0.05); }
+
+        .btn-refresh { display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(234,88,12,0.1); border: 1px solid rgba(234,88,12,0.3); border-radius: 12px; color: #f97316; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .btn-refresh:hover { background: rgba(234,88,12,0.2); }
+        .btn-refresh .material-symbols-outlined { font-size: 18px; }
+
+        .users-table { width: 100%; border-collapse: collapse; }
+        .users-table th { padding: 12px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .users-table td { padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; vertical-align: middle; }
+        .users-table tbody tr { cursor: pointer; transition: background 0.15s; }
+        .users-table tbody tr:hover { background: rgba(234,88,12,0.06); }
+        .users-table tbody tr:last-child td { border-bottom: none; }
+
+        .user-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #ea580c, #f97316); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; flex-shrink: 0; }
+        .user-name { font-weight: 600; color: #f1f5f9; font-size: 13px; }
+        .user-email { font-size: 12px; color: #64748b; margin-top: 1px; }
+
+        .course-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+        .badge-orange { background: rgba(234,88,12,0.15); color: #fb923c; border: 1px solid rgba(234,88,12,0.25); }
+        .badge-blue   { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+        .badge-purple { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+        .badge-green  { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-gray   { background: rgba(255,255,255,0.05); color: #64748b; border: 1px solid rgba(255,255,255,0.08); }
+
+        .btn-edit { display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: rgba(234,88,12,0.1); border: 1px solid rgba(234,88,12,0.25); border-radius: 8px; color: #f97316; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .btn-edit:hover { background: rgba(234,88,12,0.2); }
+        .btn-edit .material-symbols-outlined { font-size: 16px; }
+
+        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .empty-state { padding: 60px 24px; text-align: center; color: #475569; }
+        .empty-state .material-symbols-outlined { font-size: 48px; margin-bottom: 12px; display: block; }
+        .empty-state p { font-size: 14px; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; width: 100%; max-width: 520px; box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(234,88,12,0.1); transform: translateY(20px); transition: transform 0.25s; overflow: hidden; }
+        .modal-overlay.open .modal { transform: translateY(0); }
+        .modal-header { padding: 24px 28px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .modal-user { display: flex; align-items: center; gap: 14px; }
+        .modal-avatar { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #ea580c, #f97316); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: white; }
+        .modal-name { font-size: 16px; font-weight: 800; color: #f8fafc; }
+        .modal-email { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .btn-close { width: 34px; height: 34px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: #64748b; }
+        .btn-close:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+        .btn-close .material-symbols-outlined { font-size: 20px; }
+        .modal-body { padding: 24px 28px; }
+        .modal-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; margin-bottom: 14px; }
+
+        .course-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; margin-bottom: 8px; transition: all 0.2s; }
+        .course-row.has-access { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.2); }
+        .course-row-left { display: flex; align-items: center; gap: 12px; }
+        .course-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .course-row-name { font-size: 13px; font-weight: 700; color: #e2e8f0; }
+        .course-row-sub { font-size: 11px; color: #64748b; margin-top: 1px; }
+
+        .toggle-wrapper { position: relative; display: inline-flex; cursor: pointer; }
+        .toggle-input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .toggle-track { width: 44px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px; transition: background 0.2s; position: relative; }
+        .toggle-input:checked + .toggle-track { background: #ea580c; }
+        .toggle-track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .toggle-input:checked + .toggle-track::after { transform: translateX(20px); }
+
+        .modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; }
+        .btn-cancel { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #94a3b8; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+        .btn-save { flex: 2; padding: 12px; background: linear-gradient(135deg, #ea580c, #f97316); border: none; border-radius: 12px; color: white; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Inter', sans-serif; box-shadow: 0 4px 15px rgba(234,88,12,0.3); }
+        .btn-save:hover { box-shadow: 0 6px 20px rgba(234,88,12,0.45); transform: translateY(-1px); }
+        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-save .material-symbols-outlined { font-size: 18px; }
+
+        .fullscreen-overlay { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; background: #0a0a0f; flex-direction: column; gap: 16px; }
+        .spinner { width: 36px; height: 36px; border: 3px solid rgba(234,88,12,0.2); border-top-color: #ea580c; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .save-success { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; color: #34d399; font-size: 13px; font-weight: 600; margin-top: 12px; }
+
+        @media (max-width: 768px) {
+            main { padding: 20px 16px; }
+            header { padding: 0 16px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .table-header { flex-direction: column; align-items: stretch; }
+            .search-wrapper { max-width: 100%; }
+            .users-table th:nth-child(3), .users-table td:nth-child(3) { display: none; }
         }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
     <link rel="icon" type="image/png" href="/Images/favicon.webp">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body>
+    <div class="bg-glow"></div>
 
-    <!-- Erişim Engeli (Giriş yapılmamışsa veya admin değilse gösterilir) -->
-    <div id="access-denied" class="hidden fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
-        <span class="material-symbols-outlined text-6xl text-red-400 mb-4">lock</span>
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Erişim Reddedildi</h2>
-        <p class="text-gray-500 text-sm mb-6">Bu sayfaya erişim yetkiniz yok.</p>
-        <a href="./"
-            class="px-6 py-2 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition-colors">Ana
-            Sayfaya Dön</a>
+    <div id="loading-screen" class="fullscreen-overlay">
+        <div class="spinner"></div>
+        <p style="color:#64748b;font-size:14px;font-weight:500;">Yetki kontrol ediliyor...</p>
     </div>
 
-    <!-- Yükleniyor -->
-    <div id="loading-screen" class="fixed inset-0 bg-white flex items-center justify-center z-50">
-        <div class="flex flex-col items-center gap-4">
-            <div class="spinner" style="width:36px;height:36px;border-width:4px;"></div>
-            <p class="text-gray-400 text-sm font-medium">Yetki kontrol ediliyor...</p>
+    <div id="access-denied" class="fullscreen-overlay" style="display:none;">
+        <span class="material-symbols-outlined" style="font-size:64px;color:#ef4444;margin-bottom:8px;">lock</span>
+        <h2 style="font-size:22px;font-weight:800;color:#f8fafc;">Erişim Reddedildi</h2>
+        <p style="font-size:14px;color:#64748b;">Bu sayfaya erişim yetkiniz yok.</p>
+        <a href="./" style="margin-top:16px;padding:10px 24px;background:linear-gradient(135deg,#ea580c,#f97316);border-radius:12px;color:white;font-weight:700;font-size:14px;text-decoration:none;">Ana Sayfaya Dön</a>
+    </div>
+
+    <!-- Kurs Atama Modalı -->
+    <div id="course-modal" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-user">
+                    <div class="modal-avatar" id="modal-avatar">?</div>
+                    <div>
+                        <div class="modal-name" id="modal-name">—</div>
+                        <div class="modal-email" id="modal-email">—</div>
+                    </div>
+                </div>
+                <button class="btn-close" onclick="closeModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section-title">Kurs Erişimleri</div>
+                <div id="modal-course-list"></div>
+                <div id="modal-save-msg" style="display:none;" class="save-success">
+                    <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+                    Kaydedildi! Kullanıcının kursları güncellendi.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">İptal</button>
+                <button class="btn-save" id="modal-save-btn" onclick="saveCourses()">
+                    <span class="material-symbols-outlined">save</span>
+                    <span id="modal-save-text">Kaydet</span>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Ana İçerik -->
-    <div id="main-content" class="hidden">
-        <!-- Header -->
-        <header class="bg-gray-900 text-white px-6 py-4 flex items-center justify-between shadow-lg">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-orange-500 text-2xl">admin_panel_settings</span>
+    <div id="app">
+        <header>
+            <div class="header-brand">
+                <div class="header-icon">
+                    <span class="material-symbols-outlined">admin_panel_settings</span>
+                </div>
                 <div>
-                    <h1 class="text-lg font-extrabold tracking-tight">DereceLab Admin</h1>
-                    <p class="text-xs text-gray-400">Kurs Erişim Yönetimi</p>
+                    <div class="header-title">DereceLab Admin</div>
+                    <div class="header-sub">Kurs Erişim Yönetimi</div>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="dashboard.html" class="text-xs text-gray-400 hover:text-white transition-colors">← Panele
-                    Dön</a>
-                <button onclick="auth.signOut().then(() => location.href='./')"
-                    class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs font-bold transition-colors">
+            <div class="header-actions">
+                <a href="./" class="btn-ghost">
+                    <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+                    Ana Sayfa
+                </a>
+                <button class="btn-ghost" onclick="auth.signOut().then(() => location.href='./')">
+                    <span class="material-symbols-outlined" style="font-size:16px;">logout</span>
                     Çıkış
                 </button>
             </div>
         </header>
 
-        <main class="max-w-2xl mx-auto px-4 py-10">
-
-            <!-- Arama Kutusu -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-                <h2 class="text-lg font-extrabold text-gray-900 mb-1">Kullanıcı Ara</h2>
-                <p class="text-sm text-gray-500 mb-5">Shopier'den gelen sipariş e-postasındaki alıcı adresini gir.</p>
-
-                <div class="flex gap-3">
-                    <div class="flex-1 relative">
-                        <span
-                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
-                        <input id="email-input" type="email" placeholder="ornek@gmail.com"
-                            class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-                            onkeydown="if(event.key==='Enter') searchUser()">
-                    </div>
-                    <button onclick="searchUser()" id="search-btn"
-                        class="px-5 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors text-sm flex items-center gap-2">
-                        <span id="search-btn-text">Ara</span>
-                        <div id="search-spinner" class="spinner hidden"
-                            style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;">
-                        </div>
-                    </button>
-                </div>
-
-                <!-- Hata mesajı -->
-                <div id="search-error"
-                    class="hidden mt-3 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-base">error</span>
-                    <span id="search-error-text"></span>
-                </div>
+        <main>
+            <div class="page-header">
+                <h1 class="page-title">Kullanıcı Yönetimi</h1>
+                <p class="page-sub">Kayıtlı kullanıcıları görüntüle ve kurs erişimlerini yönet</p>
             </div>
 
-            <!-- Kullanıcı Kartı (arama sonucu) -->
-            <div id="user-card" class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-
-                <!-- Kullanıcı Bilgisi -->
-                <div class="flex items-center gap-4 pb-5 border-b border-gray-100 mb-5">
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                        <span class="text-xl font-extrabold text-orange-600" id="user-initial">?</span>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(234,88,12,0.12);">
+                        <span class="material-symbols-outlined" style="color:#f97316;">groups</span>
                     </div>
                     <div>
-                        <p class="font-bold text-gray-900" id="user-name">—</p>
-                        <p class="text-sm text-gray-500" id="user-email">—</p>
-                        <p class="text-xs text-gray-400 mt-0.5">UID: <span id="user-uid" class="font-mono">—</span></p>
+                        <div class="stat-value" id="stat-total">—</div>
+                        <div class="stat-label">Toplam Kullanıcı</div>
                     </div>
                 </div>
-
-                <!-- Kurs Erişimleri -->
-                <h3 class="text-sm font-extrabold text-gray-700 uppercase tracking-wider mb-4">Kurs Erişimleri</h3>
-                <div class="space-y-3" id="course-list">
-                    <!-- JS tarafından doldurulacak -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(16,185,129,0.12);">
+                        <span class="material-symbols-outlined" style="color:#34d399;">school</span>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="stat-enrolled">—</div>
+                        <div class="stat-label">Kurs Sahibi</div>
+                    </div>
                 </div>
-
-                <!-- Kaydet Butonu -->
-                <div class="mt-6 pt-5 border-t border-gray-100">
-                    <button onclick="saveCourses()" id="save-btn"
-                        class="w-full py-3.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-base">save</span>
-                        <span id="save-btn-text">Değişiklikleri Kaydet</span>
-                        <div id="save-spinner" class="spinner hidden"
-                            style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:16px;height:16px;border-width:2px;">
-                        </div>
-                    </button>
-                    <p id="save-message"
-                        class="hidden text-center text-sm font-bold text-green-600 mt-3 flex items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-base">check_circle</span>
-                        Kaydedildi! Kullanıcının kursları güncellendi.
-                    </p>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(234,88,12,0.12);">
+                        <span class="material-symbols-outlined" style="color:#fb923c;">trending_up</span>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="stat-c1">—</div>
+                        <div class="stat-label">Verimlilik Kursu</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(59,130,246,0.12);">
+                        <span class="material-symbols-outlined" style="color:#60a5fa;">payments</span>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="stat-c2">—</div>
+                        <div class="stat-label">Zaman Yönetimi</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(139,92,246,0.12);">
+                        <span class="material-symbols-outlined" style="color:#a78bfa;">verified_user</span>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="stat-c3">—</div>
+                        <div class="stat-label">Çalışma Rotasyonları</div>
+                    </div>
                 </div>
             </div>
 
+            <div class="table-container">
+                <div class="table-header">
+                    <div>
+                        <div class="table-title">Kayıtlı Kullanıcılar</div>
+                        <div class="table-count" id="table-count">Yükleniyor...</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <div class="search-wrapper">
+                            <span class="material-symbols-outlined search-icon">search</span>
+                            <input type="text" class="search-input" id="search-input" placeholder="İsim veya e-posta ara..." oninput="filterUsers(this.value)">
+                        </div>
+                        <button class="btn-refresh" onclick="loadUsers()">
+                            <span class="material-symbols-outlined">refresh</span>
+                            Yenile
+                        </button>
+                    </div>
+                </div>
+
+                <div id="table-body-wrapper">
+                    <div id="table-loading" style="padding:20px 24px;display:flex;flex-direction:column;gap:12px;">
+                        <div class="skeleton" style="height:44px;border-radius:10px;"></div>
+                        <div class="skeleton" style="height:44px;border-radius:10px;opacity:0.7;"></div>
+                        <div class="skeleton" style="height:44px;border-radius:10px;opacity:0.5;"></div>
+                        <div class="skeleton" style="height:44px;border-radius:10px;opacity:0.35;"></div>
+                        <div class="skeleton" style="height:44px;border-radius:10px;opacity:0.2;"></div>
+                    </div>
+
+                    <table class="users-table" id="users-table" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th>Kullanıcı</th>
+                                <th>Kurslar</th>
+                                <th>Kayıt Tarihi</th>
+                                <th style="text-align:right;">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+
+                    <div id="table-empty" class="empty-state" style="display:none;">
+                        <span class="material-symbols-outlined">search</span>
+                        <p>Kullanıcı bulunamadı</p>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
     <script>
-        // =====================================================
-        // Admin Paneli Kurs Tanımları
-        // Bu listeyi kurslarına göre güncelle
-        // =====================================================
         const ALL_COURSES = [
-            { id: 'course_1', name: 'Verimlilik Optimizasyonu', subtitle: 'Video Seti' },
-            { id: 'course_2', name: 'Zaman Yönetimi', subtitle: 'Video Seti' },
-            { id: 'course_3', name: 'Çalışma Rotasyonları', subtitle: 'Video Seti' },
-            { id: 'course_4', name: 'DereceLab Üçlü Paket', subtitle: '3 Video Seti' },
+            { id: 'course_1', name: 'Verimlilik Optimizasyonu', subtitle: 'Video Seti', dot: '#ea580c' },
+            { id: 'course_2', name: 'Zaman Yönetimi', subtitle: 'Video Seti', dot: '#3b82f6' },
+            { id: 'course_3', name: 'Çalışma Rotasyonları', subtitle: 'Video Seti', dot: '#8b5cf6' },
+            { id: 'course_4', name: 'DereceLab Üçlü Paket', subtitle: '3 Video Seti', dot: '#10b981' },
         ];
 
-        // Sadece bu e-postanın admin paneline erişimi var
+        const BADGE_CLASSES = { 'course_1': 'badge badge-orange', 'course_2': 'badge badge-blue', 'course_3': 'badge badge-purple', 'course_4': 'badge badge-green' };
+        const SHORT_NAMES = { 'course_1': 'Verimlilik', 'course_2': 'Zaman Yön.', 'course_3': 'Rotasyon', 'course_4': 'Üçlü Paket' };
         const ADMIN_EMAIL = 'tugrulbarism@gmail.com';
 
-        let currentUserData = null; // Bulunan kullanıcının Firestore verisi
-        let currentUserDocId = null; // Bulunan kullanıcının UID'si
+        let allUsers = [];
+        let filteredUsers = [];
+        let currentEditUid = null;
 
-        // =====================================================
-        // Yetki Kontrolü
-        // =====================================================
-        auth.onAuthStateChanged((user) => {
-            document.getElementById('loading-screen').classList.add('hidden');
+        auth.onAuthStateChanged(async (user) => {
+            document.getElementById('loading-screen').style.display = 'none';
+            if (!user) {
+                // Giriş yapılmamış → login sayfasına yönlendir
+                window.location.href = '/giris/?redirect=/admin.html';
+                return;
+            }
+            if (user.email !== ADMIN_EMAIL) {
+                // Giriş yapılmış ama admin değil → Erişim Reddedildi
+                document.getElementById('access-denied').style.display = 'flex';
+                return;
+            }
+            document.getElementById('app').style.display = 'flex';
+            await loadUsers();
+        });
 
-            if (!user || user.email !== ADMIN_EMAIL) {
-                document.getElementById('access-denied').classList.remove('hidden');
+        async function loadUsers() {
+            document.getElementById('table-loading').style.display = 'flex';
+            document.getElementById('users-table').style.display = 'none';
+            document.getElementById('table-empty').style.display = 'none';
+            document.getElementById('search-input').value = '';
+
+            try {
+                let snapshot;
+                try {
+                    snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
+                } catch (e) {
+                    snapshot = await db.collection('users').get();
+                }
+
+                allUsers = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+                filteredUsers = [...allUsers];
+                updateStats();
+                renderTable(filteredUsers);
+            } catch (err) {
+                console.error('Kullanici yukleme hatasi:', err);
+                document.getElementById('table-loading').style.display = 'none';
+                document.getElementById('table-empty').style.display = 'block';
+                document.getElementById('table-empty').innerHTML = '<span class="material-symbols-outlined" style="color:#ef4444;">error</span><p>Veri yüklenemedi: ' + err.message + '</p>';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total').textContent = allUsers.length;
+            document.getElementById('stat-enrolled').textContent = allUsers.filter(u => u.purchasedCourses && u.purchasedCourses.length > 0).length;
+            document.getElementById('stat-c1').textContent = allUsers.filter(u => u.purchasedCourses && (u.purchasedCourses.includes('course_1') || u.purchasedCourses.includes('course_4'))).length;
+            document.getElementById('stat-c2').textContent = allUsers.filter(u => u.purchasedCourses && (u.purchasedCourses.includes('course_2') || u.purchasedCourses.includes('course_4'))).length;
+            document.getElementById('stat-c3').textContent = allUsers.filter(u => u.purchasedCourses && (u.purchasedCourses.includes('course_3') || u.purchasedCourses.includes('course_4'))).length;
+        }
+
+        function renderTable(users) {
+            document.getElementById('table-loading').style.display = 'none';
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                document.getElementById('users-table').style.display = 'none';
+                document.getElementById('table-empty').style.display = 'block';
+                document.getElementById('table-count').textContent = '0 kullanıcı bulundu';
                 return;
             }
 
-            document.getElementById('main-content').classList.remove('hidden');
-        });
+            document.getElementById('table-empty').style.display = 'none';
+            document.getElementById('users-table').style.display = 'table';
+            document.getElementById('table-count').textContent = users.length + ' kullanıcı' + (allUsers.length !== users.length ? ' (toplam ' + allUsers.length + ')' : '');
 
-        // =====================================================
-        // Kullanıcı Arama (E-posta ile Firestore'da ara)
-        // =====================================================
-        async function searchUser() {
-            const email = document.getElementById('email-input').value.trim().toLowerCase();
-            if (!email) return;
+            users.forEach(user => {
+                const name = user.displayName || '(İsim yok)';
+                const email = user.email || '(E-posta yok)';
+                const initial = name[0].toUpperCase();
+                const courses = user.purchasedCourses || [];
 
-            // UI Yükleniyor
-            document.getElementById('search-btn').disabled = true;
-            document.getElementById('search-btn-text').textContent = 'Aranıyor...';
-            document.getElementById('search-spinner').classList.remove('hidden');
-            document.getElementById('search-error').classList.add('hidden');
-            document.getElementById('user-card').classList.add('hidden');
-
-            try {
-                const snapshot = await db.collection('users')
-                    .where('email', '==', email)
-                    .limit(1)
-                    .get();
-
-                if (snapshot.empty) {
-                    showSearchError(`"${email}" e-postasıyla kayıtlı kullanıcı bulunamadı. Kullanıcı henüz kayıt olmamış olabilir.`);
-                    return;
+                let dateStr = '—';
+                if (user.createdAt && user.createdAt.toDate) {
+                    dateStr = user.createdAt.toDate().toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
                 }
 
-                const doc = snapshot.docs[0];
-                currentUserDocId = doc.id;
-                currentUserData = doc.data();
+                let badgesHtml = courses.length === 0
+                    ? '<span class="badge badge-gray">Kurs yok</span>'
+                    : courses.map(cid => '<span class="' + (BADGE_CLASSES[cid] || 'badge badge-gray') + '">' + (SHORT_NAMES[cid] || cid) + '</span>').join('');
 
-                renderUserCard(currentUserData, doc.id);
-
-            } catch (err) {
-                console.error(err);
-                showSearchError('Arama sırasında hata oluştu: ' + err.message);
-            } finally {
-                document.getElementById('search-btn').disabled = false;
-                document.getElementById('search-btn-text').textContent = 'Ara';
-                document.getElementById('search-spinner').classList.add('hidden');
-            }
+                const tr = document.createElement('tr');
+                tr.onclick = () => openModal(user.uid);
+                tr.innerHTML =
+                    '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar">' + initial + '</div><div><div class="user-name">' + escapeHtml(name) + '</div><div class="user-email">' + escapeHtml(email) + '</div></div></div></td>' +
+                    '<td><div class="course-badges">' + badgesHtml + '</div></td>' +
+                    '<td style="color:#64748b;font-size:12px;">' + dateStr + '</td>' +
+                    '<td style="text-align:right;"><button class="btn-edit" onclick="event.stopPropagation();openModal(\'' + user.uid + '\')"><span class="material-symbols-outlined">edit</span>Düzenle</button></td>';
+                tbody.appendChild(tr);
+            });
         }
 
-        function showSearchError(msg) {
-            document.getElementById('search-error-text').textContent = msg;
-            document.getElementById('search-error').classList.remove('hidden');
+        function filterUsers(query) {
+            const q = query.toLowerCase().trim();
+            filteredUsers = q ? allUsers.filter(u => (u.displayName || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)) : [...allUsers];
+            renderTable(filteredUsers);
         }
 
-        // =====================================================
-        // Kullanıcı Kartını Render Et
-        // =====================================================
-        function renderUserCard(data, uid) {
-            const name = data.displayName || '(İsim yok)';
-            const email = data.email || '(E-posta yok)';
-            const purchasedCourses = data.purchasedCourses || [];
-            const initial = name[0].toUpperCase();
+        function openModal(uid) {
+            const user = allUsers.find(u => u.uid === uid);
+            if (!user) return;
+            currentEditUid = uid;
 
-            document.getElementById('user-initial').textContent = initial;
-            document.getElementById('user-name').textContent = name;
-            document.getElementById('user-email').textContent = email;
-            document.getElementById('user-uid').textContent = uid;
+            const name = user.displayName || '(İsim yok)';
+            const courses = user.purchasedCourses || [];
 
-            const courseList = document.getElementById('course-list');
-            courseList.innerHTML = '';
+            document.getElementById('modal-avatar').textContent = name[0].toUpperCase();
+            document.getElementById('modal-name').textContent = name;
+            document.getElementById('modal-email').textContent = user.email || '(E-posta yok)';
+
+            const list = document.getElementById('modal-course-list');
+            list.innerHTML = '';
 
             ALL_COURSES.forEach(course => {
-                const hasAccess = purchasedCourses.includes(course.id);
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-4 rounded-xl border ' +
-                    (hasAccess ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200');
-
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-xl ${hasAccess ? 'text-green-500' : 'text-gray-400'}">
-                            ${hasAccess ? 'check_circle' : 'radio_button_unchecked'}
-                        </span>
-                        <div>
-                            <p class="font-bold text-sm text-gray-900">${course.name}</p>
-                            <p class="text-xs text-gray-500">${course.subtitle}</p>
-                        </div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" class="sr-only peer course-toggle" 
-                            data-course-id="${course.id}" 
-                            ${hasAccess ? 'checked' : ''} 
-                            onchange="updateCourseUI('${course.id}', this)">
-                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-orange-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
-                    </label>
-                `;
-                courseList.appendChild(div);
+                const hasAccess = courses.includes(course.id);
+                const row = document.createElement('div');
+                row.className = 'course-row' + (hasAccess ? ' has-access' : '');
+                row.id = 'row-' + course.id;
+                row.innerHTML =
+                    '<div class="course-row-left">' +
+                        '<div class="course-dot" style="background:' + course.dot + ';"></div>' +
+                        '<div><div class="course-row-name">' + course.name + '</div><div class="course-row-sub">' + course.subtitle + '</div></div>' +
+                    '</div>' +
+                    '<label class="toggle-wrapper">' +
+                        '<input type="checkbox" class="toggle-input course-toggle" data-course-id="' + course.id + '" ' + (hasAccess ? 'checked' : '') + ' onchange="updateRowUI(\'' + course.id + '\', this)">' +
+                        '<div class="toggle-track"></div>' +
+                    '</label>';
+                list.appendChild(row);
             });
 
-            document.getElementById('user-card').classList.remove('hidden');
-            document.getElementById('save-message').classList.add('hidden');
+            document.getElementById('modal-save-msg').style.display = 'none';
+            document.getElementById('modal-save-btn').disabled = false;
+            document.getElementById('modal-save-text').textContent = 'Kaydet';
+            document.getElementById('course-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
-        function updateCourseUI(courseId, checkbox) {
-            const container = checkbox.closest('div.flex');
-            const icon = container.querySelector('.material-symbols-outlined');
-            const wrapper = checkbox.closest('[class*="rounded-xl"]');
-
-            if (checkbox.checked) {
-                wrapper.className = 'flex items-center justify-between p-4 rounded-xl border bg-green-50 border-green-200';
-                icon.className = 'material-symbols-outlined text-xl text-green-500';
-                icon.textContent = 'check_circle';
-            } else {
-                wrapper.className = 'flex items-center justify-between p-4 rounded-xl border bg-gray-50 border-gray-200';
-                icon.className = 'material-symbols-outlined text-xl text-gray-400';
-                icon.textContent = 'radio_button_unchecked';
-            }
+        function updateRowUI(courseId, checkbox) {
+            const row = document.getElementById('row-' + courseId);
+            if (checkbox.checked) row.classList.add('has-access');
+            else row.classList.remove('has-access');
         }
 
-        // =====================================================
-        // Kaydet
-        // =====================================================
+        function closeModal() {
+            document.getElementById('course-modal').classList.remove('open');
+            document.body.style.overflow = '';
+            currentEditUid = null;
+        }
+
+        function handleOverlayClick(event) {
+            if (event.target === document.getElementById('course-modal')) closeModal();
+        }
+
         async function saveCourses() {
-            if (!currentUserDocId) return;
+            if (!currentEditUid) return;
+            const btn = document.getElementById('modal-save-btn');
+            btn.disabled = true;
+            document.getElementById('modal-save-text').textContent = 'Kaydediliyor...';
+            document.getElementById('modal-save-msg').style.display = 'none';
 
-            document.getElementById('save-btn').disabled = true;
-            document.getElementById('save-btn-text').textContent = 'Kaydediliyor...';
-            document.getElementById('save-spinner').classList.remove('hidden');
-            document.getElementById('save-message').classList.add('hidden');
-
-            const checkboxes = document.querySelectorAll('.course-toggle');
-            const newCourses = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) newCourses.push(cb.getAttribute('data-course-id'));
-            });
+            const newCourses = Array.from(document.querySelectorAll('.course-toggle')).filter(cb => cb.checked).map(cb => cb.getAttribute('data-course-id'));
 
             try {
-                await db.collection('users').doc(currentUserDocId).update({
+                await db.collection('users').doc(currentEditUid).update({
                     purchasedCourses: newCourses,
                     lastUpdatedByAdmin: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                document.getElementById('save-message').classList.remove('hidden');
+                const idx = allUsers.findIndex(u => u.uid === currentEditUid);
+                if (idx !== -1) allUsers[idx].purchasedCourses = newCourses;
+                const fidx = filteredUsers.findIndex(u => u.uid === currentEditUid);
+                if (fidx !== -1) filteredUsers[fidx].purchasedCourses = newCourses;
 
+                updateStats();
+                renderTable(filteredUsers);
+
+                document.getElementById('modal-save-msg').style.display = 'flex';
+                document.getElementById('modal-save-text').textContent = 'Kaydedildi!';
+                setTimeout(() => closeModal(), 1800);
             } catch (err) {
-                alert('Kaydetme hatası: ' + err.message);
-                console.error(err);
-            } finally {
-                document.getElementById('save-btn').disabled = false;
-                document.getElementById('save-btn-text').textContent = 'Değişiklikleri Kaydet';
-                document.getElementById('save-spinner').classList.add('hidden');
+                alert('Kaydetme hatasi: ' + err.message);
+                document.getElementById('modal-save-text').textContent = 'Kaydet';
+                btn.disabled = false;
             }
         }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     </script>
 </body>
-
 </html>
