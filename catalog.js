@@ -29,7 +29,7 @@ window.DereceLab.Catalog = {
         titleHtml: 'Zaman Yönetimi <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
         features: ['Pomodoro Tekniği İle Çalışma', 'Günlük Planlama Stratejileri', 'Erteleme Alışkanlığını Yenme'],
         parts: [
-            { id: 'c2_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735712/c727136c-3e58-4e2c-b020-f55332bc9195?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
+            { id: 'c2_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735717/c727136c-3e58-4e2c-b020-f55332bc9195?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_3': {
@@ -39,9 +39,9 @@ window.DereceLab.Catalog = {
         titleHtml: 'Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
         features: ['Dersler Arası Geçiş Stratejileri', 'Enerji Yönetimi Teknikleri', 'Günlük Verimi Artıran Programlar'],
         parts: [
-            { id: 'c3_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735712/a14ff68b-8423-41a4-a0b8-0bf0187c14ea?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c3_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735712/ed594333-1b8a-47e7-ad36-2b8b69700b71?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c3_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735712/7b3f4063-cec4-4b19-a2cd-e36ed9ec286b?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
+            { id: 'c3_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735719/a14ff68b-8423-41a4-a0b8-0bf0187c14ea?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c3_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735719/ed594333-1b8a-47e7-ad36-2b8b69700b71?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c3_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/735719/7b3f4063-cec4-4b19-a2cd-e36ed9ec286b?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_4': {
