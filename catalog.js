@@ -14,14 +14,12 @@ window.DereceLab.Catalog = {
         titleHtml: 'Verimlilik Optimizasyonu <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
         features: ['Stratejik Planlama Teknikleri', 'Odaklanma Egzersizleri', 'Zihinsel Dayanıklılık Pratikleri'],
         parts: [
-            {
-                id: 'c1_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/ffaf8608-33e3-49d7-8a9e-d37d0bfb2e32?autoplay=false&loop=false&muted=true&preload=true&responsive=true'
-            },
-            { id: 'c1_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/1189514e-84a3-4232-b4f2-0f565b796651?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c1_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/081fb6b3-bbbc-4c86-a1df-ba449a049999?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c1_p4', title: '4. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/03f6315c-8e87-44b9-998a-f9248f1350b7?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c1_p5', title: '5. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/0c5e132e-6029-4b9c-935d-2740af2ca1aa?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
-            { id: 'c1_p6', title: '6. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/e63c3f9a-3f15-4332-8ccb-c2e0ed34990b?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
+            { id: 'c1_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/47a3883c-f42a-40d3-b0ec-bfa1e118d4cd?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/ba5e01e0-9284-4172-9f4a-867d5fe1401c?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/93aa57c5-0529-4d55-a084-aea3fce4c5c0?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p4', title: '4. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/e860d516-39fb-4d6f-b343-b17ccf28b482?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p5', title: '5. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/50c1c2a0-91f4-46db-9b52-86e45b2ba272?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c1_p6', title: '6. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/97104c05-fdc2-4768-a6da-768805555ac0?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_2': {
@@ -31,9 +29,7 @@ window.DereceLab.Catalog = {
         titleHtml: 'Zaman Yönetimi <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
         features: ['Pomodoro Tekniği İle Çalışma', 'Günlük Planlama Stratejileri', 'Erteleme Alışkanlığını Yenme'],
         parts: [
-            { id: 'c2_p1', title: '1. Bölüm: Zaman Hırsızlarını Tanımak', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-            { id: 'c2_p2', title: '2. Bölüm: Önceliklendirme Matrisi (Eisenhower)', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-            { id: 'c2_p3', title: '3. Bölüm: Ertelemeyi Yenme Stratejileri', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+            { id: 'c2_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/c727136c-3e58-4e2c-b020-f55332bc9195?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_3': {
@@ -43,9 +39,9 @@ window.DereceLab.Catalog = {
         titleHtml: 'Çalışma Rotasyonları <span class="block text-sm mt-1 font-semibold text-gray-500">Video Seti</span>',
         features: ['Dersler Arası Geçiş Stratejileri', 'Enerji Yönetimi Teknikleri', 'Günlük Verimi Artıran Programlar'],
         parts: [
-            { id: 'c3_p1', title: '1. Bölüm: Zihin Haritalama ile Ders Geçişleri', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-            { id: 'c3_p2', title: '2. Bölüm: Aktif Geri Çağırma (Active Recall)', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-            { id: 'c3_p3', title: '3. Bölüm: Aralıklı Tekrar Sistemi (Spaced Repetition)', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+            { id: 'c3_p1', title: '1. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/a14ff68b-8423-41a4-a0b8-0bf0187c14ea?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c3_p2', title: '2. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/ed594333-1b8a-47e7-ad36-2b8b69700b71?autoplay=false&loop=false&muted=true&preload=true&responsive=true' },
+            { id: 'c3_p3', title: '3. Bölüm', videoUrl: 'https://player.mediadelivery.net/embed/688322/7b3f4063-cec4-4b19-a2cd-e36ed9ec286b?autoplay=false&loop=false&muted=true&preload=true&responsive=true' }
         ]
     },
     'course_4': {
