@@ -75,7 +75,7 @@ async function processShopier(formData, res) {
 
     if (incomingHash !== expectedHash) {
         console.warn('[Shopier] ⚠️ Hash uyuşmadı! İstek reddedildi.');
-        return res.status(200).send('success'); // Sahte isteği reddet, işlemi durdur
+        return res.status(200).send('success');
     }
 
     console.log('[Shopier] ✅ Hash doğrulama başarılı.');
@@ -88,16 +88,58 @@ async function processShopier(formData, res) {
         return res.status(200).send('success');
     }
 
-    const email     = data.email?.toLowerCase().trim();
-    const productId = data.productid?.toString();
-    const courseId  = data.custom || PRODUCT_MAPPING[productId] || 'course_1';
-    const orderId   = data.orderid?.toString() || `${email}_${productId}_${Date.now()}`;
+    const email   = data.email?.toLowerCase().trim();
+    const orderId = data.orderid?.toString() || `${email}_${Date.now()}`;
 
-    console.log(`[Shopier] Sipariş: ${orderId} | Email: ${email} | Kurs: ${courseId} | isTest: ${data.istest}`);
+    console.log(`[Shopier] Sipariş: ${orderId} | Email: ${email} | isTest: ${data.istest}`);
+    console.log(`[Shopier] Ham veri: productid=${data.productid}, productcount=${data.productcount}, productlist=`, data.productlist);
 
     if (!email) {
         return res.status(200).send('success');
     }
+
+    // ---------------------------------------------------------------
+    // Sepetteki TÜM ürünleri topla:
+    // Shopier hem tekli (productid) hem çoklu (productlist) durumları için
+    // farklı alanlar gönderebilir.
+    // ---------------------------------------------------------------
+    const courseIds = new Set();
+
+    // 1) productlist: [{productid: "...", ...}, ...] şeklinde dizi gelebilir
+    if (Array.isArray(data.productlist) && data.productlist.length > 0) {
+        for (const item of data.productlist) {
+            const pid = item.productid?.toString();
+            if (pid && PRODUCT_MAPPING[pid]) {
+                courseIds.add(PRODUCT_MAPPING[pid]);
+            }
+        }
+    }
+
+    // 2) productlist string ise (virgülle ayrılmış ID'ler) parse et
+    if (typeof data.productlist === 'string' && data.productlist.trim()) {
+        for (const pid of data.productlist.split(',')) {
+            const trimmed = pid.trim();
+            if (trimmed && PRODUCT_MAPPING[trimmed]) {
+                courseIds.add(PRODUCT_MAPPING[trimmed]);
+            }
+        }
+    }
+
+    // 3) Tekli satın alım: sadece productid varsa
+    if (courseIds.size === 0 && data.productid) {
+        const pid      = data.productid.toString();
+        const courseId = data.custom || PRODUCT_MAPPING[pid];
+        if (courseId) courseIds.add(courseId);
+    }
+
+    // 4) Hiçbir eşleşme yoksa fallback
+    if (courseIds.size === 0) {
+        console.warn('[Shopier] ⚠️ Hiçbir kurs eşleşmedi! Fallback: course_1');
+        courseIds.add('course_1');
+    }
+
+    const courseList = [...courseIds];
+    console.log(`[Shopier] Atanacak kurslar: ${courseList.join(', ')}`);
 
     try {
         const snapshot = await db.collection('users').where('email', '==', email).get();
@@ -109,22 +151,28 @@ async function processShopier(formData, res) {
             const processedOrders = userData.processedOrders   || [];
 
             if (processedOrders.includes(orderId)) {
+                console.log(`[Shopier] Sipariş ${orderId} zaten işlenmiş, atlanıyor.`);
                 return res.status(200).send('success');
             }
 
-            const updateData = { processedOrders: [...processedOrders, orderId] };
-            if (!existing.includes(courseId)) {
-                updateData.purchasedCourses = [...existing, courseId];
-                updateData.lastPurchase     = admin.firestore.FieldValue.serverTimestamp();
-            }
+            // Yeni kursları mevcut listeye ekle (tekrar yok)
+            const newCourses = [...new Set([...existing, ...courseList])];
+
+            const updateData = {
+                processedOrders:  [...processedOrders, orderId],
+                purchasedCourses: newCourses,
+                lastPurchase:     admin.firestore.FieldValue.serverTimestamp()
+            };
             await targetDoc.ref.update(updateData);
+            console.log(`[Shopier] ✅ Kullanıcı güncellendi: ${email} → kurslar: ${newCourses.join(', ')}`);
         } else {
             await db.collection('users').doc(email).set({
                 email,
-                purchasedCourses: [courseId],
+                purchasedCourses: courseList,
                 processedOrders:  [orderId],
                 createdAt:        admin.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
+            console.log(`[Shopier] ✅ Yeni kullanıcı oluşturuldu: ${email} → kurslar: ${courseList.join(', ')}`);
         }
     } catch (dbError) {
         console.error('[Shopier] DB Hatası:', dbError);
