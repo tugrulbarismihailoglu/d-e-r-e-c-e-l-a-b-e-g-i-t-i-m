@@ -462,7 +462,7 @@
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
 
@@ -508,7 +508,7 @@
 
         // Şifremi Unuttum
         async function handleForgotPassword() {
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             if (!email) {
                 showMessage('Lütfen önce e-posta adresinizi girin.');
                 return;
